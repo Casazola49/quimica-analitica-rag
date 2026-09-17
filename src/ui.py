@@ -44,7 +44,7 @@ except ImportError:
 # ==============================================================================
 # Constants & Canonical Views
 # ==============================================================================
-DEFAULT_DEPARTMENT_PHONE: str = os.environ.get("WHATSAPP_PHONE", "59170000000")
+DEFAULT_DEPARTMENT_PHONE: str = os.environ.get("WHATSAPP_PHONE", "59176932485")
 
 CANONICAL_VIEWS: List[str] = [
     "Syllabus Navigator / Temario",
@@ -68,13 +68,17 @@ def generate_whatsapp_url(phone_number: str, message: str) -> str:
     https://wa.me/<PHONE>?text=<ENCODED_MESSAGE>
 
     Cleans phone digits and percent-encodes spaces to %20 and newlines to %0A.
+    Automatically prepends country code 591 for 8-digit Bolivian numbers.
     """
     clean_phone = re.sub(r"[^\d]", "", str(phone_number or ""))
     if not clean_phone:
         clean_phone = re.sub(r"[^\d]", "", DEFAULT_DEPARTMENT_PHONE)
+    elif len(clean_phone) == 8 and clean_phone.startswith(("6", "7")):
+        clean_phone = f"591{clean_phone}"
 
     encoded_msg = urllib.parse.quote(str(message or ""))
     return f"https://wa.me/{clean_phone}?text={encoded_msg}"
+
 
 
 def format_book_request_message(
@@ -580,26 +584,28 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
         )
 
     ctx.sidebar.markdown("---")
-    # Model Selector with Flash Lite & Auto-Reroute
+    # Model Selector with Gemini 3.5 Flash Lite & Auto-Reroute
     ctx.sidebar.subheader("⚙️ Configuración del Modelo")
     model_options = [
+        "Gemini 3.5 Flash Lite (Mayor cuota gratuita)",
+        "gemini-flash-lite-latest (Último Flash Lite)",
+        "gemini-flash-latest (Último Flash)",
         "gemini-2.5-flash-lite",
-        "gemini-2.0-flash-lite",
         "gemini-2.5-flash",
-        "gemini-2.0-flash",
-        "gemini-1.5-flash",
+        "gemini-pro-latest (Último Pro)",
     ]
-    current_selected = ctx.session_state.get("selected_model") or "gemini-2.5-flash-lite"
+    current_selected = ctx.session_state.get("selected_model") or model_options[0]
     selected_idx = model_options.index(current_selected) if current_selected in model_options else 0
 
     model_choice = ctx.sidebar.selectbox(
         "Modelo Gemini Principal:",
         model_options,
         index=selected_idx,
-        help="Prioriza Flash Lite para máxima velocidad y cuota gratuita. Si se agota la cuota, el sistema reenruta automáticamente a los demás modelos de la cadena de respaldo.",
+        help="Prioriza Gemini 3.5 Flash Lite para máxima velocidad y cuota gratuita. Si se agota la cuota temporal (HTTP 429), el sistema reenruta automáticamente a los modelos Flash / Flash Lite / Pro más recientes.",
     )
     ctx.session_state["selected_model"] = model_choice
-    ctx.sidebar.caption("🔄 *Reenrutamiento inteligente:* Si se agota la cuota de un modelo (HTTP 429), conmuta automáticamente a los modelos restantes.")
+    ctx.sidebar.caption("🔄 *Auto-Reenrutamiento activo:* Si se agota la cuota (429), conmuta automáticamente a los modelos Flash Lite / Flash / Pro restantes.")
+
 
 
     # Clear Session Button

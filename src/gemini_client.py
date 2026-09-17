@@ -18,29 +18,39 @@ import google.genai as genai
 logger = logging.getLogger(__name__)
 
 # Model Configuration & Dynamic Re-routing Chain
-# Prioritizes Flash Lite for higher quota and lower latency, with automatic fallback
-DEFAULT_MODEL: str = "gemini-2.5-flash-lite"
-FALLBACK_MODEL: str = "gemini-2.5-flash"
+# Prioritizes Gemini 3.5 Flash Lite / latest models for maximum free quota, with automatic fallback
+DEFAULT_MODEL: str = "gemini-3.5-flash-lite"
+FALLBACK_MODEL: str = "gemini-flash-lite-latest"
 
 # Comprehensive priority fallback chain for Google AI Studio free tier
+# Prioritizes Flash Lite and newest models (which have the highest free quotas)
 # Each model family has independent quota buckets on Google AI Studio
 MODEL_FALLBACK_CHAIN: tuple[str, ...] = (
+    "gemini-3.5-flash-lite",
+    "gemini-flash-lite-latest",
     "gemini-2.5-flash-lite",
     "gemini-2.0-flash-lite",
+    "gemini-flash-latest",
     "gemini-2.5-flash",
     "gemini-2.0-flash",
     "gemini-1.5-flash",
-    "gemini-1.5-flash-8b",
+    "gemini-pro-latest",
+    "gemini-2.5-pro",
+    "gemini-1.5-pro",
 )
 
-# User-friendly alias mapping (e.g. Gemini 3.5 Flash Lite -> 2.5 Flash Lite)
+# User-friendly alias mapping (e.g. Gemini 3.5 Flash Lite -> 3.5 Flash Lite or latest)
 MODEL_ALIASES: dict[str, str] = {
-    "gemini-3.5-flash-lite": "gemini-2.5-flash-lite",
-    "gemini-3-flash-lite": "gemini-2.5-flash-lite",
-    "gemini-flash-lite": "gemini-2.5-flash-lite",
-    "gemini-3.5-flash": "gemini-2.5-flash",
-    "gemini-3-flash": "gemini-2.5-flash",
-    "gemini-flash": "gemini-2.5-flash",
+    "gemini-3.5-flash-lite": "gemini-3.5-flash-lite",
+    "gemini-3-flash-lite": "gemini-3.5-flash-lite",
+    "gemini-flash-lite": "gemini-flash-lite-latest",
+    "gemini-flash-lite-latest": "gemini-flash-lite-latest",
+    "gemini-3.5-flash": "gemini-flash-latest",
+    "gemini-3-flash": "gemini-flash-latest",
+    "gemini-flash": "gemini-flash-latest",
+    "gemini-flash-latest": "gemini-flash-latest",
+    "gemini-pro": "gemini-pro-latest",
+    "gemini-pro-latest": "gemini-pro-latest",
 }
 
 
@@ -48,11 +58,14 @@ def resolve_model_name(model_name: Optional[str]) -> str:
     """Normalizes model aliases and display names to valid Google AI Studio model IDs."""
     if not model_name:
         return DEFAULT_MODEL
-    cleaned = str(model_name).strip().lower()
-    # Extract base model identifier if display string contains description in parentheses
+    cleaned = str(model_name).strip()
+    if "Gemini 3.5 Flash Lite" in cleaned or ("3.5" in cleaned and "lite" in cleaned.lower()):
+        return "gemini-3.5-flash-lite"
     if " " in cleaned:
         cleaned = cleaned.split(" ")[0].strip()
-    return MODEL_ALIASES.get(cleaned, cleaned)
+    cleaned_lower = cleaned.lower()
+    return MODEL_ALIASES.get(cleaned_lower, cleaned_lower)
+
 
 AI_STUDIO_URL: str = "https://aistudio.google.com/app/apikey"
 STANDARD_KEY_PREFIX: str = "AIzaSy"

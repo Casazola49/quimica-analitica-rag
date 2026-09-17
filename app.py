@@ -19,7 +19,7 @@ def main() -> None:
         initial_sidebar_state="expanded",
     )
 
-    # Global custom styling for badges, cards, and clean typography
+    # Global custom styling for badges, cards, clean typography, and hiding GitHub / Streamlit branding
     st.markdown(
         """
         <style>
@@ -29,6 +29,15 @@ def main() -> None:
         .main-header {
             margin-bottom: 1.5rem;
         }
+        /* Ocultar el menú superior, botón de GitHub, barra de herramientas y pie de página */
+        #MainMenu {visibility: hidden; display: none !important;}
+        header {visibility: hidden; display: none !important;}
+        footer {visibility: hidden; display: none !important;}
+        [data-testid="stToolbar"] {visibility: hidden; display: none !important;}
+        [data-testid="stDecoration"] {visibility: hidden; display: none !important;}
+        [data-testid="stStatusWidget"] {visibility: hidden; display: none !important;}
+        .viewerBadge_container__1QSob, .viewerBadge_link__1QSob {display: none !important;}
+        a[href*="github.com"] {display: none !important;}
         </style>
         """,
         unsafe_allow_html=True,
