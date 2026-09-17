@@ -1,10 +1,10 @@
-# Local Pi runtime state
+# Local runtime state
 .atl/
 .pi/
+.system_generated/
 
 # Heavy assets & copyrighted books (DO NOT COMMIT)
 books/
-*.pdf
 
 # Environment & local secrets
 .env
@@ -16,8 +16,22 @@ node_modules/
 dist/
 dist-ssr/
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Test caches and temporary directories
+.pytest_cache/
+tmp_covers_test/
+scratch/
 
 # OS / Editor
 .DS_Store
 *.log
+
+# Antigravity agent run logs (preserve skills)
+.agents/sentinel/
+.agents/teamwork_preview_*/
+.agents/ORIGINAL_REQUEST.md

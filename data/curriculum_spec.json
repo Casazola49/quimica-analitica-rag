@@ -1,0 +1,2492 @@
+{
+  "metadata": {
+    "institution": "Universidad Mayor de San Simón (UMSS)",
+    "faculty": "Facultad de Ciencias y Tecnología",
+    "department": "Departamento de Química",
+    "program": "Ingeniería Química",
+    "academic_year": "2024",
+    "level": "Quinto Semestre (5to Semestre)",
+    "prerequisites": [
+      {
+        "code": "2004044",
+        "name": "FISICOQUIMICA"
+      }
+    ],
+    "specification_sources": [
+      "plan_global/23-QUIMICA-ANALITICA-QMC-Sem-5.pdf",
+      "plan_global/25-LABORATORIO-DE-QUIMICA-ANALITICA-CUANTITATIVA-QMC-Sem-5.pdf"
+    ]
+  },
+  "courses": {
+    "theory": {
+      "course_name": "QUIMICA ANALITICA",
+      "siss_code": "2004061",
+      "character": "Obligatoria",
+      "total_hours": 120,
+      "academic_credits": 6,
+      "bibliography": [
+        {
+          "authors": [
+            "Skoog, D.",
+            "West, D.",
+            "Holler, F. J.",
+            "Crouch, S. R."
+          ],
+          "title": "Química Analítica / Fundamentos de Química Analítica",
+          "edition": "7ma / 9na / 10ma Edición",
+          "publisher": "McGraw-Hill / Cengage Learning",
+          "year": "2001 / 2014 / 2021"
+        },
+        {
+          "authors": [
+            "Kolthoff, I. M.",
+            "Elving, P. J."
+          ],
+          "title": "Treatise on Analytical Chemistry",
+          "edition": "2nd Edition",
+          "publisher": "John Wiley & Sons, NY",
+          "year": "1983"
+        },
+        {
+          "authors": [
+            "Aguilar Sanjuán, M."
+          ],
+          "title": "Introducción a los equilibrios iónicos",
+          "edition": "Segunda Edición",
+          "publisher": "Editorial Reverté, S.A., Barcelona, España",
+          "year": "1999"
+        },
+        {
+          "authors": [
+            "Day, R. A.",
+            "Underwood, A. L."
+          ],
+          "title": "Química Analítica Cuantitativa",
+          "edition": "5ta / 6ta Edición",
+          "publisher": "Prentice-Hall Hispanoamericana, S.A., México",
+          "year": "1989 / 1991"
+        }
+      ],
+      "units": [
+        {
+          "unit_number": 1,
+          "unit_title": "ANÁLISIS QUÍMICO",
+          "unit_id": "THEORY_U1",
+          "description": "Introducción conceptual al proceso analítico total, terminología fundamental, muestreo representativo, preparación de muestras y unidades de concentración.",
+          "learning_objectives": [
+            "Diferenciar con precisión entre analito, matriz, interferente, técnica y método analítico.",
+            "Identificar y secuenciar rigurosamente las etapas del proceso analítico clásico e instrumental.",
+            "Seleccionar y aplicar métodos de muestreo estadísticamente representativos para sólidos, líquidos y gases.",
+            "Formular procedimientos de disolución y eliminación o enmascaramiento de interferencias.",
+            "Calcular concentraciones de disoluciones en unidades físicas y químicas (molaridad, normalidad, molalidad, formalidad, ppm, ppb, % p/p, % p/v)."
+          ],
+          "key_competencies": [
+            "Diseño de protocolos de preparación y tratamiento de muestras heterogéneas.",
+            "Conversión fluida y sin error entre todas las escalas de concentración analítica.",
+            "Diagnóstico de fuentes de interferencia en matrices complejas."
+          ],
+          "topics": [
+            {
+              "topic_code": "1.1",
+              "title": "Definiciones",
+              "keywords": [
+                "química analítica",
+                "análisis cualitativo",
+                "análisis cuantitativo",
+                "analito",
+                "matriz",
+                "alícuota",
+                "muestra",
+                "técnica",
+                "método"
+              ]
+            },
+            {
+              "topic_code": "1.2",
+              "title": "Etapas de un análisis químico",
+              "keywords": [
+                "etapas del proceso analítico",
+                "definición del problema",
+                "selección del método",
+                "muestreo",
+                "preparación de muestra",
+                "medición",
+                "calibración",
+                "evaluación de resultados"
+              ]
+            },
+            {
+              "topic_code": "1.3",
+              "title": "Muestreo",
+              "keywords": [
+                "muestreo representativo",
+                "reducción de tamaño",
+                "cuarteo",
+                "homogenización",
+                "muestra bruta",
+                "muestra de laboratorio"
+              ]
+            },
+            {
+              "topic_code": "1.4",
+              "title": "Tratamiento de la muestra y sus interferencias",
+              "keywords": [
+                "disolución",
+                "digestión",
+                "enmascaramiento",
+                "separación",
+                "interferencia de matriz",
+                "blanco de muestra"
+              ]
+            },
+            {
+              "topic_code": "1.5",
+              "title": "Medidas de composición",
+              "keywords": [
+                "molaridad",
+                "normalidad",
+                "formalidad",
+                "molalidad",
+                "porcentaje en masa",
+                "ppm",
+                "ppb",
+                "fracción molar",
+                "densidad"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 1: Naturaleza de la química analítica",
+              "Capítulo 2: Productos químicos, aparatos y operaciones",
+              "Capítulo 4: Cálculos utilizados en la química analítica"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 1: Introducción"
+            ]
+          }
+        },
+        {
+          "unit_number": 2,
+          "unit_title": "PRUEBAS ESTADÍSTICAS Y ANÁLISIS DE ERRORES",
+          "unit_id": "THEORY_U2",
+          "description": "Fundamentos de metrología química, análisis estadístico de datos experimentales, tipología de errores, propagación de incertidumbres y criterios de aceptación.",
+          "learning_objectives": [
+            "Distinguir de manera cuantitativa entre exactitud (error relativo y absoluto) y precisión (desviación estándar, varianza, coeficiente de variación).",
+            "Identificar y mitigar errores sistemáticos (de método, instrumentales y personales) frente a errores aleatorios o indeterminados.",
+            "Calcular intervalos de confianza para la media utilizando la distribución t de Student a diferentes niveles de significancia.",
+            "Evaluar el uso de patrones primarios, patrones secundarios y ensayos en blanco para la corrección de sesgos analíticos.",
+            "Aplicar rigurosamente las reglas de cifras significativas y propagación de errores en cálculos analíticos sumatorios y multiplicativos."
+          ],
+          "key_competencies": [
+            "Tratamiento metrológico riguroso de datos analíticos experimentales.",
+            "Detección y rechazo justificado de valores anómalos mediante pruebas estadísticas (Q de Dixon, Grubbs).",
+            "Reporte de resultados con incertidumbre expandida y cifras significativas correctas."
+          ],
+          "topics": [
+            {
+              "topic_code": "2.1",
+              "title": "Detección y medición de errores",
+              "keywords": [
+                "error analítico",
+                "error absoluto",
+                "error relativo",
+                "sesgo",
+                "fuentes de error"
+              ]
+            },
+            {
+              "topic_code": "2.2",
+              "title": "Precisión y exactitud",
+              "keywords": [
+                "precisión",
+                "exactitud",
+                "media aritmética",
+                "mediana",
+                "desviación estándar",
+                "varianza",
+                "coeficiente de variación",
+                "RSD"
+              ]
+            },
+            {
+              "topic_code": "2.3",
+              "title": "Errores aleatorios y errores sistemáticos",
+              "keywords": [
+                "errores sistemáticos",
+                "errores aleatorios",
+                "distribución normal",
+                "curva de Gauss",
+                "error determinado",
+                "error indeterminado"
+              ]
+            },
+            {
+              "topic_code": "2.4",
+              "title": "Límites de confianza",
+              "keywords": [
+                "límites de confianza",
+                "intervalo de confianza",
+                "distribución t de Student",
+                "grados de libertad",
+                "nivel de confianza 95%"
+              ]
+            },
+            {
+              "topic_code": "2.5",
+              "title": "Estándares, blancos.",
+              "keywords": [
+                "patrón primario",
+                "patrón secundario",
+                "blanco de reactivo",
+                "blanco de disolvente",
+                "curva de calibración",
+                "adición estándar"
+              ]
+            },
+            {
+              "topic_code": "2.6",
+              "title": "Cifras significativas",
+              "keywords": [
+                "cifras significativas",
+                "redondeo",
+                "propagación de errores",
+                "incertidumbre absoluta",
+                "incertidumbre relativa"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 5: Errores en los análisis químicos",
+              "Capítulo 6: Errores aleatorios en el análisis químico",
+              "Capítulo 7: Tratamiento estadístico y evaluación de datos"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 2: Errores y tratamiento de datos analíticos"
+            ]
+          }
+        },
+        {
+          "unit_number": 3,
+          "unit_title": "MÉTODOS GRAVIMÉTRICOS DE ANÁLISIS",
+          "unit_id": "THEORY_U3",
+          "description": "Principios físicos y químicos de la gravimetría por precipitación, mecanismos de nucleación y crecimiento cristalino, fenómenos de coprecipitación y aplicaciones analíticas.",
+          "learning_objectives": [
+            "Describir las propiedades ideales que debe reunir un precipitado analítico y su forma de pesada.",
+            "Explicar la cinética de formación de precipitados: nucleación homogénea/heterogénea vs crecimiento de cristales.",
+            "Analizar la relación de Von Weimarn sobre la sobresaturación relativa y su control experimental para obtener precipitados cristalinos.",
+            "Diferenciar los tipos de coprecipitación (adsorción superficial, inclusión isomórfica, oclusión y postprecipitación) y sus métodos de minimización.",
+            "Calcular factores gravimétricos y porcentajes de pureza de analitos a partir de masas de precipitado calcinado."
+          ],
+          "key_competencies": [
+            "Optimización de condiciones experimentales para favorecer cristales filtrables y puros.",
+            "Resolución de problemas estequiométricos gravimétricos complejos.",
+            "Manejo de procesos térmicos de calcinación, desecación y pesada a peso constante."
+          ],
+          "topics": [
+            {
+              "topic_code": "3.1",
+              "title": "Propiedades de los precipitados",
+              "keywords": [
+                "precipitado coloidal",
+                "precipitado cristalino",
+                "filtrabilidad",
+                "estabilidad térmica",
+                "reactivo precipitante"
+              ]
+            },
+            {
+              "topic_code": "3.2",
+              "title": "Mecanismos de formación de los precipitados",
+              "keywords": [
+                "nucleación",
+                "nucleación homogénea",
+                "nucleación heterogénea",
+                "crecimiento de cristales"
+              ]
+            },
+            {
+              "topic_code": "3.3",
+              "title": "Sobresaturación relativa",
+              "keywords": [
+                "relación de Von Weimarn",
+                "sobresaturación relativa",
+                "(Q-S)/S",
+                "control de concentración y temperatura"
+              ]
+            },
+            {
+              "topic_code": "3.4",
+              "title": "Precipitados cristalinos",
+              "keywords": [
+                "digestión",
+                "maduración de Ostwald",
+                "envejecimiento del precipitado",
+                "adición lenta de reactivo",
+                "precipitación en disolución homogénea"
+              ]
+            },
+            {
+              "topic_code": "3.5",
+              "title": "Coprecipitación",
+              "keywords": [
+                "coprecipitación",
+                "adsorción superficial",
+                "oclusión",
+                "inclusión",
+                "solución sólida",
+                "postprecipitación",
+                "peptización",
+                "lavado con electrolito"
+              ]
+            },
+            {
+              "topic_code": "3.6",
+              "title": "Aplicaciones.",
+              "keywords": [
+                "factor gravimétrico",
+                "cálculos gravimétricos",
+                "BaSO4",
+                "AgCl",
+                "Fe2O3",
+                "crisol Gooch",
+                "calcinación",
+                "peso constante"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 12: Métodos gravimétricos de análisis"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 3: Análisis gravimétrico"
+            ]
+          }
+        },
+        {
+          "unit_number": 4,
+          "unit_title": "SOLUBILIDAD DE LOS PRECIPITADOS",
+          "unit_id": "THEORY_U4",
+          "description": "Equilibrio heterogéneo sólido-líquido, producto de solubilidad, factores que modifican la solubilidad (ion común, fuerza iónica, pH, complejación) y separación selectiva.",
+          "learning_objectives": [
+            "Formular la constante del producto de solubilidad (Kps) y relacionarla rigurosamente con la solubilidad molar intrínseca.",
+            "Evaluar el impacto termodinámico del efecto del ion común y la fuerza iónica (actividad y coeficientes de actividad de Debye-Hückel).",
+            "Calcular la solubilidad de sales poco solubles sometidas a equilibrios competitivos de hidrólisis/pH y formación de complejos secundarios.",
+            "Diseñar condiciones de pH y concentración de reactivos para separaciones fraccionadas de cationes y aniones."
+          ],
+          "key_competencies": [
+            "Cálculo de solubilidad condicional en sistemas multifásicos complejos.",
+            "Diseño de separaciones químicas selectivas por precipitación fraccionada.",
+            "Modelación de equilibrios simultáneos en disolución acuosa."
+          ],
+          "topics": [
+            {
+              "topic_code": "4.1",
+              "title": "Constante del producto de solubilidad",
+              "keywords": [
+                "Kps",
+                "producto de solubilidad",
+                "solubilidad molar",
+                "producto iónico Q",
+                "criterio de precipitación"
+              ]
+            },
+            {
+              "topic_code": "4.2",
+              "title": "Efecto de los equilibrios competitivos sobre la solubilidad",
+              "keywords": [
+                "efecto del ion común",
+                "fuerza iónica",
+                "coeficiente de actividad",
+                "ecuación de Debye-Hückel",
+                "efecto del pH",
+                "equilibrio de complejación",
+                "solubilidad condicional"
+              ]
+            },
+            {
+              "topic_code": "4.3",
+              "title": "Separaciones basadas en la diferencia de solubilidades",
+              "keywords": [
+                "precipitación fraccionada",
+                "separación selectiva",
+                "control de pH en sulfuros",
+                "separación de hidróxidos"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 9: Disoluciones acuosas y equilibrios químicos",
+              "Capítulo 10: Efecto de los electrolitos sobre el equilibrio químico",
+              "Capítulo 11: Resolución de problemas de equilibrios complejos"
+            ],
+            "Aguilar_San_Juan_2ed_ES": [
+              "Capítulo 5: Equilibrios de precipitación"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 3: Análisis gravimétrico (sección equilibrios de solubilidad)"
+            ]
+          }
+        },
+        {
+          "unit_number": 5,
+          "unit_title": "VALORACIONES DE PRECIPITACIÓN",
+          "unit_id": "THEORY_U5",
+          "description": "Volumetría por precipitación (argentometría), construcción de curvas de valoración sigmoideas, titulación de mezclas y fundamentos de los métodos de Mohr, Volhard y Fajans.",
+          "learning_objectives": [
+            "Construir y graficar curvas teóricas de valoración de precipitación (pX o pAg en función del volumen de reactivo valorante).",
+            "Analizar el efecto de la concentración de los reactivos y la magnitud de Kps en la nitidez del salto en el punto de equivalencia.",
+            "Resolver curvas de titulación para mezclas de halogenuros (ej. ioduro y cloruro).",
+            "Diferenciar los fundamentos, intervalos de pH, indicadores y limitaciones operativas de los métodos de Mohr, Volhard y Fajans."
+          ],
+          "key_competencies": [
+            "Determinación cuantitativa de haluros y pseudohaluros por argentometría.",
+            "Selección del método argentométrico adecuado según el pH y la matriz de la muestra.",
+            "Interpretación de indicadores de adsorción y precipitación secundaria coloreada."
+          ],
+          "topics": [
+            {
+              "topic_code": "5.1",
+              "title": "Curvas de valoración para las reacciones de precipitación",
+              "keywords": [
+                "curva de titulación argentométrica",
+                "pAg",
+                "pCl",
+                "salto de potencial/concentración",
+                "efecto de Kps"
+              ]
+            },
+            {
+              "topic_code": "5.2",
+              "title": "Curvas de valoración para mezclas",
+              "keywords": [
+                "titulación de mezclas de haluros",
+                "precipitación sucesiva",
+                "I- y Cl-",
+                "puntos finales múltiples"
+              ]
+            },
+            {
+              "topic_code": "5.3",
+              "title": "Indicadores para las valoraciones de precipitación",
+              "keywords": [
+                "indicadores de precipitación",
+                "formación de sólido coloreado",
+                "indicadores de adsorción",
+                "punto final"
+              ]
+            },
+            {
+              "topic_code": "5.4",
+              "title": "Aplicaciones: Métodos de Mohr y Volhard",
+              "keywords": [
+                "método de Mohr",
+                "cromato de potasio",
+                "K2CrO4",
+                "pH 6.5-10",
+                "método de Volhard",
+                "retrotitulación",
+                "tiocianato",
+                "KSCN",
+                "Fe(III)",
+                "método de Fajans",
+                "fluoresceína",
+                "diclorofluoresceína"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 13: Titulaciones en química analítica: Titulaciones de precipitación"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 6: Titulaciones por precipitación"
+            ]
+          }
+        },
+        {
+          "unit_number": 6,
+          "unit_title": "VALORACIONES DE NEUTRALIZACIÓN",
+          "unit_id": "THEORY_U6",
+          "description": "Equilibrios ácido-base, teoría de indicadores de pH, curvas de neutralización de ácidos y bases fuertes y débiles, sistemas polipróticos y capacidad amortiguadora.",
+          "learning_objectives": [
+            "Explicar el equilibrio químico y mecanismo cromóforo de los indicadores ácido-base y su rango de transición de color (pH = pKa ± 1).",
+            "Deducir y calcular el pH en las cuatro regiones clave de una curva de valoración: inicial, antes del PE, en el PE y después del PE.",
+            "Calcular el pH de disoluciones de ácidos y bases débiles monopróticos y polipróticos mediante balances de materia y carga.",
+            "Formular disoluciones amortiguadoras (buffers) y calcular su capacidad reguladora mediante la ecuación de Henderson-Hasselbalch.",
+            "Interpretar curvas de titulación de ácidos polipróticos y mezclas de carbonatos (métodos de Warder y Winkler)."
+          ],
+          "key_competencies": [
+            "Cálculo y predicción de curvas de titulación ácido-base sin simplificaciones erróneas.",
+            "Selección justificada de indicadores visuales según el pH del punto de equivalencia.",
+            "Diseño y preparación de soluciones tampón para rangos de pH específicos."
+          ],
+          "topics": [
+            {
+              "topic_code": "6.1",
+              "title": "Indicadores Ácido- Base",
+              "keywords": [
+                "indicadores ácido-base",
+                "fenolftaleína",
+                "naranja de metilo",
+                "rojo de metilo",
+                "rango de viraje",
+                "pKa del indicador"
+              ]
+            },
+            {
+              "topic_code": "6.2",
+              "title": "Curvas de valoración de ácidos fuertes y bases fuertes",
+              "keywords": [
+                "ácido fuerte base fuerte",
+                "curva de neutralización",
+                "punto de equivalencia neutro",
+                "cálculo de pH"
+              ]
+            },
+            {
+              "topic_code": "6.3",
+              "title": "Equilibrios de ácidos y bases débiles",
+              "keywords": [
+                "Ka",
+                "Kb",
+                "ácidos débiles",
+                "bases débiles",
+                "grado de disociación",
+                "fracciones molares alfa"
+              ]
+            },
+            {
+              "topic_code": "6.4",
+              "title": "Soluciones reguladoras",
+              "keywords": [
+                "solución tampón",
+                "buffer",
+                "amortiguador",
+                "Henderson-Hasselbalch",
+                "capacidad reguladora beta"
+              ]
+            },
+            {
+              "topic_code": "6.5",
+              "title": "Curvas de valoración de ácidos débiles",
+              "keywords": [
+                "titulación de ácido débil con base fuerte",
+                "punto de semiequivalencia",
+                "pH = pKa",
+                "hidrólisis en el punto de equivalencia"
+              ]
+            },
+            {
+              "topic_code": "6.6",
+              "title": "Curvas de valoración de bases débiles",
+              "keywords": [
+                "titulación de base débil con ácido fuerte",
+                "punto de equivalencia ácido",
+                "ácidos polipróticos",
+                "H3PO4",
+                "mezclas de carbonatos"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 14: Principios de las titulaciones de neutralización",
+              "Capítulo 15: Curvas de titulación para sistemas ácido/base complejos",
+              "Capítulo 16: Aplicaciones de las titulaciones de neutralización"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 4: Titulaciones ácido-base",
+              "Capítulo 5: Equilibrios ácido-base en disoluciones complejas"
+            ],
+            "Aguilar_San_Juan_2ed_ES": [
+              "Capítulo 2: Equilibrios ácido-base",
+              "Capítulo 3: Curvas de neutralización"
+            ]
+          }
+        },
+        {
+          "unit_number": 7,
+          "unit_title": "VALORACIONES DE FORMACIÓN DE COMPLEJOS",
+          "unit_id": "THEORY_U7",
+          "description": "Titulaciones quelatométricas, estructura química y propiedades del EDTA, constantes condicionales, indicadores metalocrómicos y determinación de cationes y dureza del agua.",
+          "learning_objectives": [
+            "Describir la estructura química, formas protonadas (H4Y, H3Y-, H2Y2-, HY3-, Y4-) y quelatos 1:1 formados por el EDTA con cationes metálicos.",
+            "Deducir y calcular la constante de formación condicional (K'f = alpha4 * Kf) en función del pH y de reactivos complejantes auxiliares (alpha_M).",
+            "Construir curvas de titulación complexométrica (pM vs volumen de EDTA) identificando las regiones previas, en y posteriores al PE.",
+            "Explicar el mecanismo de desplazamiento de los indicadores metalocrómicos (Negro de Eriocromo T, Calmagita, Murexida).",
+            "Diseñar protocolos para titulación directa, por retroceso, por desplazamiento y mediante agentes enmascarantes (cianuro, fluoruro, trietanolamina)."
+          ],
+          "key_competencies": [
+            "Cálculo de constantes de equilibrio condicionales en presencia de interferentes.",
+            "Determinación estequiométrica de cationes divalentes y polivalentes (Ca2+, Mg2+, Zn2+, Pb2+).",
+            "Aplicación analítica en análisis de dureza total, cálcica y magnésica en aguas industriales y potables."
+          ],
+          "topics": [
+            {
+              "topic_code": "7.1",
+              "title": "Valoraciones con ácidos poliaminocarboxílicos – EDTA",
+              "keywords": [
+                "EDTA",
+                "ácido etilendiaminotetraacético",
+                "quelato",
+                "ligando hexadentado",
+                "estequiometría 1:1"
+              ]
+            },
+            {
+              "topic_code": "7.2",
+              "title": "Cálculos en equilibrios relacionados con EDTA",
+              "keywords": [
+                "constante de formación absoluta Kf",
+                "fracción alfa4",
+                "constante de formación condicional K'f",
+                "efecto del pH",
+                "complejos auxiliares"
+              ]
+            },
+            {
+              "topic_code": "7.3",
+              "title": "Deducción de una curva de valoración con EDTA",
+              "keywords": [
+                "curva pM vs volumen EDTA",
+                "salto de pM",
+                "influencia del pH en la curva"
+              ]
+            },
+            {
+              "topic_code": "7.4",
+              "title": "Indicadores",
+              "keywords": [
+                "indicadores metalocrómicos",
+                "Negro de Eriocromo T (NET)",
+                "Murexida",
+                "Calmagita",
+                "competencia por el ligando"
+              ]
+            },
+            {
+              "topic_code": "7.5",
+              "title": "Aplicaciones",
+              "keywords": [
+                "dureza del agua",
+                "dureza cálcica",
+                "dureza magnésica",
+                "titulación directa",
+                "titulación por retroceso",
+                "enmascaramiento"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 17: Reacciones y titulaciones de formación de complejos"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 7: Titulaciones por formación de complejos"
+            ],
+            "Aguilar_San_Juan_2ed_ES": [
+              "Capítulo 4: Equilibrios de formación de complejos"
+            ]
+          }
+        },
+        {
+          "unit_number": 8,
+          "unit_title": "TEORÍA DE LAS VALORACIONES DE OXIDO - REDUCCIÓN",
+          "unit_id": "THEORY_U8",
+          "description": "Termodinámica electroquímica, semirreacciones, celdas galvánicas, ecuación de Nernst, potenciales formales, deducción de curvas redox e indicadores redox.",
+          "learning_objectives": [
+            "Balancear ecuaciones redox complejas por el método del ion-electrón en medio ácido y básico.",
+            "Identificar y esquematizar los componentes de celdas galvánicas y electrolíticas (ánodo, cátodo, puente salino, convenio IUPAC).",
+            "Aplicar la ecuación de Nernst para calcular potenciales de electrodo y potenciales formales bajo condiciones no estándar.",
+            "Calcular la fuerza electromotriz (fem) de una pila y relacionarla cuantitativamente con la energía libre de Gibbs y la constante de equilibrio Keq.",
+            "Construir curvas teóricas de titulación redox (potencial del sistema E vs volumen de titulante) y seleccionar indicadores redox adecuados."
+          ],
+          "key_competencies": [
+            "Predicción de la espontaneidad y extensión de reacciones redox analíticas.",
+            "Modelación matemática de curvas de titulación redox.",
+            "Selección de indicadores redox por su potencial formal de transición."
+          ],
+          "topics": [
+            {
+              "topic_code": "8.1",
+              "title": "Procesos de oxido-reducción",
+              "keywords": [
+                "redox",
+                "oxidación",
+                "reducción",
+                "agente oxidante",
+                "agente reductor",
+                "método ion-electrón"
+              ]
+            },
+            {
+              "topic_code": "8.2",
+              "title": "Pilas electroquímicas",
+              "keywords": [
+                "pila galvánica",
+                "celda electrolítica",
+                "ánodo",
+                "cátodo",
+                "puente salino",
+                "notación de celda"
+              ]
+            },
+            {
+              "topic_code": "8.3",
+              "title": "Potenciales de electrodo",
+              "keywords": [
+                "ecuación de Nernst",
+                "potencial estándar E°",
+                "electrodo estándar de hidrógeno SHE",
+                "potencial formal E°'"
+              ]
+            },
+            {
+              "topic_code": "8.4",
+              "title": "Pilas y potenciales de pila",
+              "keywords": [
+                "potencial de celda E_celda",
+                "energía libre de Gibbs delta G°",
+                "constante de equilibrio Keq"
+              ]
+            },
+            {
+              "topic_code": "8.5",
+              "title": "Valoraciones de oxidación-reducción",
+              "keywords": [
+                "curva de titulación redox",
+                "potencial en el punto de equivalencia",
+                "salto de potencial redox"
+              ]
+            },
+            {
+              "topic_code": "8.6",
+              "title": "Indicadores redox",
+              "keywords": [
+                "indicador redox",
+                "difenilamina",
+                "sulfonato de difenilamina",
+                "ferroína",
+                "almidón",
+                "autoindicador permanganato"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 18: Introducción a la electroquímica",
+              "Capítulo 19: Aplicaciones de los potenciales estándar de electrodo"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 8: Equilibrios de oxidación-reducción",
+              "Capítulo 9: Titulaciones de oxidación-reducción (sección teórica)"
+            ]
+          }
+        },
+        {
+          "unit_number": 9,
+          "unit_title": "APLICACIONES DE LAS VALORACIONES DE OXIDOREDUCCIÓN",
+          "unit_id": "THEORY_U9",
+          "description": "Uso de reactivos auxiliares pre-oxidantes y pre-reductores, métodos volumétricos con permanganato, dicromato, cerio(IV), yodimetría e yodometría indirecta.",
+          "learning_objectives": [
+            "Seleccionar reactivos auxiliares para ajuste previo del estado de oxidación del analito (reductor de Jones, reductor de Walden, bismutato de sodio, persulfato de amonio).",
+            "Explicar las propiedades, ventajas y desventajas de los oxidantes patrón: KMnO4, K2Cr2O7, Ce(IV) y KIO3.",
+            "Diferenciar entre métodos directos (yodimetría con I2) y métodos indirectos (yodometría con exceso de I- y valoración con tiosulfato de sodio Na2S2O3).",
+            "Resolver problemas cuantitativos de determinación de hierro en minerales, peróxido de hidrógeno, cobre, calcio (vía oxalato) e índice de yodo."
+          ],
+          "key_competencies": [
+            "Formulación y ejecución de métodos volumétricos redox en matrices minerales e industriales.",
+            "Manejo de reactivos auxiliares pre-redox y control de interferencias de cloruros (reactivo de Zimmermann-Reinhardt).",
+            "Cálculos estequiométricos de equivalencia redox para valoraciones directas y por retrotitulación."
+          ],
+          "topics": [
+            {
+              "topic_code": "9.1",
+              "title": "Reactivos auxiliares oxidantes y reductores",
+              "keywords": [
+                "reactivos auxiliares",
+                "reductor de Jones (Zn/Hg)",
+                "reductor de Walden (Ag/HCl)",
+                "bismutato de sodio NaBiO3",
+                "peroxidisulfato (NH4)2S2O8",
+                "peróxido de hidrógeno H2O2"
+              ]
+            },
+            {
+              "topic_code": "9.2",
+              "title": "Aplicación de los oxidantes patrón",
+              "keywords": [
+                "permanganometría KMnO4",
+                "dicromatometría K2Cr2O7",
+                "cerimetría Ce(IV)",
+                "yodimetría I2",
+                "estandarización con Na2C2O4"
+              ]
+            },
+            {
+              "topic_code": "9.3",
+              "title": "Aplicaciones volumétricas de reductores",
+              "keywords": [
+                "yodometría indirecta",
+                "tiosulfato de sodio Na2S2O3",
+                "almidón como indicador",
+                "determinación de hierro",
+                "índice de yodo"
+              ]
+            }
+          ],
+          "mapped_textbook_chapters": {
+            "Skoog_9ed_ES": [
+              "Capítulo 20: Aplicaciones de las titulaciones de oxidación/reducción"
+            ],
+            "Day_Underwood_5ed_ES": [
+              "Capítulo 9: Titulaciones de oxidación-reducción (sección aplicaciones)"
+            ]
+          }
+        }
+      ]
+    },
+    "laboratory": {
+      "course_name": "LABORATORIO DE QUIMICA ANALITICA CUANTITATIVA",
+      "siss_code": "2004169",
+      "character": "Obligatoria",
+      "total_hours": 120,
+      "academic_credits": 6,
+      "bibliography": [
+        {
+          "authors": [
+            "Skoog, D. A.",
+            "West, D. M.",
+            "Holler, F. J."
+          ],
+          "title": "Química Analítica",
+          "edition": "Edición 1998 / 7ma / 9na",
+          "publisher": "McGraw-Hill Interamericana S.A., Colombia",
+          "year": "1998"
+        },
+        {
+          "authors": [
+            "Day, R. A.",
+            "Underwood, A. L."
+          ],
+          "title": "Química Analítica Cuantitativa",
+          "edition": "5ta Edición",
+          "publisher": "Prentice-Hall Hispanoamericana, S.A., México",
+          "year": "1989"
+        }
+      ],
+      "units": [
+        {
+          "unit_number": 1,
+          "unit_title": "SEGURIDAD EN EL LABORATORIO Y TRATAMIENTO ESTADISTICO DE DATOS",
+          "unit_id": "LAB_U1",
+          "description": "Bioseguridad y gestión de riesgos químicos en el laboratorio analítico, metrología de pesada y calibración gravimétrica de material volumétrico con tratamiento estadístico.",
+          "practicals": [
+            {
+              "practical_number": 1,
+              "practical_id": "LAB_P1",
+              "title": "SEGURIDAD EN EL LABORATORIO",
+              "topics": [
+                {
+                  "code": "1.1",
+                  "title": "Lugar de trabajo"
+                },
+                {
+                  "code": "1.2",
+                  "title": "Normas de seguridad y limpieza"
+                },
+                {
+                  "code": "1.3",
+                  "title": "Primeros auxilios"
+                },
+                {
+                  "code": "1.4",
+                  "title": "Eliminación de desechos químicos"
+                }
+              ],
+              "objectives": [
+                "Conocer y aplicar los protocolos de seguridad, bioseguridad y orden en el laboratorio de química analítica.",
+                "Identificar pictogramas de peligro SGA/GHS y hojas de datos de seguridad (FDS/MSDS).",
+                "Aplicar medidas inmediatas de primeros auxilios ante quemaduras por ácidos/bases, cortes o inhalación de vapores tóxicos.",
+                "Clasificar y segregar residuos químicos (ácidos, metales pesados, disolventes halogenados y no halogenados) para su correcta neutralización y disposición."
+              ],
+              "techniques": [
+                "Uso de campana de extracción de gases (fume hood)",
+                "Segregación y etiquetado de envases de residuos peligrosos",
+                "Neutralización de derrames de ácidos fuertes (con NaHCO3) y bases (con ácido acético diluido)",
+                "Uso de equipos de protección personal (EPP): gafas de seguridad, bata de algodón, guantes de nitrilo"
+              ],
+              "reagents": [
+                "Bicarbonato de sodio (NaHCO3) sólido para neutralización de ácidos",
+                "Ácido acético diluido al 5% o ácido bórico para neutralización de bases",
+                "Solución lavaojos salina estéril",
+                "Material absorbente inerte (vermiculita / arena seca)"
+              ],
+              "equipment": [
+                "Campana de extracción de vapores químicos",
+                "Ducha de emergencia y lavaojos",
+                "Extintor de CO2 y polvo químico seco (ABC)",
+                "Kit para control de derrames químicos"
+              ],
+              "safety_hazards": [
+                "Riesgo de salpicaduras de ácidos y álcalis concentrados en piel y ojos",
+                "Inhalación de gases irritantes (NOx, SO2, HCl, NH3)",
+                "Fuego por disolventes inflamables"
+              ],
+              "calculations": [
+                "Cálculo estequiométrico de neutralización para tratamiento de efluentes ácidos o básicos antes del vertido",
+                "Límites permisibles de descarga ambiental según normativa local"
+              ]
+            },
+            {
+              "practical_number": 2,
+              "practical_id": "LAB_P2",
+              "title": "TRATAMIENTO ESTADISTICO DE DATOS",
+              "topics": [
+                {
+                  "code": "1.5",
+                  "title": "Tratamiento estadístico de datos"
+                },
+                {
+                  "code": "1.6",
+                  "title": "Uso y calibración de la balanza analítica (Determinación del peso de un objeto, Procedimiento de una pesada)"
+                },
+                {
+                  "code": "1.7",
+                  "title": "Calibración de material volumétrico (Procedimientos de calibración, Registro de resultados)"
+                },
+                {
+                  "code": "1.8",
+                  "title": "Manejo estadístico de resultados"
+                },
+                {
+                  "code": "1.9",
+                  "title": "Cálculos y conclusiones"
+                },
+                {
+                  "code": "1.10",
+                  "title": "Preguntas sobre el tema"
+                }
+              ],
+              "objectives": [
+                "Dominar el principio de operación, nivelación y técnicas de pesada por diferencia en balanza analítica electrónica (0.1 mg).",
+                "Realizar la calibración gravimétrica de pipetas volumétricas y matraces aforados mediante el pesaje de agua destilada corregida por densidad y empuje del aire.",
+                "Calcular parámetros estadísticos de dispersión y tendencia central: media, desviación estándar, error relativo e intervalos de confianza.",
+                "Aplicar pruebas de rechazo de datos anómalos (Q de Dixon) y propagación de incertidumbres."
+              ],
+              "techniques": [
+                "Pesada por diferencia usando pesafiltros",
+                "Manejo de desecadores con gel de sílice",
+                "Enrase y manipulación de pipetas aforadas y buretas",
+                "Medición de temperatura del agua destilada con termómetro calibrado",
+                "Corrección de empuje del aire (buoyancy correction)"
+              ],
+              "reagents": [
+                "Agua destilada desgasificada",
+                "Gel de sílice desecante autoindicador"
+              ],
+              "equipment": [
+                "Balanza analítica con resolución de 0.0001 g (0.1 mg)",
+                "Termómetro de precisión (0.1 °C)",
+                "Pipeta volumétrica de 10 mL y 25 mL clase A",
+                "Matraz aforado de 50 mL y 100 mL",
+                "Pesafiltros con tapa esmerilada",
+                "Barómetro ambiental"
+              ],
+              "safety_hazards": [
+                "Manipulación de material de vidrio frágil",
+                "Cuidado mecánico de las cuchillas y platos de la balanza analítica"
+              ],
+              "calculations": [
+                "Corrección de empuje del aire: m = m_ap + m_ap * (d_aire/d_objeto - d_aire/d_pesas)",
+                "Volumen calibrado: V_20°C = m_agua / rho_agua(T) * [1 - beta*(T - 20°C)]",
+                "Media muestral: x_bar = sum(x_i) / n",
+                "Desviación estándar: s = sqrt(sum((x_i - x_bar)^2) / (n - 1))",
+                "Coeficiente de variación: CV = (s / x_bar) * 100",
+                "Intervalo de confianza: CI = x_bar +/- (t * s / sqrt(n))",
+                "Criterio Q de Dixon: Q_calc = |x_sospechoso - x_cercano| / (x_max - x_min)"
+              ]
+            }
+          ]
+        },
+        {
+          "unit_number": 2,
+          "unit_title": "PUESTA EN SOLUCION DE LAS MUESTRAS",
+          "unit_id": "LAB_U2",
+          "description": "Operaciones unitarias de muestreo mineralógico y métodos de disgregación por vía húmeda (ácidos inorgánicos) y vía seca (fusión alcalina).",
+          "practicals": [
+            {
+              "practical_number": 3,
+              "practical_id": "LAB_P3",
+              "title": "PUESTA EN SOLUCION DE LAS MUESTRAS",
+              "topics": [
+                {
+                  "code": "2.1",
+                  "title": "Técnicas de muestreo"
+                },
+                {
+                  "code": "2.2",
+                  "title": "Puesta en solución de sustancias orgánicas e inorgánicas"
+                },
+                {
+                  "code": "2.3",
+                  "title": "Procesos de vía húmeda y vía seca"
+                }
+              ],
+              "objectives": [
+                "Ejecutar protocolos de homogenización, molienda y cuarteo en muestras sólidas heterogéneas.",
+                "Desarrollar disoluciones por vía húmeda mediante digestión ácida con reactivos oxidantes y no oxidantes.",
+                "Efectuar disgregaciones por vía seca empleando sales fundentes alcalinas en crisoles metálicos/porcelana.",
+                "Comparar la eficacia de disolución y recuperación analítica entre vía húmeda y seca."
+              ],
+              "techniques": [
+                "Cuarteo manual de muestras sólidas",
+                "Trituración en mortero de ágata y tamizado",
+                "Digestión ácida en vaso de precipitados con vidrio de reloj en placa calefactora",
+                "Fusión alcalina en crisol de porcelana o níquel con mechero Bunsen o mufla a 800 °C",
+                "Lixiviación del fundente enfriado con ácido diluido"
+              ],
+              "reagents": [
+                "Ácido clorhídrico (HCl) concentrado 37% p/p",
+                "Ácido nítrico (HNO3) concentrado 65% p/p",
+                "Ácido sulfúrico (H2SO4) concentrado 98% p/p",
+                "Agua regia (3:1 HCl:HNO3)",
+                "Carbonato de sodio anhidro (Na2CO3) p.a.",
+                "Bisulfato o pirosulfato de potasio (K2S2O7) p.a.",
+                "Muestra mineral / roca caliza / escoria metalúrgica"
+              ],
+              "equipment": [
+                "Placa calefactora con agitación magnética",
+                "Campana de extracción de alta eficiencia",
+                "Crisoles de porcelana o platino/níquel con pinzas para crisol",
+                "Mortero y pistilo de ágata",
+                "Tamices Tyler de malla fina (100-200 mesh)",
+                "Mufla eléctrica"
+              ],
+              "safety_hazards": [
+                "Generación de vapores nitrosos corrosivos (NO2 pardo rojizo)",
+                "Quemaduras térmicas severas por crisoles al rojo vivo (800 °C)",
+                "Riesgo de salpicaduras de mezcla ácida hirviente"
+              ],
+              "calculations": [
+                "Relación másica fundente:muestra (típicamente 5:1 a 10:1)",
+                "Porcentaje de residuo insoluble: % Insoluble = (m_residuo / m_muestra) * 100",
+                "Porcentaje de recuperación de analito en fase líquida"
+              ]
+            }
+          ]
+        },
+        {
+          "unit_number": 3,
+          "unit_title": "PREPARACION Y ESTANDARIZACION DE SOLUCIONES",
+          "unit_id": "LAB_U3",
+          "description": "Preparación de disoluciones valoradas de ácidos, bases y agentes oxidantes, y su titulación contra patrones primarios certificados.",
+          "practicals": [
+            {
+              "practical_number": 4,
+              "practical_id": "LAB_P4",
+              "title": "PREPARACION Y ESTANDARIZACION DE SOLUCIONES",
+              "topics": [
+                {
+                  "code": "3.1",
+                  "title": "Que es un reactivo"
+                },
+                {
+                  "code": "3.2",
+                  "title": "Equipos, materiales y reactivos"
+                },
+                {
+                  "code": "3.3",
+                  "title": "Procedimiento"
+                },
+                {
+                  "code": "3.4",
+                  "title": "Preparación de una solución aproximada de HCl 0,1 N"
+                },
+                {
+                  "code": "3.5",
+                  "title": "Preparación de una solución aproximada de NaOH 0,1 N"
+                },
+                {
+                  "code": "3.6",
+                  "title": "Preparación de una solución de KMnO4 0,01 N"
+                },
+                {
+                  "code": "3.7",
+                  "title": "Preparacion de una solución de K2CrO4 0,01 N"
+                },
+                {
+                  "code": "3.8",
+                  "title": "Normalización de las soluciones de HCl 0,1 N y de NaOH 0,1 N"
+                },
+                {
+                  "code": "3.9",
+                  "title": "Normalización de una solución de KMnO4 0.1 N"
+                },
+                {
+                  "code": "3.10",
+                  "title": "Normalización de una solución de dicromato de potasio 0,1 N"
+                },
+                {
+                  "code": "3.11",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "3.12",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Diferenciar entre grado analítico de reactivos (p.a., USP, técnico) y definir los requisitos de un patrón primario.",
+                "Preparar soluciones acuosas de concentración aproximada de HCl (~0.1 N), NaOH (~0.1 N), KMnO4 (~0.01 N y 0.1 N) y K2CrO4 (~0.01 N).",
+                "Estandarizar HCl con Na2CO3 anhidro y NaOH con biftalato de potasio (KHP).",
+                "Estandarizar permanganato de potasio (KMnO4) en medio ácido caliente contra oxalato de sodio (Na2C2O4).",
+                "Preparar y estandarizar dicromato de potasio (K2Cr2O7) como patrón primario y contra sal de Mohr."
+              ],
+              "techniques": [
+                "Eliminación de CO2 disuelto mediante ebullición de agua destilada",
+                "Filtración de soluciones de KMnO4 a través de lana de vidrio o crisol filtrante para separar MnO2",
+                "Manejo de buretas con purga de burbujas de aire",
+                "Titulación redox en caliente (70-80 °C) para la reacción permanganato-oxalato",
+                "Detección visual de punto final con autoindicador (KMnO4) y con indicadores ácido-base (fenolftaleína, naranja de metilo)"
+              ],
+              "reagents": [
+                "HCl concentrado (~37% p/p, d = 1.19 g/mL)",
+                "Lentejas de NaOH p.a.",
+                "Permanganato de potasio (KMnO4) sólido",
+                "Cromato de potasio (K2CrO4) sólido",
+                "Dicromato de potasio (K2Cr2O7) patrón primario desecado a 140 °C",
+                "Carbonato de sodio (Na2CO3) patrón primario desecado a 270 °C",
+                "Biftalato de potasio (KHC8H4O4, KHP) patrón primario desecado a 110 °C",
+                "Oxalato de sodio (Na2C2O4) patrón primario desecado a 110 °C",
+                "Ácido sulfúrico (H2SO4) concentrado",
+                "Soluciones indicadoras de fenolftaleína y anaranjado de metilo"
+              ],
+              "equipment": [
+                "Balanza analítica (0.1 mg)",
+                "Buretas de 25 mL y 50 mL clase A",
+                "Matraces aforados de 250 mL, 500 mL y 1000 mL",
+                "Matraces Erlenmeyer de 250 mL",
+                "Placa calefactora y termómetro de 0-100 °C",
+                "Frasco lavador y frascos ámbar para reactivos fotosensibles"
+              ],
+              "safety_hazards": [
+                "Disolución exotérmica de NaOH (liberación de calor)",
+                "Vapores de HCl corrosivos",
+                "Manchas de MnO2 en la piel y ropa por KMnO4",
+                "Toxicidad y carcinogenicidad del Cr(VI) (dicromato y cromato)"
+              ],
+              "calculations": [
+                "Normalidad de HCl: N_HCl = (m_Na2CO3 * 1000) / (PE_Na2CO3 * V_HCl)  [PE = MW/2 = 52.99 g/eq]",
+                "Normalidad de NaOH: N_NaOH = (m_KHP * 1000) / (PE_KHP * V_NaOH)  [PE = MW = 204.22 g/eq]",
+                "Normalidad de KMnO4: N_KMnO4 = (m_Na2C2O4 * 1000) / (PE_Na2C2O4 * V_KMnO4)  [PE = MW/2 = 67.00 g/eq]",
+                "Factor de corrección volumétrica: f_c = N_experimental / N_teórica",
+                "Cálculo de volumen concentrado: V_conc = (N_deseada * V_deseada * PE) / (%p * d * 10)"
+              ]
+            }
+          ]
+        },
+        {
+          "unit_number": 4,
+          "unit_title": "GRAVIMETRIA",
+          "unit_id": "LAB_U4",
+          "description": "Análisis cuantitativo gravimétrico clásico por precipitación, digestión térmica, calcinación a alta temperatura y pesada a peso constante.",
+          "practicals": [
+            {
+              "practical_number": 5,
+              "practical_id": "LAB_P5",
+              "title": "DETERMINACIÓN GRAVIMÉTRICA DE SULFATOS",
+              "topics": [
+                {
+                  "code": "4.1",
+                  "title": "Determinación gravimétrica de sulfatos."
+                },
+                {
+                  "code": "4.2",
+                  "title": "Equipos, materiales y reactivos."
+                },
+                {
+                  "code": "4.3",
+                  "title": "Procedimiento."
+                },
+                {
+                  "code": "4.4",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "4.5",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Precipitar cuantitativamente el ion sulfato (SO4^2-) como sulfato de bario (BaSO4) en medio ácido clorhídrico caliente.",
+                "Controlar la sobresaturación relativa para minimizar la nucleación y promover el crecimiento de cristales de BaSO4.",
+                "Ejecutar la digestión del precipitado (maduración de Ostwald) a temperatura cercana a ebullición.",
+                "Realizar la filtración con papel de cenizas conocidas (Whatman 42), lavado libre de cloruros (test de AgNO3) y calcinación en mufla a 800 °C.",
+                "Determinar el porcentaje de sulfato en una muestra desconocida mediante el factor gravimétrico."
+              ],
+              "techniques": [
+                "Precipitación en caliente con agitación continua",
+                "Digestión térmica prolongada (1 hora en baño maría)",
+                "Filtración analítica cuantitativa por gravedad con papel filtro sin cenizas",
+                "Ensayo de lavado de precipitado con AgNO3 hasta ausencia de turbidez de AgCl",
+                "Carbonización lenta del papel filtro sin llama y calcinación en crisol de porcelana en horno mufla a 800-900 °C",
+                "Enfriamiento en desecador y pesada a peso constante (+/- 0.2 mg)"
+              ],
+              "reagents": [
+                "Muestra soluble con sulfatos (Na2SO4 / muestra problema)",
+                "Solución de cloruro de bario (BaCl2) al 5% o 10% p/v",
+                "Ácido clorhídrico concentrado (HCl) diluido 1:1",
+                "Solución de nitrato de plata (AgNO3) 0.1 N (reactivo para ensayo de cloruros)",
+                "Agua destilada caliente"
+              ],
+              "equipment": [
+                "Balanza analítica (0.1 mg)",
+                "Horno mufla programable (hasta 1000 °C)",
+                "Crisoles de porcelana previamente calcinados y tarados",
+                "Embudos de vástago largo y papel filtro Whatman N° 42",
+                "Desecador de vidrio con gel de sílice activa",
+                "Placa calefactora y vaso de precipitados de 400 mL"
+              ],
+              "safety_hazards": [
+                "Quemaduras térmicas al retirar crisoles de la mufla a 800 °C",
+                "Toxicidad de las sales solubles de bario (Ba2+)",
+                "Vapores de ácido clorhídrico durante la digestión"
+              ],
+              "calculations": [
+                "Reacción: SO4^2- + Ba^2+ -> BaSO4(s)",
+                "Factor gravimétrico (SO4^2-): FG = MW_SO4 / MW_BaSO4 = 96.06 / 233.39 = 0.4116",
+                "Factor gravimétrico (S): FG = MW_S / MW_BaSO4 = 32.065 / 233.39 = 0.1374",
+                "Porcentaje de analito: % SO4^2- = (m_BaSO4 * FG / m_muestra) * 100",
+                "Condición de peso constante: |m_calcinacion_k - m_calcinacion_k-1| <= 0.0003 g"
+              ]
+            }
+          ]
+        },
+        {
+          "unit_number": 5,
+          "unit_title": "VOLUMETRIA",
+          "unit_id": "LAB_U5",
+          "description": "Métodos volumétricos cuantitativos basados en valoraciones de precipitación, neutralización ácido-base, óxido-reducción (dicromatometría e iodometría) y complexometría.",
+          "practicals": [
+            {
+              "practical_number": 6,
+              "practical_id": "LAB_P6",
+              "title": "VOLUMETRIA DE PRECIPITACION, DETERMINACION DE CLORUROS",
+              "topics": [
+                {
+                  "code": "5.1",
+                  "title": "Determinación gravimétrica de cloruros solubles"
+                },
+                {
+                  "code": "5.2",
+                  "title": "Determinación volumétrica por precipitación de cloruros solubles."
+                },
+                {
+                  "code": "5.3",
+                  "title": "Comparación de métodos"
+                },
+                {
+                  "code": "5.4",
+                  "title": "Equipos, materiales y reactivos"
+                },
+                {
+                  "code": "5.5",
+                  "title": "Procedimiento"
+                },
+                {
+                  "code": "5.6",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "5.7",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Determinar el contenido de cloruros en una muestra problema mediante el método gravimétrico de AgCl.",
+                "Determinar cloruros por volumetría de precipitación empleando el método argentométrico de Mohr (indicador K2CrO4) y/o Volhard (retrotitulación con KSCN).",
+                "Comparar la exactitud, precisión, tiempo de análisis y limitaciones experimentales entre los métodos gravimétrico y volumétrico."
+              ],
+              "techniques": [
+                "Precipitación de AgCl en crisol Gooch o filtro de vidrio sintetizado",
+                "Titulación directa de cloruro con solución patrón de AgNO3 a pH neutro (método de Mohr)",
+                "Adición de exceso de AgNO3, filtración/aislamiento con nitrobenceno y valoración por retroceso con KSCN en medio ácido (método de Volhard)",
+                "Apreciación del viraje de punto final de amarillo a rojo ladrillo (Ag2CrO4 en Mohr) o rojo sangre ([Fe(SCN)]^2+ en Volhard)"
+              ],
+              "reagents": [
+                "Solución valorada de nitrato de plata (AgNO3) 0.1 N",
+                "Solución indicadora de cromato de potasio (K2CrO4) al 5% p/v",
+                "Solución valorada de tiocianato de potasio o amonio (KSCN / NH4SCN) 0.1 N",
+                "Solución indicadora de sulfato férrico amónico (alumbre férrico)",
+                "Ácido nítrico (HNO3) 6 N libre de óxidos de nitrógeno",
+                "Nitrobenceno p.a. (o alcohol isoamílico)",
+                "Bicarbonato de sodio (para ajuste de pH en Mohr)",
+                "Muestra con cloruros (ej. NaCl o agua salobre)"
+              ],
+              "equipment": [
+                "Bureta de 25 mL clase A con protección ámbar (o protegida de la luz)",
+                "Matraces Erlenmeyer de 250 mL",
+                "Crisoles Gooch con lana de vidrio o vidrio sinterizado (porosidad media)",
+                "Estufa de secado a 110-120 °C",
+                "Balanza analítica (0.1 mg)"
+              ],
+              "safety_hazards": [
+                "Nitrato de plata produce quemaduras y manchas oscuras persistentes de plata metálica en la piel",
+                "Cromato de potasio es tóxico y cancerígeno",
+                "Nitrobenceno es altamente tóxico por absorción cutánea e inhalación (usar campana de extracción)"
+              ],
+              "calculations": [
+                "Gravimetría: % Cl- = (m_AgCl * (MW_Cl / MW_AgCl) / m_muestra) * 100  [FG = 35.45 / 143.32 = 0.2474]",
+                "Volumetría de Mohr: % Cl- = (V_AgNO3 * N_AgNO3 * meq_Cl / m_muestra) * 100  [meq_Cl = 0.03545 g/meq]",
+                "Volumetría de Volhard: % Cl- = [((V_Ag * N_Ag) - (V_SCN * N_SCN)) * meq_Cl / m_muestra] * 100",
+                "Comparación estadística: Prueba t de Student para comparación de medias de ambos métodos"
+              ]
+            },
+            {
+              "practical_number": 7,
+              "practical_id": "LAB_P7",
+              "title": "VOLUMETRIA ACIDO – BASE",
+              "topics": [
+                {
+                  "code": "5.8",
+                  "title": "Titulación de un ácido fuerte con una base fuerte, determinación potenciométrica y con indicador visual."
+                },
+                {
+                  "code": "5.9",
+                  "title": "Equipos, materiales y reactivos"
+                },
+                {
+                  "code": "5.10",
+                  "title": "Procedimiento"
+                },
+                {
+                  "code": "5.11",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "5.12",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Titular un ácido fuerte (HCl) con una base fuerte patrón (NaOH) evaluando simultáneamente el viraje con indicador visual y la respuesta de un electrodo de pH combinado.",
+                "Trazar la curva experimental de titulación potenciométrica de pH vs volumen de titulante agregado.",
+                "Determinar con precisión el volumen de equivalencia utilizando el método de la primera derivada (dpH/dV) y de la segunda derivada (d2pH/dV2).",
+                "Evaluar el error de titulación comparando el punto final del indicador visual con el punto de inflexión potenciométrico."
+              ],
+              "techniques": [
+                "Calibración en dos puntos de pH-metro con soluciones buffer pH 4.01 y 7.00 (o 10.01)",
+                "Titulación potenciométrica con adición fraccionada de volumen (mL a mL y luego 0.05 mL en la zona de viraje)",
+                "Manejo de agitación magnética continua sin golpear el bulbo del electrodo",
+                "Tratamiento de derivadas numéricas en hoja de cálculo"
+              ],
+              "reagents": [
+                "Solución valorada de HCl ~0.1 N",
+                "Solución estandarizada de NaOH ~0.1 N",
+                "Soluciones amortiguadoras de calibración: pH 4.00, 7.00 y 10.00",
+                "Indicador de fenolftaleína al 0.1% en etanol",
+                "Indicador de azul de bromotimol",
+                "Agua destilada neutra"
+              ],
+              "equipment": [
+                "pH-metro digital de mesa con resolución de 0.01 pH",
+                "Electrodo combinado de vidrio y referencia de Ag/AgCl con solución KCl 3M",
+                "Agitador magnético con barras magnéticas recubiertas de PTFE",
+                "Bureta de 25 mL clase A con soporte y pinza",
+                "Vaso de precipitados de 150 mL de forma alta"
+              ],
+              "safety_hazards": [
+                "Manejo de disoluciones de álcalis concentrados que pueden causar lesiones oculares",
+                "Fragilidad del bulbo de vidrio ultrafino del electrodo de pH"
+              ],
+              "calculations": [
+                "Normalidad del ácido: N_ácido = (V_NaOH,eq * N_NaOH) / V_alícuota",
+                "Primera derivada numérica: (dpH/dV)_i = (pH_i+1 - pH_i-1) / (V_i+1 - V_i-1)",
+                "Segunda derivada: (d2pH/dV2) = 0 define el punto de inflexión exacto",
+                "Porcentaje de pureza o concentración en g/L: C(g/L) = N_ácido * PE_ácido"
+              ]
+            },
+            {
+              "practical_number": 8,
+              "practical_id": "LAB_P8",
+              "title": "VOLUMETRIA DE OXIDACION-REDUCCION DICROMATOMETRIA",
+              "topics": [
+                {
+                  "code": "5.13",
+                  "title": "Dicromatometria"
+                },
+                {
+                  "code": "5.14",
+                  "title": "Equipos, materiales y reactivos"
+                },
+                {
+                  "code": "5.15",
+                  "title": "Procedimiento"
+                },
+                {
+                  "code": "5.16",
+                  "title": "Aplicación en la determinación de Hierro"
+                },
+                {
+                  "code": "5.17",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "5.18",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Comprender la química redox del dicromato de potasio como oxidante patrón secundario y primario estable.",
+                "Efectuar la disolución ácida de un mineral de hierro (hematita/magnetita) y la reducción previa cuantitativa de Fe(III) a Fe(II) con cloruro estannoso (SnCl2).",
+                "Eliminar el exceso de reductor SnCl2 mediante adición controlada de cloruro mercúrico (HgCl2) formando el precipitado sedoso blanco de Hg2Cl2.",
+                "Titular el Fe(II) con solución estándar de K2Cr2O7 en presencia de ácido fosfórico y difenilaminosulfonato de bario/sodio como indicador redox.",
+                "Calcular el porcentaje de hierro total (% Fe) y de óxido férrico (% Fe2O3) en la muestra mineral."
+              ],
+              "techniques": [
+                "Digestión ácida en caliente de muestra de mineral de hierro",
+                "Reducción gota a gota con SnCl2 caliente hasta decoloración del complejo amarillo de Fe(III)",
+                "Enfriamiento rápido bajo chorro de agua y adición rápida de HgCl2 (aparición de aspecto sedoso; si es gris/negro se descarta por exceso de SnCl2 y reducción a Hg metálico)",
+                "Adición de mezcla sulfofosfórica (H2SO4 - H3PO4) para complejar Fe(III) como incoloro y disminuir su potencial formal",
+                "Detección del viraje redox de verde a violeta/púrpura persistente"
+              ],
+              "reagents": [
+                "Muestra de mineral de hierro o sal de Mohr desconocida",
+                "Solución estándar de dicromato de potasio (K2Cr2O7) 0.1000 N",
+                "Solución de cloruro estannoso (SnCl2) al 5% p/v en HCl 1:1",
+                "Solución saturada de cloruro mercúrico (HgCl2) al 5% p/v",
+                "Mezcla sulfofosfórica: H2SO4 conc. + H3PO4 conc. + H2O (150 mL + 150 mL + 700 mL)",
+                "Indicador difenilaminosulfonato de sodio o bario al 0.2% p/v en agua",
+                "HCl concentrado"
+              ],
+              "equipment": [
+                "Bureta de 25 mL o 50 mL",
+                "Matraces Erlenmeyer de 500 mL",
+                "Placa calefactora en campana",
+                "Balanza analítica (0.1 mg)"
+              ],
+              "safety_hazards": [
+                "Alta toxicidad del cloruro mercúrico y sales de mercurio: requiere recolección separada estricta para tratamiento de metales pesados",
+                "Toxicidad y carcinogenicidad del cromo hexavalente Cr(VI)",
+                "Ácido clorhídrico y sulfúrico concentrado hirviendo"
+              ],
+              "calculations": [
+                "Reacciones redox:",
+                "2 Fe^3+ + Sn^2+ + Cl^- -> 2 Fe^2+ + Sn^4+",
+                "Sn^2+(exceso) + 2 HgCl2 -> Sn^4+ + Hg2Cl2(s) + 2 Cl^-",
+                "Cr2O7^2- + 6 Fe^2+ + 14 H^+ -> 2 Cr^3+ + 6 Fe^3+ + 7 H2O",
+                "Porcentaje de Hierro: % Fe = (V_K2Cr2O7 * N_K2Cr2O7 * 0.05585 / m_muestra) * 100",
+                "Porcentaje de Fe2O3: % Fe2O3 = (V_K2Cr2O7 * N_K2Cr2O7 * 0.07985 / m_muestra) * 100"
+              ]
+            },
+            {
+              "practical_number": 9,
+              "practical_id": "LAB_P9",
+              "title": "VOLUMETRIA DE OXIDACION-REDUCCION IODOMETRIA",
+              "topics": [
+                {
+                  "code": "5.19",
+                  "title": "Preparación y estandarización de soluciones de yodo y tiosulfato"
+                },
+                {
+                  "code": "5.20",
+                  "title": "Equipos, materiales y reactivos"
+                },
+                {
+                  "code": "5.21",
+                  "title": "Procedimiento"
+                },
+                {
+                  "code": "5.22",
+                  "title": "Aplicación en la determinación de Índice de Iodo"
+                },
+                {
+                  "code": "5.23",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "5.24",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Preparar y estandarizar una disolución de tiosulfato de sodio (Na2S2O3 ~0.1 N) frente a patrón primario de yodato de potasio (KIO3) o dicromato.",
+                "Comprender la diferencia operativa entre yodimetría directa y yodometría indirecta.",
+                "Determinar el Índice de Yodo (grado de insaturación) de aceites vegetales o grasas comerciales aplicando el reactivo halogenante de Wijs o Hanus.",
+                "Utilizar correctamente la disolución de almidón como indicador específico de yodo, reconociendo el momento exacto de su adición."
+              ],
+              "techniques": [
+                "Reacción de halogenación en oscuridad durante 30 minutos con agitación periódica en matraz con tapón esmerilado",
+                "Generación in situ de triyoduro (I3-) tras adición de exceso de KI",
+                "Titulación del exceso de yodo con Na2S2O3 hasta color amarillo pajizo pálido antes de añadir almidón",
+                "Ejecución paralela de un ensayo en blanco riguroso bajo idénticas condiciones"
+              ],
+              "reagents": [
+                "Solución de tiosulfato de sodio (Na2S2O3 . 5H2O) ~0.1 N (con Na2CO3 como conservante)",
+                "Yodato de potasio (KIO3) patrón primario desecado a 120 °C",
+                "Yoduro de potasio (KI) libre de yodato al 10% o 15% p/v",
+                "Reactivo de Wijs (monocloruro de yodo ICl en ácido acético glacial) o Reactivo de Hanus (monobromuro de yodo IBr)",
+                "Disolvente orgánico clorado (cloroformo CHCl3 o diclorometano) o ciclohexano p.a.",
+                "Solución de almidón soluble al 1% p/v recién preparada",
+                "Ácido clorhídrico o sulfúrico diluido",
+                "Muestra de aceite vegetal (soja, girasol u oliva)"
+              ],
+              "equipment": [
+                "Matraces de yodo de 250 o 500 mL con tapón de vidrio esmerilado y sello de líquido",
+                "Bureta de 25 o 50 mL de vidrio de precisión",
+                "Pipetas volumétricas de doble aforo",
+                "Balanza analítica (0.1 mg)",
+                "Cronómetro"
+              ],
+              "safety_hazards": [
+                "Reactivo de Wijs es fuertemente corrosivo e irritante por ácido acético glacial e ICl",
+                "Cloroformo es tóxico y sospechoso de carcinogenicidad (sustituir preferentemente por ciclohexano o manipular en campana)",
+                "Inhalación de vapores de yodo libre"
+              ],
+              "calculations": [
+                "Estandarización de tiosulfato: IO3^- + 5 I^- + 6 H^+ -> 3 I2 + 3 H2O",
+                "I2 + 2 S2O3^2- -> 2 I^- + S4O6^2-  (1 mol KIO3 = 6 eq)",
+                "N_tiosulfato = (m_KIO3 * 1000) / (35.67 * V_Na2S2O3)",
+                "Índice de Yodo (g I2 / 100 g aceite):",
+                "IY = [((V_blanco - V_muestra) * N_Na2S2O3 * 0.1269 * 100) / m_aceite]",
+                "donde 0.1269 g/meq es el peso equivalente del yodo (126.9 g/mol)"
+              ]
+            },
+            {
+              "practical_number": 10,
+              "practical_id": "LAB_P10",
+              "title": "COMPLEJOMETRIA",
+              "topics": [
+                {
+                  "code": "5.25",
+                  "title": "Titulaciones complexométricas"
+                },
+                {
+                  "code": "5.26",
+                  "title": "Equipos, materiales y reactivos."
+                },
+                {
+                  "code": "5.27",
+                  "title": "Procedimiento, preparación y normalización de EDTA."
+                },
+                {
+                  "code": "5.28",
+                  "title": "Determinación de la dureza del agua."
+                },
+                {
+                  "code": "5.29",
+                  "title": "Registro de resultados."
+                },
+                {
+                  "code": "5.30",
+                  "title": "Cálculos y conclusiones."
+                }
+              ],
+              "objectives": [
+                "Preparar una solución estándar de la sal disódica del ácido etilendiaminotetraacético (Na2H2Y . 2H2O ~0.01 M).",
+                "Estandarizar la solución de EDTA contra una solución patrón primario de carbonato de calcio (CaCO3).",
+                "Determinar la dureza total del agua (Ca2+ + Mg2+) a pH 10 con tampón amoniacal usando Negro de Eriocromo T (NET) como indicador.",
+                "Determinar la dureza cálcica a pH 12-13 precipitando Mg(OH)2 con NaOH y empleando Murexida o calconcarboxílico como indicador.",
+                "Calcular por diferencia la dureza magnésica y expresar los resultados en mg/L (ppm) de CaCO3."
+              ],
+              "techniques": [
+                "Preparación de buffer amoniacal pH 10 en campana",
+                "Ajuste de pH con control de papel tornasol o pH-metro",
+                "Precipitación selectiva de Mg(OH)2 a pH fuertemente alcalino",
+                "Apreciación del viraje cromático neto: rojo vino a azul puro (NET en dureza total) y rosa a violeta/azul (Murexida en dureza cálcica)",
+                "Titulación a temperatura moderada para evitar degradación de indicadores"
+              ],
+              "reagents": [
+                "Sal disódica de EDTA dihidratada (Na2H2Y . 2H2O) p.a.",
+                "Carbonato de calcio (CaCO3) patrón primario desecado a 110 °C",
+                "Solución buffer de amonio pH 10 (NH4Cl + NH4OH concentrado)",
+                "Solución de NaOH al 2 N o 8 N",
+                "Indicador Negro de Eriocromo T sólido mezclado con NaCl (1:100)",
+                "Indicador Murexida sólida mezclada con NaCl (1:100)",
+                "Ácido clorhídrico diluido para disolución de CaCO3",
+                "Muestra de agua potable / agua de pozo / agua de red"
+              ],
+              "equipment": [
+                "Bureta de 25 mL clase A",
+                "Matraces aforados de 100 mL, 250 mL y 1000 mL",
+                "Matraces Erlenmeyer de 250 mL",
+                "Pipetas volumétricas de 25 mL y 50 mL",
+                "Balanza analítica (0.1 mg)"
+              ],
+              "safety_hazards": [
+                "Vapores acres y tóxicos de amoníaco concentrado (preparar tampón siempre en campana)",
+                "Soluciones concentradas de NaOH cáusticas para la piel y córnea"
+              ],
+              "calculations": [
+                "Molaridad de EDTA: M_EDTA = (m_CaCO3 * 1000) / (100.09 * V_EDTA)",
+                "Dureza Total (ppm CaCO3) = (V_EDTA,pH10 * M_EDTA * 100.09 * 1000) / V_muestra_agua",
+                "Dureza Cálcica (ppm CaCO3) = (V_EDTA,pH12 * M_EDTA * 100.09 * 1000) / V_muestra_agua",
+                "Dureza Magnésica (ppm CaCO3) = Dureza Total - Dureza Cálcica",
+                "ppm Mg^2+ = Dureza Magnésica * (MW_Mg / MW_CaCO3) = Dureza Magnésica * (24.31 / 100.09) = Dureza Magnésica * 0.2429",
+                "Clasificación del agua: blanda (0-75 ppm), moderada (75-150 ppm), dura (150-300 ppm), muy dura (>300 ppm)"
+              ]
+            }
+          ]
+        },
+        {
+          "unit_number": 6,
+          "unit_title": "METODOS INSTRUMENTALES (ELECTRODEPOSICION)",
+          "unit_id": "LAB_U6",
+          "description": "Análisis electrogravimétrico instrumental mediante depósito catódico a potencial o corriente controlada sobre electrodos de platino.",
+          "practicals": [
+            {
+              "practical_number": 11,
+              "practical_id": "LAB_P11",
+              "title": "ELECTRODEPOSICION",
+              "topics": [
+                {
+                  "code": "6.1",
+                  "title": "Determinación electrolítica del cobre"
+                },
+                {
+                  "code": "6.2",
+                  "title": "Equipos, materiales y reactivos"
+                },
+                {
+                  "code": "6.3",
+                  "title": "Procedimiento"
+                },
+                {
+                  "code": "6.4",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "6.5",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Comprender los principios teóricos de la electrogravimetría regidos por las leyes de electrólisis de Faraday.",
+                "Determinar cuantitativamente el contenido de cobre en una muestra de aleación de latón o sal de cobre por depósito electrolítico sobre un cátodo de gasa de platino.",
+                "Optimizar las condiciones de electrolito: presencia de ácidos sulfúrico y nítrico, y adición de urea como despolarizante para destruir óxidos de nitrógeno (HNO2).",
+                "Calcular el rendimiento de corriente y la pureza del metal electrodepositado."
+              ],
+              "techniques": [
+                "Limpieza y activación de electrodos de platino con HNO3 caliente y flameado suave",
+                "Conexión en circuito cerrado con fuente de poder DC y agitación mecánica o magnética vigorosa",
+                "Eliminación de ácido nitroso mediante adición de urea",
+                "Comprobación de término de depósito por inmersión de nueva porción de superficie limpia de platino",
+                "Lavado del cátodo con agua destilada y alcohol/acetona sin interrumpir la corriente eléctrica para evitar redisolución",
+                "Secado en estufa a 105 °C, enfriamiento y pesaje gravimétrico de precisión"
+              ],
+              "reagents": [
+                "Muestra de cobre / aleación de latón (Cu-Zn)",
+                "Ácido nítrico concentrado (HNO3) 65%",
+                "Ácido sulfúrico concentrado (H2SO4) 98%",
+                "Urea (CO(NH2)2) en polvo p.a.",
+                "Etanol o acetona para lavado y secado rápido de electrodos",
+                "Solución de amoníaco concentrado (para prueba cualitativa de finalización con complejo azul [Cu(NH3)4]^2+)"
+              ],
+              "equipment": [
+                "Equipo analizador electrolítico con fuente de corriente directa (DC, 0-10 V, 0-5 A)",
+                "Electrodos de gasa de platino: cátodo cilíndrico de gran superficie y ánodo en espiral concéntrico",
+                "Agitador mecánico o magnético incorporado",
+                "Vaso de precipitados alto (Berzelius) sin labio de 250 mL",
+                "Balanza analítica (0.1 mg)",
+                "Estufa de secado a 105 °C y desecador"
+              ],
+              "safety_hazards": [
+                "Riesgo de choque eléctrico por conexiones DC",
+                "Liberación simultánea de oxígeno e hidrógeno: riesgo de atmósferas explosivas (evitar chispas y ventilar en campana)",
+                "Manejo de ácidos calientes y electrodos de platino de alto costo económico"
+              ],
+              "calculations": [
+                "Semirreacciones:",
+                "Cátodo (-): Cu^2+ + 2 e^- -> Cu(s)  [E° = +0.34 V]",
+                "Ánodo (+): 2 H2O -> O2(g) + 4 H^+ + 4 e^-",
+                "Masa de cobre depositado: Delta_m = m_catodo_con_Cu - m_catodo_tara",
+                "Porcentaje de Cobre: % Cu = (Delta_m / m_muestra) * 100",
+                "Masa teórica de Faraday: m_teorica = (I * t * MW_Cu) / (n * F)  [n = 2, F = 96485 C/mol]",
+                "Eficiencia de corriente: eta(%) = (Delta_m / m_teorica) * 100"
+              ]
+            }
+          ]
+        },
+        {
+          "unit_number": 7,
+          "unit_title": "METODOS INSTRUMENTALES (ESPECTROFOTOMETRIA)",
+          "unit_id": "LAB_U7",
+          "description": "Análisis cuantitativo instrumental por absorción molecular UV-Visible aplicando la ley de Beer-Lambert y complejos quelato coloreados.",
+          "practicals": [
+            {
+              "practical_number": 12,
+              "practical_id": "LAB_P12",
+              "title": "COLORIMETRIA",
+              "topics": [
+                {
+                  "code": "7.1",
+                  "title": "Determinación fotométrica de Hierro"
+                },
+                {
+                  "code": "7.2",
+                  "title": "Equipos, materiales y reactivos"
+                },
+                {
+                  "code": "7.3",
+                  "title": "Procedimiento"
+                },
+                {
+                  "code": "7.4",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "7.5",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Comprender los principios ópticos de la espectrofotometría de absorción molecular y la ley de Beer-Lambert.",
+                "Determinar trazas de hierro total en disolución acuosa mediante la formación del complejo coloreado ferroso-1,10-fenantrolina [Fe(phen)3]^2+.",
+                "Reducir cuantitativamente el Fe(III) a Fe(II) empleando clorhidrato de hidroxilamina y tamponar el pH con acetato de sodio a 4.5.",
+                "Construir una curva de calibración espectrofotométrica de Absorbancia vs concentración (ppm Fe) a lambda_max = 508-510 nm.",
+                "Calcular la absortividad molar y determinar la concentración de una muestra desconocida mediante regresión lineal por mínimos cuadrados."
+              ],
+              "techniques": [
+                "Manejo y calibración de longitud de onda de espectrofotómetro UV-Vis",
+                "Preparación de serie de diluciones estándar volumétricas",
+                "Uso de celdas ópticas de cuarzo o vidrio óptico (1 cm de camino de paso óptico)",
+                "Ajuste de cero de absorbancia con blanco de reactivos",
+                "Construcción de gráfico de regresión lineal y análisis de correlación R^2"
+              ],
+              "reagents": [
+                "Solución estándar concentrada de Fe (100 ppm o 1000 ppm a partir de Fe(NH4)2(SO4)2 . 6H2O o alambre de hierro puro)",
+                "Solución de clorhidrato de 1,10-fenantrolina al 0.1% o 0.25% p/v en agua",
+                "Solución reductora de clorhidrato de hidroxilamina (NH2OH . HCl) al 10% p/v",
+                "Solución amortiguadora de acetato de sodio (CH3COONa) 1.5 M o 2 M (pH ~4.5)",
+                "Muestra problema de agua o suplemento de hierro farmacéutico",
+                "Agua desionizada"
+              ],
+              "equipment": [
+                "Espectrofotómetro UV-Visible con monocromador y selector de rendija",
+                "Par de cubetas de vidrio óptico apareadas de 1.00 cm de paso",
+                "Matraces aforados de 50 mL y 100 mL clase A",
+                "Micropipetas automáticas calibradas (100-1000 microL) o pipetas serológicas de precisión",
+                "Papel de limpieza para lentes ópticas"
+              ],
+              "safety_hazards": [
+                "Toxicidad del reactivo 1,10-fenantrolina e hidroxilamina",
+                "Manipulación cuidadosa de cubetas de vidrio (evitar rayaduras y huellas dactilares que dispersan la luz)"
+              ],
+              "calculations": [
+                "Ley de Beer-Lambert: A = -log(T) = epsilon * b * C",
+                "Ecuación de regresión lineal: A = m * C(ppm) + c",
+                "Absortividad molar teórica del complejo [Fe(phen)3]^2+: epsilon = 1.11 x 10^4 L/(mol * cm) a 508 nm",
+                "Concentración de la muestra desconocida: C_x = (A_x - c) / m",
+                "Corrección por factor de dilución: C_final = C_x * (V_aforado / V_alicuota)",
+                "Límite de detección (LOD) y límite de cuantificación (LOQ): LOD = 3 * s_blanco / m; LOQ = 10 * s_blanco / m"
+              ]
+            }
+          ]
+        },
+        {
+          "unit_number": 8,
+          "unit_title": "METODOS INSTRUMENTALES (ESPECTROSCOPIA DE EMISION)",
+          "unit_id": "LAB_U8",
+          "description": "Análisis cuantitativo instrumental por espectrometría de emisión atómica en llama para metales alcalinos y alcalinotérreos.",
+          "practicals": [
+            {
+              "practical_number": 13,
+              "practical_id": "LAB_P13",
+              "title": "FOTOMETRIA DE LLAMA",
+              "topics": [
+                {
+                  "code": "8.1",
+                  "title": "Determinación del sodio por fotometría de llama."
+                },
+                {
+                  "code": "8.2",
+                  "title": "Equipos, materiales y reactivos"
+                },
+                {
+                  "code": "8.3",
+                  "title": "Procedimiento"
+                },
+                {
+                  "code": "8.4",
+                  "title": "Registro de resultados"
+                },
+                {
+                  "code": "8.5",
+                  "title": "Cálculos y conclusiones"
+                }
+              ],
+              "objectives": [
+                "Comprender los fundamentos de la espectrometría de emisión atómica: nebulización, desolvatación, atomización, excitación térmica y emisión espontánea de fotones.",
+                "Operar con seguridad un fotómetro de llama utilizando mezcla de gas licuado de petróleo (GLP)/aire comprimido.",
+                "Determinar cuantitativamente la concentración de sodio (Na+) en muestras de agua potable, bebidas isotónicas o suero fisiológico midiendo la emisión del doblete resonante a 589.0 y 589.6 nm.",
+                "Evaluar interferencias físicas (viscosidad), químicas e ionización en la llama, y aplicar el método de adición estándar o calibración directa."
+              ],
+              "techniques": [
+                "Encendido y ajuste del flujo de gas combustible y aire en el fotómetro",
+                "Aspiración por capilar y calibración de la tasa de nebulización",
+                "Ajuste de cero con agua desionizada y calibración del fondo de escala con el estándar más concentrado",
+                "Lavado periódico del capilar y cámara de nebulización entre lecturas con agua desionizada para evitar efecto memoria"
+              ],
+              "reagents": [
+                "Cloruro de sodio (NaCl) patrón primario desecado a 110 °C",
+                "Solución patrón madre de Na+ de 1000 ppm",
+                "Soluciones de trabajo estándar de Na+ (0, 2, 5, 10, 15 y 20 ppm)",
+                "Muestra real: agua de red, agua mineral embotellada o bebida rehidratante deportiva",
+                "Agua desionizada de alta pureza (conductividad < 1 microS/cm)"
+              ],
+              "equipment": [
+                "Fotómetro de llama digital con filtro óptico para sodio (589 nm) y potasio (766 nm)",
+                "Compresor de aire con trampa de humedad y filtro de aceite",
+                "Cilindro de gas GLP o propano con válvula reguladora de presión",
+                "Matraces aforados de 50 mL y 100 mL",
+                "Vasos de muestra para aspiración capilar"
+              ],
+              "safety_hazards": [
+                "Riesgo de fuga o explosión de gas inflamable GLP/propano",
+                "Quemaduras térmicas por la chimenea de llama abierta y radiación UV del mechero",
+                "Gases de escape de la combustión (requiere campana o chimenea de tiro forzado)"
+              ],
+              "calculations": [
+                "Emisión atómica: Intensidad de emisión I_E = K * C_Na",
+                "Curva de calibración: I_E = m * [Na+] + b",
+                "Interpolación de muestra: [Na+]_ppm = (I_E,muestra - b) / m",
+                "Concentración en la muestra original considerando factor de dilución: [Na+]_real = [Na+]_ppm * FD",
+                "Conversión a miliequivalentes por litro (mEq/L) para fluidos biológicos: mEq/L = (mg/L) / 22.99",
+                "Verificación del cumplimiento de límites permisibles para agua potable (Norma Boliviana NB 512: máx 200 mg/L Na+)"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "cross_curriculum_mapping": [
+    {
+      "thematic_axis": "Fundamentos Metrológicos y Tratamiento de Errores",
+      "theory_units": [
+        "THEORY_U1",
+        "THEORY_U2"
+      ],
+      "laboratory_practicals": [
+        "LAB_P1",
+        "LAB_P2"
+      ],
+      "core_concepts": [
+        "Cifras significativas",
+        "Exactitud y precisión",
+        "t de Student",
+        "Calibración gravimétrica",
+        "Pesada por diferencia",
+        "Bioseguridad"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Cap. 1, 2, 4, 5, 6, 7",
+        "Day & Underwood Cap. 1, 2"
+      ]
+    },
+    {
+      "thematic_axis": "Muestreo, Disolución y Preparación de Muestras",
+      "theory_units": [
+        "THEORY_U1"
+      ],
+      "laboratory_practicals": [
+        "LAB_P3"
+      ],
+      "core_concepts": [
+        "Cuarteo",
+        "Digestión ácida por vía húmeda",
+        "Fusión por vía seca con fundentes",
+        "Eliminación de interferencias"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Cap. 1, 33",
+        "Day & Underwood Cap. 1"
+      ]
+    },
+    {
+      "thematic_axis": "Preparación de Disoluciones y Patrones",
+      "theory_units": [
+        "THEORY_U1",
+        "THEORY_U6",
+        "THEORY_U8"
+      ],
+      "laboratory_practicals": [
+        "LAB_P4"
+      ],
+      "core_concepts": [
+        "Patrones primarios",
+        "Estandarización de HCl y NaOH",
+        "Estandarización de KMnO4",
+        "Normalidad y factor volumétrico"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Cap. 4, 13, 16, 20",
+        "Day & Underwood Cap. 4, 9"
+      ]
+    },
+    {
+      "thematic_axis": "Métodos Gravimétricos y Equilibrios de Solubilidad",
+      "theory_units": [
+        "THEORY_U3",
+        "THEORY_U4"
+      ],
+      "laboratory_practicals": [
+        "LAB_P5",
+        "LAB_P6"
+      ],
+      "core_concepts": [
+        "Kps",
+        "Sobresaturación relativa de Von Weimarn",
+        "Coprecipitación",
+        "Digestión",
+        "Determinación de sulfatos como BaSO4",
+        "Cloruros como AgCl",
+        "Factores gravimétricos"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Cap. 9, 10, 11, 12",
+        "Day & Underwood Cap. 3",
+        "Aguilar Sanjuán Cap. 5"
+      ]
+    },
+    {
+      "thematic_axis": "Volumetría de Precipitación (Argentometría)",
+      "theory_units": [
+        "THEORY_U5"
+      ],
+      "laboratory_practicals": [
+        "LAB_P6"
+      ],
+      "core_concepts": [
+        "Curvas de precipitación pAg",
+        "Método de Mohr",
+        "Método de Volhard",
+        "Método de Fajans",
+        "Titulación de haluros"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Cap. 13",
+        "Day & Underwood Cap. 6"
+      ]
+    },
+    {
+      "thematic_axis": "Volumetría de Neutralización Ácido-Base",
+      "theory_units": [
+        "THEORY_U6"
+      ],
+      "laboratory_practicals": [
+        "LAB_P4",
+        "LAB_P7"
+      ],
+      "core_concepts": [
+        "Curvas de pH ácido fuerte / débil",
+        "Indicadores de pH",
+        "Buffers de Henderson-Hasselbalch",
+        "Titulación potenciométrica",
+        "Primera y segunda derivada"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Cap. 14, 15, 16",
+        "Day & Underwood Cap. 4, 5",
+        "Aguilar Sanjuán Cap. 2, 3"
+      ]
+    },
+    {
+      "thematic_axis": "Volumetría por Formación de Complejos (Quelatometría)",
+      "theory_units": [
+        "THEORY_U7"
+      ],
+      "laboratory_practicals": [
+        "LAB_P10"
+      ],
+      "core_concepts": [
+        "EDTA",
+        "Constante condicional K'f",
+        "Indicadores metalocrómicos (NET, Murexida)",
+        "Dureza del agua (total, cálcica, magnésica)"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Cap. 17",
+        "Day & Underwood Cap. 7",
+        "Aguilar Sanjuán Cap. 4"
+      ]
+    },
+    {
+      "thematic_axis": "Volumetría de Óxido-Reducción",
+      "theory_units": [
+        "THEORY_U8",
+        "THEORY_U9"
+      ],
+      "laboratory_practicals": [
+        "LAB_P4",
+        "LAB_P8",
+        "LAB_P9"
+      ],
+      "core_concepts": [
+        "Ecuación de Nernst",
+        "Curvas de titulación redox",
+        "Dicromatometría",
+        "Determinación de hierro con SnCl2/HgCl2",
+        "Yodometría indirecta",
+        "Índice de yodo con Na2S2O3"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Cap. 18, 19, 20",
+        "Day & Underwood Cap. 8, 9"
+      ]
+    },
+    {
+      "thematic_axis": "Métodos Instrumentales Electroquímicos y Ópticos",
+      "theory_units": [
+        "THEORY_U8"
+      ],
+      "laboratory_practicals": [
+        "LAB_P11",
+        "LAB_P12",
+        "LAB_P13"
+      ],
+      "core_concepts": [
+        "Electrodeposición de cobre",
+        "Leyes de Faraday",
+        "Espectrofotometría UV-Vis",
+        "Ley de Beer-Lambert",
+        "Complejo Fe-fenantrolina",
+        "Fotometría de emisión de llama para sodio"
+      ],
+      "primary_textbook_chapters": [
+        "Skoog Fundamentos Cap. 22, 24, 25, 28",
+        "Skoog Análisis Instrumental Cap. 6, 7, 9, 10, 22",
+        "Day & Underwood Cap. 11, 12, 14"
+      ]
+    }
+  ],
+  "retrieval_and_tutoring_taxonomy": {
+    "error_analysis_and_statistics": {
+      "category_label": "Análisis de Errores y Estadística Analítica",
+      "keywords": [
+        "precisión",
+        "exactitud",
+        "error sistemático",
+        "error aleatorio",
+        "sesgo",
+        "desviación estándar",
+        "varianza",
+        "coeficiente de variación",
+        "RSD",
+        "límites de confianza",
+        "distribución normal",
+        "t de Student",
+        "grados de libertad",
+        "prueba Q de Dixon",
+        "test de Grubbs",
+        "cifras significativas",
+        "propagación de errores",
+        "blanco de reactivos",
+        "patrón primario",
+        "patrón secundario",
+        "calibración de balanza",
+        "calibración volumétrica",
+        "corrección de empuje del aire"
+      ],
+      "synonyms_en": [
+        "accuracy",
+        "precision",
+        "systematic error",
+        "random error",
+        "bias",
+        "standard deviation",
+        "variance",
+        "relative standard deviation",
+        "confidence limits",
+        "Student t test",
+        "Dixon Q test",
+        "significant figures",
+        "error propagation",
+        "reagent blank",
+        "primary standard",
+        "buoyancy correction"
+      ],
+      "typical_student_queries": [
+        "¿Cómo calcular el intervalo de confianza al 95%?",
+        "¿Cuándo se debe rechazar un dato con la prueba Q de Dixon?",
+        "¿Cómo propagar la incertidumbre en una división o multiplicación?",
+        "¿Cómo corregir la masa pesada por empuje del aire?"
+      ]
+    },
+    "gravimetry_and_solubility": {
+      "category_label": "Gravimetría y Equilibrios de Solubilidad",
+      "keywords": [
+        "gravimetría",
+        "precipitado cristalino",
+        "precipitado coloidal",
+        "nucleación",
+        "crecimiento de cristales",
+        "sobresaturación relativa",
+        "ecuación de Von Weimarn",
+        "digestión",
+        "maduración de Ostwald",
+        "coprecipitación",
+        "adsorción superficial",
+        "oclusión",
+        "inclusión",
+        "postprecipitación",
+        "factor gravimétrico",
+        "BaSO4",
+        "AgCl",
+        "Kps",
+        "producto de solubilidad",
+        "efecto del ion común",
+        "fuerza iónica",
+        "ecuación de Debye-Hückel",
+        "solubilidad condicional",
+        "precipitación fraccionada",
+        "lavado de precipitado",
+        "peptización",
+        "peso constante"
+      ],
+      "synonyms_en": [
+        "gravimetry",
+        "crystalline precipitate",
+        "colloidal precipitate",
+        "nucleation",
+        "crystal growth",
+        "relative supersaturation",
+        "Von Weimarn ratio",
+        "Ostwald ripening",
+        "coprecipitation",
+        "surface adsorption",
+        "occlusion",
+        "gravimetric factor",
+        "solubility product",
+        "common ion effect",
+        "ionic strength",
+        "fractional precipitation"
+      ],
+      "typical_student_queries": [
+        "¿Cómo se calcula el factor gravimétrico para sulfatos en forma de BaSO4?",
+        "¿Por qué se calienta la disolución al precipitar BaSO4?",
+        "¿Qué es la sobresaturación relativa de Von Weimarn y cómo se minimiza?",
+        "¿Cómo afecta el pH a la solubilidad de sales con aniones básicos?"
+      ]
+    },
+    "acid_base_volumetry": {
+      "category_label": "Volumetría Ácido-Base y Buffers",
+      "keywords": [
+        "volumetría de neutralización",
+        "titulación ácido fuerte base fuerte",
+        "titulación ácido débil",
+        "indicadores de pH",
+        "fenolftaleína",
+        "anaranjado de metilo",
+        "rango de viraje",
+        "solución amortiguadora",
+        "buffer",
+        "ecuación de Henderson-Hasselbalch",
+        "capacidad reguladora",
+        "punto de equivalencia",
+        "punto de semiequivalencia",
+        "ácidos polipróticos",
+        "mezclas de carbonatos",
+        "método de Warder",
+        "método de Winkler",
+        "titulación potenciométrica",
+        "primera derivada",
+        "segunda derivada",
+        "biftalato de potasio",
+        "Na2CO3"
+      ],
+      "synonyms_en": [
+        "neutralization titration",
+        "acid-base titration",
+        "pH indicator",
+        "buffer solution",
+        "buffer capacity",
+        "equivalence point",
+        "half-equivalence point",
+        "polyprotic acids",
+        "carbonate mixtures",
+        "potentiometric titration",
+        "derivative titration curve"
+      ],
+      "typical_student_queries": [
+        "¿Cómo calcular el pH en el punto de equivalencia de un ácido débil con base fuerte?",
+        "¿Cómo seleccionar el indicador adecuado para una titulación ácido-base?",
+        "¿Cómo preparar un buffer de pH 9.2 con amoníaco y cloruro de amonio?",
+        "¿Cómo calcular la primera y segunda derivada para encontrar el punto final potenciométrico?"
+      ]
+    },
+    "precipitation_volumetry": {
+      "category_label": "Volumetría de Precipitación (Argentometría)",
+      "keywords": [
+        "argentometría",
+        "nitrato de plata",
+        "método de Mohr",
+        "método de Volhard",
+        "método de Fajans",
+        "cromato de potasio",
+        "tiocianato de amonio",
+        "alumbre férrico",
+        "indicadores de adsorción",
+        "fluoresceína",
+        "diclorofluoresceína",
+        "curva de titulación argentométrica",
+        "titulación por retroceso",
+        "nitrobenceno",
+        "cloruros solubles"
+      ],
+      "synonyms_en": [
+        "argentometric titration",
+        "silver nitrate",
+        "Mohr method",
+        "Volhard method",
+        "Fajans method",
+        "potassium chromate",
+        "adsorption indicator",
+        "back titration"
+      ],
+      "typical_student_queries": [
+        "¿Cuál es la diferencia entre los métodos de Mohr, Volhard y Fajans?",
+        "¿Por qué el método de Mohr debe realizarse a pH neutro (6.5 a 10)?",
+        "¿Por qué se añade nitrobenceno en el método de Volhard para cloruros?",
+        "¿Cómo funciona un indicador de adsorción como la diclorofluoresceína?"
+      ]
+    },
+    "complexometric_volumetry": {
+      "category_label": "Volumetría por Formación de Complejos y Dureza de Agua",
+      "keywords": [
+        "complexometría",
+        "complejometría",
+        "EDTA",
+        "ácido etilendiaminotetraacético",
+        "quelato",
+        "constante de formación absoluta Kf",
+        "constante de formación condicional K'f",
+        "fracción alfa4",
+        "indicador metalocrómico",
+        "Negro de Eriocromo T (NET)",
+        "Murexida",
+        "Calmagita",
+        "dureza del agua",
+        "dureza total",
+        "dureza cálcica",
+        "dureza magnésica",
+        "tampón amoniacal pH 10",
+        "enmascaramiento",
+        "desenmascaramiento",
+        "titulación de calcio y magnesio"
+      ],
+      "synonyms_en": [
+        "complexometric titration",
+        "chelatometry",
+        "EDTA",
+        "conditional formation constant",
+        "metallochromic indicator",
+        "Eriochrome Black T",
+        "water hardness",
+        "total hardness",
+        "calcium hardness",
+        "magnesium hardness",
+        "masking agent"
+      ],
+      "typical_student_queries": [
+        "¿Cómo se calcula la constante de formación condicional K'f del EDTA a un pH determinado?",
+        "¿Por qué el Negro de Eriocromo T requiere pH 10 para detectar calcio y magnesio?",
+        "¿Cómo diferenciar entre dureza cálcica y magnésica en una muestra de agua?",
+        "¿Cómo convertir ppm de CaCO3 a grados hidrotimétricos franceses o alemanes?"
+      ]
+    },
+    "redox_volumetry": {
+      "category_label": "Volumetría de Óxido-Reducción (Permanganometría, Dicromatometría, Iodometría)",
+      "keywords": [
+        "redox",
+        "óxido-reducción",
+        "ecuación de Nernst",
+        "potencial estándar E°",
+        "potencial formal E°'",
+        "curva de titulación redox",
+        "indicadores redox",
+        "difenilaminosulfonato",
+        "ferroína",
+        "almidón",
+        "permanganometría",
+        "KMnO4",
+        "oxalato de sodio",
+        "dicromatometría",
+        "K2Cr2O7",
+        "determinación de hierro",
+        "reducción con SnCl2",
+        "HgCl2",
+        "mezcla sulfofosfórica",
+        "yodimetría",
+        "yodometría indirecta",
+        "tiosulfato de sodio",
+        "Na2S2O3",
+        "índice de yodo",
+        "reactivo de Wijs",
+        "reactivo de Hanus",
+        "reductor de Jones",
+        "reductor de Walden"
+      ],
+      "synonyms_en": [
+        "oxidation-reduction titration",
+        "redox titration",
+        "Nernst equation",
+        "formal potential",
+        "permanganometry",
+        "dichromatometry",
+        "iodometry",
+        "iodimetry",
+        "sodium thiosulfate",
+        "iodine value",
+        "Wijs reagent",
+        "Zimmermann-Reinhardt reagent",
+        "Jones reductor"
+      ],
+      "typical_student_queries": [
+        "¿Cómo calcular el potencial del sistema en el punto de equivalencia de una titulación redox?",
+        "¿Cuál es el rol del SnCl2 y del HgCl2 en la determinación de hierro con dicromato?",
+        "¿Por qué se añade la disolución de almidón cerca del final en las titulaciones yodométricas?",
+        "¿Cómo se calcula el índice de yodo de un aceite vegetal?"
+      ]
+    },
+    "instrumental_methods": {
+      "category_label": "Métodos Instrumentales (Electroquímica, Espectrofotometría, Emisión)",
+      "keywords": [
+        "métodos instrumentales",
+        "electrodeposición",
+        "electrogravimetría",
+        "cátodo de platino",
+        "leyes de Faraday",
+        "eficiencia de corriente",
+        "urea como despolarizante",
+        "espectrofotometría UV-Vis",
+        "ley de Beer-Lambert",
+        "absortividad molar epsilon",
+        "1,10-fenantrolina",
+        "complejo Fe(II)-fenantrolina",
+        "curva de calibración espectrofotométrica",
+        "fotometría de llama",
+        "espectrometría de emisión atómica",
+        "doblete del sodio 589 nm",
+        "nebulizador",
+        "quemador de GLP/aire",
+        "interferencias de matriz"
+      ],
+      "synonyms_en": [
+        "instrumental analysis",
+        "electrogravimetry",
+        "electrodeposition",
+        "Faraday's laws",
+        "current efficiency",
+        "UV-Vis spectrophotometry",
+        "Beer-Lambert law",
+        "molar absorptivity",
+        "1,10-phenanthroline",
+        "flame emission photometry",
+        "atomic emission",
+        "sodium doublet"
+      ],
+      "typical_student_queries": [
+        "¿Cómo calcular la masa teórica de cobre depositado aplicando la ley de Faraday?",
+        "¿Por qué se añade hidroxilamina y acetato de sodio en la determinación espectrofotométrica de hierro?",
+        "¿Cómo verificar si se cumple la ley de Beer-Lambert?",
+        "¿Qué factores causan desviaciones en la fotometría de emisión de llama para sodio?"
+      ]
+    }
+  },
+  "exam_blueprints": {
+    "question_typologies": [
+      {
+        "type_id": "CONCEPTUAL_THEORY",
+        "label": "Pregunta Conceptual de Fundamentos Químicos",
+        "description": "Evalúa el entendimiento cualitativo de principios analíticos (equilibrio, termodinámica, cinética, mecanismos)."
+      },
+      {
+        "type_id": "NUMERICAL_CALCULATION",
+        "label": "Problema de Cálculo Numérico y Estequiometría",
+        "description": "Evalúa la habilidad para resolver balances estequiométricos, cálculo de concentraciones, titulaciones, curvas de pH/potencial/pM o factores gravimétricos."
+      },
+      {
+        "type_id": "EXPERIMENTAL_DESIGN_PROCEDURAL",
+        "label": "Diseño Experimental y Procedimiento de Laboratorio",
+        "description": "Evalúa la selección de material de vidrio, preparación de reactivos, secuencias de digestión, calibraciones o técnicas operativas."
+      },
+      {
+        "type_id": "LAB_ERROR_TROUBLESHOOTING",
+        "label": "Diagnóstico de Errores y Seguridad en el Laboratorio",
+        "description": "Presenta un escenario con un fallo experimental (precipitado oscuro con HgCl2, viraje prematuro, lectura anómala de pH o fotometría) y solicita diagnóstico de causa raíz y remediación."
+      }
+    ],
+    "evaluations": [
+      {
+        "exam_code": "EXAM_PARTIAL_1",
+        "exam_title": "Primer Examen Parcial (Teoría y Laboratorio)",
+        "scope_theory": [
+          "THEORY_U1",
+          "THEORY_U2",
+          "THEORY_U3",
+          "THEORY_U4"
+        ],
+        "scope_lab": [
+          "LAB_P1",
+          "LAB_P2",
+          "LAB_P3",
+          "LAB_P4",
+          "LAB_P5"
+        ],
+        "key_focus": "Metrología, análisis de errores, preparación de soluciones, gravimetría de sulfatos y equilibrios de precipitación."
+      },
+      {
+        "exam_code": "EXAM_PARTIAL_2",
+        "exam_title": "Segundo Examen Parcial (Teoría y Laboratorio)",
+        "scope_theory": [
+          "THEORY_U5",
+          "THEORY_U6",
+          "THEORY_U7"
+        ],
+        "scope_lab": [
+          "LAB_P6",
+          "LAB_P7",
+          "LAB_P10"
+        ],
+        "key_focus": "Volumetría de precipitación (Mohr/Volhard), volumetría ácido-base (curvas e indicadores), y quelatometría con EDTA (dureza del agua)."
+      },
+      {
+        "exam_code": "EXAM_FINAL",
+        "exam_title": "Examen Final / Examen General Integrador",
+        "scope_theory": [
+          "THEORY_U1",
+          "THEORY_U2",
+          "THEORY_U3",
+          "THEORY_U4",
+          "THEORY_U5",
+          "THEORY_U6",
+          "THEORY_U7",
+          "THEORY_U8",
+          "THEORY_U9"
+        ],
+        "scope_lab": [
+          "LAB_P1",
+          "LAB_P2",
+          "LAB_P3",
+          "LAB_P4",
+          "LAB_P5",
+          "LAB_P6",
+          "LAB_P7",
+          "LAB_P8",
+          "LAB_P9",
+          "LAB_P10",
+          "LAB_P11",
+          "LAB_P12",
+          "LAB_P13"
+        ],
+        "key_focus": "Evaluación integral de los 9 temas teóricos y las 13 prácticas de laboratorio incluyendo métodos redox e instrumentales."
+      }
+    ]
+  }
+}
