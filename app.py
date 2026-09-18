@@ -19,39 +19,20 @@ def main() -> None:
         initial_sidebar_state="expanded",
     )
 
-    # Global custom styling for badges, cards, clean typography, and hiding GitHub / Streamlit branding
-    st.markdown(
-        """
-        <style>
-        .stApp {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        .main-header {
-            margin-bottom: 1.5rem;
-        }
-        /* Ocultar el menú superior, botón de GitHub, barra de herramientas y pie de página */
-        #MainMenu {visibility: hidden; display: none !important;}
-        header {visibility: hidden; display: none !important;}
-        footer {visibility: hidden; display: none !important;}
-        [data-testid="stToolbar"] {visibility: hidden; display: none !important;}
-        [data-testid="stDecoration"] {visibility: hidden; display: none !important;}
-        [data-testid="stStatusWidget"] {visibility: hidden; display: none !important;}
-        .viewerBadge_container__1QSob, .viewerBadge_link__1QSob {display: none !important;}
-        a[href*="github.com"] {display: none !important;}
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
     # Initialize Ephemeral Client Session State
     ui.init_session_state()
 
-    # Render BYOK Sidebar & Model Settings
+    # Get active visual theme (sumie_dark / washi_light)
+    theme_mode = st.session_state.get("theme_mode", "sumie_dark")
+
+    # Apply dynamic visual design system (Alquímica-33: Sumi-e & Washi)
+    st.markdown(ui.get_theme_css(theme_mode), unsafe_allow_html=True)
+
+    # Render BYOK Sidebar, Model Settings & Theme Switcher
     ui.render_sidebar_byok(st)
 
-    # Portal Header Banner
-    st.title("🧪 Portal Educativo de Química Analítica")
-    st.caption("Carrera de Ingeniería Química | Universidad Mayor de San Simón (UMSS) | Código: 2004061")
+    # Portal Header Banner with Red Sun, Hanko Seal & Japanese Calligraphy
+    ui.render_portal_header(st, theme_mode)
 
     # Multi-Tab Navigation
     tab1, tab2, tab3, tab4, tab5 = st.tabs([

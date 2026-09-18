@@ -464,6 +464,7 @@ def init_session_state(session: Optional[Dict[str, Any]] = None) -> Dict[str, An
         "exam_submitted": False,
         "exam_results": None,
         "exam_evaluation": None,
+        "theme_mode": "sumie_dark",
     }
     for k, v in defaults.items():
         if k not in s:
@@ -505,6 +506,311 @@ def disconnect_api_key(session: Optional[Dict[str, Any]] = None) -> None:
     s["authenticated"] = False
     s["api_key_message"] = ""
     s["_last_checked_key"] = None
+
+
+# ==============================================================================
+# 5b. Visual Design System & Themes (Alquímica-33: Sumi-e & Washi Paper)
+# ==============================================================================
+def get_theme_css(theme_mode: str = "sumie_dark") -> str:
+    """
+    Generates dynamic CSS adhering strictly to the 'Alquímica-33' Sumi-e & Washi design system.
+    Supports:
+    - 'sumie_dark': Deep ink black (#0a0a0a), charcoal cards (#141414), vermilion red (#dc2626) accents.
+    - 'washi_light': Warm ivory rice paper (#f9f8f4), dark ink typography (#111111), vermilion red (#dc2626) stamps.
+    """
+    is_dark = (theme_mode == "sumie_dark")
+
+    if is_dark:
+        bg_app = "#0a0a0a"
+        bg_radial = "radial-gradient(circle at 85% 15%, rgba(220, 38, 38, 0.08) 0%, transparent 45%), linear-gradient(180deg, #0d0d0d 0%, #080808 100%)"
+        bg_sidebar = "#0e0e0e"
+        border_sidebar = "#222222"
+        text_primary = "#f5f5f5"
+        text_secondary = "#a3a3a3"
+        card_bg = "#141414"
+        card_border = "#262626"
+        card_border_hover = "#dc2626"
+        btn_bg = "#181818"
+        btn_text = "#f0f0f0"
+        btn_border = "#333333"
+        input_bg = "#141414"
+        input_border = "#333333"
+        input_text = "#f0f0f0"
+        tab_text = "#888888"
+        tab_active_text = "#ffffff"
+        tab_active_bg = "linear-gradient(180deg, transparent 0%, rgba(220, 38, 38, 0.12) 100%)"
+        tab_border = "#222222"
+        chat_user_bg = "#1c1c1c"
+        chat_user_border = "#333333"
+        chat_ai_bg = "#121212"
+        chat_ai_border = "#262626"
+        alert_info_bg = "#161616"
+        alert_info_border = "#2e2e2e"
+        alert_info_text = "#d4d4d4"
+    else:
+        bg_app = "#f9f8f4"
+        bg_radial = "radial-gradient(circle at 85% 15%, rgba(220, 38, 38, 0.05) 0%, transparent 45%), linear-gradient(180deg, #fdfbf7 0%, #f3efe6 100%)"
+        bg_sidebar = "#f2ede3"
+        border_sidebar = "#dfd7c9"
+        text_primary = "#141414"
+        text_secondary = "#555555"
+        card_bg = "#ffffff"
+        card_border = "#e2dcd0"
+        card_border_hover = "#dc2626"
+        btn_bg = "#ffffff"
+        btn_text = "#141414"
+        btn_border = "#d8cfbf"
+        input_bg = "#ffffff"
+        input_border = "#d4cbba"
+        input_text = "#141414"
+        tab_text = "#666666"
+        tab_active_text = "#111111"
+        tab_active_bg = "linear-gradient(180deg, transparent 0%, rgba(220, 38, 38, 0.08) 100%)"
+        tab_border = "#dfd7c9"
+        chat_user_bg = "#eae3d4"
+        chat_user_border = "#d8cdb8"
+        chat_ai_bg = "#ffffff"
+        chat_ai_border = "#e0d8c8"
+        alert_info_bg = "#f5f0e6"
+        alert_info_border = "#e2dacb"
+        alert_info_text = "#2c2c2c"
+
+    return f"""
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap');
+
+    /* Ocultar Streamlit default branding y menú GitHub */
+    #MainMenu {{visibility: hidden; display: none !important;}}
+    header {{visibility: hidden; display: none !important;}}
+    footer {{visibility: hidden; display: none !important;}}
+    [data-testid="stToolbar"] {{visibility: hidden; display: none !important;}}
+    [data-testid="stDecoration"] {{visibility: hidden; display: none !important;}}
+    [data-testid="stStatusWidget"] {{visibility: hidden; display: none !important;}}
+    .viewerBadge_container__1QSob, .viewerBadge_link__1QSob {{display: none !important;}}
+    a[href*="github.com"] {{display: none !important;}}
+
+    /* Fondo principal y tipografía */
+    .stApp {{
+        background-color: {bg_app} !important;
+        background-image: {bg_radial} !important;
+        color: {text_primary} !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }}
+
+    /* Títulos editoriales estilo Sumi-e */
+    h1, h2, h3, .stHeading {{
+        font-family: 'Cinzel', 'Newsreader', Georgia, serif !important;
+        color: {text_primary} !important;
+        letter-spacing: 0.02em !important;
+    }}
+
+    /* Barra lateral */
+    [data-testid="stSidebar"] {{
+        background-color: {bg_sidebar} !important;
+        border-right: 1px solid {border_sidebar} !important;
+    }}
+    [data-testid="stSidebar"] * {{
+        color: {text_primary} !important;
+    }}
+
+    /* Botones interactivos con acento Vermilion */
+    .stButton > button, div[data-testid="stLinkButton"] > a {{
+        background-color: {btn_bg} !important;
+        color: {btn_text} !important;
+        border: 1px solid {btn_border} !important;
+        border-radius: 6px !important;
+        font-weight: 500 !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }}
+    .stButton > button:hover, div[data-testid="stLinkButton"] > a:hover {{
+        background-color: #dc2626 !important;
+        color: #ffffff !important;
+        border-color: #dc2626 !important;
+        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35) !important;
+        transform: translateY(-1px);
+    }}
+    .stButton > button[kind="primary"] {{
+        background-color: #dc2626 !important;
+        color: #ffffff !important;
+        border-color: #b91c1c !important;
+    }}
+
+    /* Pestañas de Navegación */
+    .stTabs [data-baseweb="tab-list"] {{
+        background-color: transparent !important;
+        border-bottom: 1px solid {tab_border} !important;
+        gap: 6px !important;
+    }}
+    .stTabs [data-baseweb="tab"] {{
+        color: {tab_text} !important;
+        background-color: transparent !important;
+        border-radius: 6px 6px 0 0 !important;
+        padding: 8px 18px !important;
+        font-weight: 500 !important;
+        border-bottom: 2px solid transparent !important;
+        transition: all 0.15s ease !important;
+    }}
+    .stTabs [aria-selected="true"] {{
+        color: {tab_active_text} !important;
+        border-bottom: 2px solid #dc2626 !important;
+        background: {tab_active_bg} !important;
+    }}
+
+    /* Tarjetas y Contenedores Desplegables */
+    [data-testid="stExpander"], details {{
+        background-color: {card_bg} !important;
+        border: 1px solid {card_border} !important;
+        border-radius: 8px !important;
+        transition: border-color 0.2s ease !important;
+    }}
+    [data-testid="stExpander"]:hover, details:hover {{
+        border-color: {card_border_hover} !important;
+    }}
+
+    /* Campos de Entrada de Texto y Selectores */
+    input, select, textarea, [data-baseweb="select"] {{
+        background-color: {input_bg} !important;
+        color: {input_text} !important;
+        border: 1px solid {input_border} !important;
+        border-radius: 6px !important;
+    }}
+    input:focus, textarea:focus {{
+        border-color: #dc2626 !important;
+        box-shadow: 0 0 0 1px #dc2626 !important;
+    }}
+
+    /* Burbujas del Chat RAG */
+    [data-testid="stChatMessage"]:nth-child(odd) {{
+        background-color: {chat_user_bg} !important;
+        border: 1px solid {chat_user_border} !important;
+        border-radius: 8px !important;
+    }}
+    [data-testid="stChatMessage"]:nth-child(even) {{
+        background-color: {chat_ai_bg} !important;
+        border: 1px solid {chat_ai_border} !important;
+        border-left: 3px solid #dc2626 !important;
+        border-radius: 8px !important;
+    }}
+
+    /* Cajas de Información y Alertas */
+    [data-testid="stAlert"] {{
+        background-color: {alert_info_bg} !important;
+        border: 1px solid {alert_info_border} !important;
+        border-radius: 8px !important;
+        color: {alert_info_text} !important;
+    }}
+    </style>
+    """
+
+
+def render_portal_header(st_ctx: Any = None, theme_mode: str = "sumie_dark") -> None:
+    """
+    Renders the Alquímica-33 Sumi-e & Washi Banner Header,
+    incorporating the traditional vermilion Hanko seal [錬],
+    calligraphy kanji [水墨画 • 錬金術三十三], and the Rising Sun / Mountain mist motif.
+    """
+    ctx = _get_st(st_ctx)
+    is_dark = (theme_mode == "sumie_dark")
+    bg_banner = "rgba(18, 18, 18, 0.95)" if is_dark else "rgba(255, 255, 255, 0.95)"
+    border_banner = "#262626" if is_dark else "#e5dfd5"
+    title_color = "#ffffff" if is_dark else "#111111"
+    subtitle_color = "#a0a0a0" if is_dark else "#666666"
+    sun_glow = "rgba(220, 38, 38, 0.35)" if is_dark else "rgba(220, 38, 38, 0.20)"
+
+    html_banner = f"""
+    <div style="
+        position: relative;
+        background: {bg_banner};
+        border: 1px solid {border_banner};
+        border-radius: 12px;
+        padding: 1.25rem 1.75rem;
+        margin-bottom: 1.25rem;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, {'0.3' if is_dark else '0.06'});
+    ">
+        <!-- Red Sun Emblem (Hinomaru / Cinnabar Disc) -->
+        <div style="
+            position: absolute;
+            top: -25px;
+            right: 25px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #dc2626 0%, #991b1b 80%, transparent 100%);
+            opacity: 0.85;
+            box-shadow: 0 0 35px {sun_glow};
+            pointer-events: none;
+            z-index: 1;
+        "></div>
+        <div style="
+            position: absolute;
+            top: 15px;
+            right: 140px;
+            font-family: serif;
+            font-size: 13px;
+            color: #ef4444;
+            opacity: 0.7;
+            letter-spacing: 5px;
+            pointer-events: none;
+            z-index: 1;
+        ">
+            墨 • 錬 • 化
+        </div>
+
+        <!-- Banner Content -->
+        <div style="position: relative; z-index: 2; display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;">
+            <!-- Square Hanko Seal (Alquimia / 錬) -->
+            <div style="
+                width: 48px;
+                height: 48px;
+                background-color: #dc2626;
+                border: 2px solid #b91c1c;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ffffff;
+                font-family: serif;
+                font-weight: 900;
+                font-size: 24px;
+                box-shadow: 0 2px 12px rgba(220, 38, 38, 0.45);
+                flex-shrink: 0;
+            ">
+                錬
+            </div>
+
+            <div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.2rem;">
+                    <span style="
+                        font-family: 'Cinzel', 'Newsreader', serif;
+                        font-size: 1.4rem;
+                        font-weight: 700;
+                        color: {title_color};
+                        letter-spacing: 0.02em;
+                    ">
+                        Portal Educativo de Química Analítica
+                    </span>
+                    <span style="
+                        font-size: 10px;
+                        padding: 2px 8px;
+                        background-color: rgba(220, 38, 38, 0.15);
+                        border: 1px solid rgba(220, 38, 38, 0.6);
+                        color: #ef4444;
+                        border-radius: 12px;
+                        font-family: monospace;
+                        font-weight: bold;
+                    ">
+                        水墨画 • ALQUÍMICA-33
+                    </span>
+                </div>
+                <div style="font-size: 0.82rem; color: {subtitle_color}; font-family: 'Inter', sans-serif;">
+                    Ingeniería Química | Universidad Mayor de San Simón (UMSS) | Código: 2004061
+                </div>
+            </div>
+        </div>
+    </div>
+    """
+    ctx.markdown(html_banner, unsafe_allow_html=True)
 
 
 # ==============================================================================
@@ -601,12 +907,33 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
         "Modelo Gemini Principal:",
         model_options,
         index=selected_idx,
-        help="Prioriza Gemini 3.5 Flash Lite para máxima velocidad y cuota gratuita. Si se agota la cuota temporal (HTTP 429), el sistema reenruta automáticamente a los modelos Flash / Flash Lite / Pro más recientes.",
     )
     ctx.session_state["selected_model"] = model_choice
     ctx.sidebar.caption("🔄 *Auto-Reenrutamiento activo:* Si se agota la cuota (429), conmuta automáticamente a los modelos Flash Lite / Flash / Pro restantes.")
 
 
+
+    # Visual Theme Selector (Alquímica-33)
+    ctx.sidebar.markdown("---")
+    ctx.sidebar.subheader("🎨 Estilo Visual (Alquímica-33)")
+    theme_options = [
+        "🌑 Sumi-e (Tinta Carbón / Noche)",
+        "📜 Washi (Papel de Arroz / Día)",
+    ]
+    current_theme = ctx.session_state.get("theme_mode", "sumie_dark")
+    theme_idx = 0 if current_theme == "sumie_dark" else 1
+    selected_theme_label = ctx.sidebar.radio(
+        "Modo de Interfaz:",
+        theme_options,
+        index=theme_idx,
+        key="theme_radio_selector",
+        help="Alterna entre el tema Sumi-e nocturno (tinta negra carbón) y el tema Washi diurno (papel de arroz marfil).",
+    )
+    new_theme_mode = "sumie_dark" if "Sumi-e" in selected_theme_label else "washi_light"
+    if ctx.session_state.get("theme_mode") != new_theme_mode:
+        ctx.session_state["theme_mode"] = new_theme_mode
+        if hasattr(ctx, "rerun"):
+            ctx.rerun()
 
     # Clear Session Button
     ctx.sidebar.markdown("---")
@@ -618,6 +945,7 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
         "api_key": ctx.session_state.get("api_key"),
         "model": model_choice,
         "is_valid": ctx.session_state.get("api_key_valid", False),
+        "theme_mode": ctx.session_state.get("theme_mode", "sumie_dark"),
     }
 
 
