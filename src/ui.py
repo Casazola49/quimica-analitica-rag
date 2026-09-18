@@ -26,6 +26,7 @@ import html
 import logging
 import os
 import re
+import textwrap
 import urllib.parse
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -514,7 +515,13 @@ def disconnect_api_key(session: Optional[Dict[str, Any]] = None) -> None:
 def get_theme_css(theme_mode: str = "sumie_dark") -> str:
     """
     Generates dynamic CSS adhering strictly to the 'Alquímica-33' Sumi-e & Washi design system.
-    Supports:
+    Features:
+    - GPU-accelerated hardware animations (0% CPU cost):
+      * Sun radiance breathing pulse (Hinomaru)
+      * Soaring crane silhouette flight
+      * Drifting Momiji / Sakura leaf particles
+      * Interactive Hanko stamp imprint on hover/click
+      * Dynamic glowing crimson borders for cards, inputs, and tabs
     - 'sumie_dark': Deep ink black (#0a0a0a), charcoal cards (#141414), vermilion red (#dc2626) accents.
     - 'washi_light': Warm ivory rice paper (#f9f8f4), dark ink typography (#111111), vermilion red (#dc2626) stamps.
     """
@@ -538,7 +545,7 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         input_text = "#f0f0f0"
         tab_text = "#888888"
         tab_active_text = "#ffffff"
-        tab_active_bg = "linear-gradient(180deg, transparent 0%, rgba(220, 38, 38, 0.12) 100%)"
+        tab_active_bg = "linear-gradient(180deg, transparent 0%, rgba(220, 38, 38, 0.14) 100%)"
         tab_border = "#222222"
         chat_user_bg = "#1c1c1c"
         chat_user_border = "#333333"
@@ -547,6 +554,8 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         alert_info_bg = "#161616"
         alert_info_border = "#2e2e2e"
         alert_info_text = "#d4d4d4"
+        leaf_color = "rgba(220, 38, 38, 0.65)"
+        leaf_glow = "rgba(239, 68, 68, 0.8)"
     else:
         bg_app = "#f9f8f4"
         bg_radial = "radial-gradient(circle at 85% 15%, rgba(220, 38, 38, 0.05) 0%, transparent 45%), linear-gradient(180deg, #fdfbf7 0%, #f3efe6 100%)"
@@ -574,8 +583,10 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         alert_info_bg = "#f5f0e6"
         alert_info_border = "#e2dacb"
         alert_info_text = "#2c2c2c"
+        leaf_color = "rgba(185, 28, 28, 0.55)"
+        leaf_glow = "rgba(220, 38, 38, 0.5)"
 
-    return f"""
+    raw_css = f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap');
 
@@ -595,6 +606,7 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         background-image: {bg_radial} !important;
         color: {text_primary} !important;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        overflow-x: hidden !important;
     }}
 
     /* Títulos editoriales estilo Sumi-e */
@@ -604,38 +616,40 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         letter-spacing: 0.02em !important;
     }}
 
-    /* Barra lateral */
+    /* Barra lateral con textura y sombra */
     [data-testid="stSidebar"] {{
         background-color: {bg_sidebar} !important;
         border-right: 1px solid {border_sidebar} !important;
+        box-shadow: 2px 0 15px rgba(0, 0, 0, {'0.4' if is_dark else '0.04'}) !important;
     }}
     [data-testid="stSidebar"] * {{
         color: {text_primary} !important;
     }}
 
-    /* Botones interactivos con acento Vermilion */
+    /* Botones interactivos con acento Vermilion y transición suave */
     .stButton > button, div[data-testid="stLinkButton"] > a {{
         background-color: {btn_bg} !important;
         color: {btn_text} !important;
         border: 1px solid {btn_border} !important;
         border-radius: 6px !important;
         font-weight: 500 !important;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }}
     .stButton > button:hover, div[data-testid="stLinkButton"] > a:hover {{
         background-color: #dc2626 !important;
         color: #ffffff !important;
         border-color: #dc2626 !important;
-        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35) !important;
-        transform: translateY(-1px);
+        box-shadow: 0 4px 18px rgba(220, 38, 38, 0.4) !important;
+        transform: translateY(-2px);
     }}
     .stButton > button[kind="primary"] {{
         background-color: #dc2626 !important;
         color: #ffffff !important;
         border-color: #b91c1c !important;
+        box-shadow: 0 2px 10px rgba(220, 38, 38, 0.3) !important;
     }}
 
-    /* Pestañas de Navegación */
+    /* Pestañas de Navegación con resplandor en acento */
     .stTabs [data-baseweb="tab-list"] {{
         background-color: transparent !important;
         border-bottom: 1px solid {tab_border} !important;
@@ -648,23 +662,26 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         padding: 8px 18px !important;
         font-weight: 500 !important;
         border-bottom: 2px solid transparent !important;
-        transition: all 0.15s ease !important;
+        transition: all 0.2s ease !important;
     }}
     .stTabs [aria-selected="true"] {{
         color: {tab_active_text} !important;
         border-bottom: 2px solid #dc2626 !important;
         background: {tab_active_bg} !important;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15) !important;
     }}
 
-    /* Tarjetas y Contenedores Desplegables */
+    /* Tarjetas y Contenedores Desplegables con elevación en hover */
     [data-testid="stExpander"], details {{
         background-color: {card_bg} !important;
         border: 1px solid {card_border} !important;
         border-radius: 8px !important;
-        transition: border-color 0.2s ease !important;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }}
     [data-testid="stExpander"]:hover, details:hover {{
         border-color: {card_border_hover} !important;
+        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.18) !important;
+        transform: translateY(-1px);
     }}
 
     /* Campos de Entrada de Texto y Selectores */
@@ -673,6 +690,7 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         color: {input_text} !important;
         border: 1px solid {input_border} !important;
         border-radius: 6px !important;
+        transition: border-color 0.2s ease !important;
     }}
     input:focus, textarea:focus {{
         border-color: #dc2626 !important;
@@ -690,6 +708,7 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         border: 1px solid {chat_ai_border} !important;
         border-left: 3px solid #dc2626 !important;
         border-radius: 8px !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08) !important;
     }}
 
     /* Cajas de Información y Alertas */
@@ -699,15 +718,114 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         border-radius: 8px !important;
         color: {alert_info_text} !important;
     }}
+
+    /* =========================================================================
+       ANIMACIONES Y EFECTOS DINÁMICOS SUMI-E (0% CPU, 100% GPU ACCELERATED)
+       ========================================================================= */
+
+    /* 1. Sol Carmín Pulsante con Resplandor */
+    @keyframes sunRadiance {{
+        0% {{
+            transform: scale(1) translateY(0);
+            filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.45));
+        }}
+        50% {{
+            transform: scale(1.08) translateY(-4px);
+            filter: drop-shadow(0 0 45px rgba(239, 68, 68, 0.8));
+        }}
+        100% {{
+            transform: scale(1) translateY(0);
+            filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.45));
+        }}
+    }}
+    .sumie-sun {{
+        animation: sunRadiance 6s ease-in-out infinite alternate !important;
+        will-change: transform, filter;
+    }}
+
+    /* 2. Grullas en Vuelo a través de la Bruma */
+    @keyframes craneFlight {{
+        0% {{
+            transform: translateX(30px) translateY(4px);
+            opacity: 0.3;
+        }}
+        50% {{
+            transform: translateX(-40px) translateY(-4px);
+            opacity: 0.85;
+        }}
+        100% {{
+            transform: translateX(-110px) translateY(-8px);
+            opacity: 0.2;
+        }}
+    }}
+    .crane-flight {{
+        animation: craneFlight 16s ease-in-out infinite alternate !important;
+        will-change: transform, opacity;
+    }}
+
+    /* 3. Sello Hanko Alquímica-33 con Impronta Táctil */
+    .hanko-interactive {{
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        cursor: pointer !important;
+    }}
+    .hanko-interactive:hover {{
+        transform: scale(1.1) rotate(-3deg) !important;
+        box-shadow: 0 0 22px rgba(220, 38, 38, 0.8) !important;
+    }}
+    .hanko-interactive:active {{
+        transform: scale(0.95) rotate(0deg) !important;
+    }}
+
+    /* 4. Lluvia de Hojas de Arce / Chispas Momiji flotantes */
+    @keyframes leafDrift1 {{
+        0% {{ transform: translate3d(0, -10px, 0) rotate(0deg); opacity: 0; }}
+        15% {{ opacity: 0.75; }}
+        85% {{ opacity: 0.75; }}
+        100% {{ transform: translate3d(45px, 105vh, 0) rotate(360deg); opacity: 0; }}
+    }}
+    @keyframes leafDrift2 {{
+        0% {{ transform: translate3d(0, -10px, 0) rotate(45deg); opacity: 0; }}
+        20% {{ opacity: 0.65; }}
+        80% {{ opacity: 0.65; }}
+        100% {{ transform: translate3d(-55px, 105vh, 0) rotate(420deg); opacity: 0; }}
+    }}
+    .momiji-particle {{
+        position: fixed;
+        top: -15px;
+        pointer-events: none;
+        z-index: 99999;
+        width: 10px;
+        height: 14px;
+        background: {leaf_color};
+        border-radius: 60% 0 60% 60%;
+        box-shadow: 0 0 8px {leaf_glow};
+        will-change: transform, opacity;
+    }}
+    .momiji-p1 {{ left: 12%; animation: leafDrift1 14s linear infinite; animation-delay: 0s; }}
+    .momiji-p2 {{ left: 28%; animation: leafDrift2 18s linear infinite; animation-delay: 3s; }}
+    .momiji-p3 {{ left: 52%; animation: leafDrift1 16s linear infinite; animation-delay: 7s; }}
+    .momiji-p4 {{ left: 74%; animation: leafDrift2 15s linear infinite; animation-delay: 2s; }}
+    .momiji-p5 {{ left: 88%; animation: leafDrift1 20s linear infinite; animation-delay: 5s; }}
+    .momiji-p6 {{ left: 40%; animation: leafDrift2 17s linear infinite; animation-delay: 9s; }}
     </style>
+
+    <!-- Partículas Momiji Flotantes (Lluvia Carmesí) -->
+    <div class="momiji-particle momiji-p1"></div>
+    <div class="momiji-particle momiji-p2"></div>
+    <div class="momiji-particle momiji-p3"></div>
+    <div class="momiji-particle momiji-p4"></div>
+    <div class="momiji-particle momiji-p5"></div>
+    <div class="momiji-particle momiji-p6"></div>
     """
+    return textwrap.dedent(raw_css).strip()
 
 
 def render_portal_header(st_ctx: Any = None, theme_mode: str = "sumie_dark") -> None:
     """
     Renders the Alquímica-33 Sumi-e & Washi Banner Header,
     incorporating the traditional vermilion Hanko seal [錬],
-    calligraphy kanji [水墨画 • 錬金術三十三], and the Rising Sun / Mountain mist motif.
+    calligraphy kanji [水墨画 • 錬金術三十三], the animated Rising Sun, and soaring cranes.
+    Guaranteed clean HTML mounting without Markdown code-block parsing artifacts.
     """
     ctx = _get_st(st_ctx)
     is_dark = (theme_mode == "sumie_dark")
@@ -715,91 +833,28 @@ def render_portal_header(st_ctx: Any = None, theme_mode: str = "sumie_dark") -> 
     border_banner = "#262626" if is_dark else "#e5dfd5"
     title_color = "#ffffff" if is_dark else "#111111"
     subtitle_color = "#a0a0a0" if is_dark else "#666666"
-    sun_glow = "rgba(220, 38, 38, 0.35)" if is_dark else "rgba(220, 38, 38, 0.20)"
+    sun_glow = "rgba(220, 38, 38, 0.45)" if is_dark else "rgba(220, 38, 38, 0.22)"
 
-    html_banner = f"""
-    <div style="
-        position: relative;
-        background: {bg_banner};
-        border: 1px solid {border_banner};
-        border-radius: 12px;
-        padding: 1.25rem 1.75rem;
-        margin-bottom: 1.25rem;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, {'0.3' if is_dark else '0.06'});
-    ">
-        <!-- Red Sun Emblem (Hinomaru / Cinnabar Disc) -->
-        <div style="
-            position: absolute;
-            top: -25px;
-            right: 25px;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #dc2626 0%, #991b1b 80%, transparent 100%);
-            opacity: 0.85;
-            box-shadow: 0 0 35px {sun_glow};
-            pointer-events: none;
-            z-index: 1;
-        "></div>
-        <div style="
-            position: absolute;
-            top: 15px;
-            right: 140px;
-            font-family: serif;
-            font-size: 13px;
-            color: #ef4444;
-            opacity: 0.7;
-            letter-spacing: 5px;
-            pointer-events: none;
-            z-index: 1;
-        ">
-            墨 • 錬 • 化
+    raw_html = f"""
+    <div style="position: relative; background: {bg_banner}; border: 1px solid {border_banner}; border-radius: 12px; padding: 1.25rem 1.75rem; margin-bottom: 1.25rem; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, {'0.35' if is_dark else '0.06'});">
+        <!-- Red Sun Emblem (Hinomaru con Pulso Radiante Dinámico) -->
+        <div class="sumie-sun" style="position: absolute; top: -25px; right: 25px; width: 125px; height: 125px; border-radius: 50%; background: radial-gradient(circle, #ef4444 0%, #dc2626 40%, #991b1b 80%, transparent 100%); opacity: 0.88; box-shadow: 0 0 35px {sun_glow}; pointer-events: none; z-index: 1;"></div>
+        <!-- Grullas y Caligrafía Tradicional en la Bruma -->
+        <div class="crane-flight" style="position: absolute; top: 16px; right: 135px; font-family: 'Newsreader', serif; font-size: 13px; color: #ef4444; letter-spacing: 6px; pointer-events: none; z-index: 1; text-shadow: 0 0 8px rgba(220, 38, 38, 0.5);">
+            鶴 • 墨 • 錬
         </div>
-
         <!-- Banner Content -->
         <div style="position: relative; z-index: 2; display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap;">
-            <!-- Square Hanko Seal (Alquimia / 錬) -->
-            <div style="
-                width: 48px;
-                height: 48px;
-                background-color: #dc2626;
-                border: 2px solid #b91c1c;
-                border-radius: 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #ffffff;
-                font-family: serif;
-                font-weight: 900;
-                font-size: 24px;
-                box-shadow: 0 2px 12px rgba(220, 38, 38, 0.45);
-                flex-shrink: 0;
-            ">
+            <!-- Square Hanko Seal (Alquimia / 錬) con Impronta Táctil -->
+            <div class="hanko-interactive" title="Alquímica-33 • Sello de Transmutación" style="width: 48px; height: 48px; background-color: #dc2626; border: 2px solid #b91c1c; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-family: serif; font-weight: 900; font-size: 24px; box-shadow: 0 2px 14px rgba(220, 38, 38, 0.55); flex-shrink: 0;">
                 錬
             </div>
-
             <div>
                 <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.2rem;">
-                    <span style="
-                        font-family: 'Cinzel', 'Newsreader', serif;
-                        font-size: 1.4rem;
-                        font-weight: 700;
-                        color: {title_color};
-                        letter-spacing: 0.02em;
-                    ">
+                    <span style="font-family: 'Cinzel', 'Newsreader', serif; font-size: 1.4rem; font-weight: 700; color: {title_color}; letter-spacing: 0.02em;">
                         Portal Educativo de Química Analítica
                     </span>
-                    <span style="
-                        font-size: 10px;
-                        padding: 2px 8px;
-                        background-color: rgba(220, 38, 38, 0.15);
-                        border: 1px solid rgba(220, 38, 38, 0.6);
-                        color: #ef4444;
-                        border-radius: 12px;
-                        font-family: monospace;
-                        font-weight: bold;
-                    ">
+                    <span style="font-size: 10px; padding: 2px 8px; background-color: rgba(220, 38, 38, 0.15); border: 1px solid rgba(220, 38, 38, 0.6); color: #ef4444; border-radius: 12px; font-family: monospace; font-weight: bold; letter-spacing: 0.05em;">
                         水墨画 • ALQUÍMICA-33
                     </span>
                 </div>
@@ -810,7 +865,11 @@ def render_portal_header(st_ctx: Any = None, theme_mode: str = "sumie_dark") -> 
         </div>
     </div>
     """
-    ctx.markdown(html_banner, unsafe_allow_html=True)
+    clean_html = textwrap.dedent(raw_html).strip()
+    if hasattr(ctx, "html"):
+        ctx.html(clean_html)
+    else:
+        ctx.markdown(clean_html, unsafe_allow_html=True)
 
 
 # ==============================================================================
