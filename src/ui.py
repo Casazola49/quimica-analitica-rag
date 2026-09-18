@@ -1279,3 +1279,45 @@ def render_exam_tab(st_ctx: Any = None) -> None:
                     )
                     ctx.session_state["messages"].append({"role": "user", "content": remediation_prompt})
                     ctx.info("Mensaje de refuerzo agregado al Tutor. Dirígete a la pestaña '💬 Tutor Inteligente'.")
+
+
+def render_simulator_tab(st_ctx=None) -> None:
+    """Renders the 2D Interactive Virtual Laboratory Simulator tab."""
+    ctx = st_ctx or st
+    if not ctx:
+        return
+
+    ctx.subheader("🔬 Laboratorio Virtual Interactivo — Química Analítica")
+    ctx.markdown(
+        """
+        Simulador 2D interactivo con instrumental volumétrico analítico, gravimetría,
+        espectrofotometría UV-Vis y libreta digital de laboratorio con detección procedural de defectos de técnica.
+        Desarrollado para la carrera de Ingeniería Química (UMSS).
+        """
+    )
+
+    c1, c2 = ctx.columns([3, 1])
+    with c1:
+        ctx.info(
+            "💡 **Modo Embebido**: Puedes interactuar con la mesada de laboratorio directamente aquí abajo, "
+            "o abrir la versión completa en una nueva pestaña para trabajar con mayor comodidad."
+        )
+    with c2:
+        ctx.link_button(
+            "🚀 Abrir a Pantalla Completa ↗",
+            "https://casazola49.github.io/quimica-analitica-lab-sim/",
+            use_container_width=True,
+        )
+
+    # Render iframe component
+    try:
+        import streamlit.components.v1 as components
+        components.iframe(
+            "https://casazola49.github.io/quimica-analitica-lab-sim/",
+            height=850,
+            scrolling=True,
+        )
+    except Exception as e:
+        ctx.error(f"No se pudo cargar el marco del simulador: {e}")
+        ctx.markdown("[Haz clic aquí para abrir el simulador en GitHub Pages](https://casazola49.github.io/quimica-analitica-lab-sim/)")
+

@@ -54,11 +54,12 @@ def main() -> None:
     st.caption("Carrera de Ingeniería Química | Universidad Mayor de San Simón (UMSS) | Código: 2004061")
 
     # Multi-Tab Navigation
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "📚 Biblioteca & Libros",
         "📋 Plan de Estudios",
         "💬 Tutor Inteligente",
         "📝 Simulador de Exámenes",
+        "🔬 Laboratorio Virtual",
     ])
 
     with tab1:
@@ -72,6 +73,10 @@ def main() -> None:
 
     with tab4:
         ui.render_exam_tab(st)
+
+    with tab5:
+        ui.render_simulator_tab(st)
+
 
 
 if __name__ == "__main__":
