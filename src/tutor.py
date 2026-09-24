@@ -247,7 +247,7 @@ def get_tutor_response(
     )
 
     # 7. Check for live Gemini API invocation vs deterministic offline fallback
-    if api_key and str(api_key).strip().startswith("AIzaSy"):
+    if api_key and str(api_key).strip().startswith(("AIzaSy", "AQ.")):
         try:
             from src.gemini_client import generate_response
             response = generate_response(

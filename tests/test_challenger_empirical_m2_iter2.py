@@ -146,6 +146,7 @@ class TestKeyValidationAdversarialHarness:
             "mock_test_quota_key_abc",
             "AIzaSyTestMockDeterministicKey1234567890",
             "AIzaSy" + "A" * 33,  # Standard 39-character key
+            "AQ.Ab8RN6_mock_test_key_123456789012345678901234",  # Modern 2026 AQ. auth key
         ],
     )
     def test_valid_keys_accepted(self, valid_test_or_mock_key: str) -> None:

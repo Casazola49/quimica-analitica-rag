@@ -395,7 +395,7 @@ def generate_exam_questions(
         clean_unit = clean_unit.replace("LAB_U", "L")
 
     # 4. Attempt LLM generation if valid API key provided
-    if api_key and str(api_key).strip().startswith("AIzaSy"):
+    if api_key and str(api_key).strip().startswith(("AIzaSy", "AQ.")):
         try:
             from src.gemini_client import generate_response
             llm_prompt = (

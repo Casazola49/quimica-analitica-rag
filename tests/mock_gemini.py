@@ -102,8 +102,8 @@ class MockGeminiModelsService:
     def _check_key_permission(self) -> None:
         if not self.api_key:
             raise MockAPIError(400, "API key is missing or empty.")
-        if not self.api_key.startswith("AIzaSy"):
-            raise MockAPIError(400, "Invalid API key format. Key must start with 'AIzaSy'.")
+        if not self.api_key.startswith(("AIzaSy", "AQ.")) and not self.api_key.startswith(("mock_", "test_")):
+            raise MockAPIError(400, "Invalid API key format. Key must start with 'AIzaSy' or 'AQ.'.")
         if len(self.api_key) < 30:
             raise MockAPIError(400, "API key is too short.")
         if "QUOTA" in self.api_key or "429" in self.api_key:

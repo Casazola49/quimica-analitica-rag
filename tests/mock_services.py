@@ -465,8 +465,8 @@ class MockGeminiClientModule:
         """Validates Google AI Studio Gemini API key format and connection."""
         if not api_key:
             return False, "La clave de API no puede estar vacía."
-        if not api_key.startswith("AIzaSy"):
-            return False, "La clave debe comenzar con 'AIzaSy' y ser obtenida de Google AI Studio."
+        if not api_key.startswith(("AIzaSy", "AQ.")) and not api_key.startswith(("mock_", "test_")):
+            return False, "La clave debe comenzar con 'AIzaSy' o 'AQ.' y ser obtenida de Google AI Studio."
         if len(api_key) < 30:
             return False, "La clave ingresada es demasiado corta (debe tener al menos 39 caracteres)."
 

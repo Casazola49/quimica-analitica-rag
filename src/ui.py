@@ -945,7 +945,7 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
             "https://aistudio.google.com/app/apikey\n\n"
             "1. Inicia sesión con tu cuenta Google.\n"
             "2. Haz clic en 'Create API key'.\n"
-            "3. Pega tu clave en este panel. Cuota sin costo: 15 RPM / 1,500 RPD."
+            "3. Pega tu clave en este panel (formato moderno AQ.... o clásico AIzaSy...). Cuota sin costo: 15 RPM / 1,500 RPD."
         )
 
     ctx.sidebar.markdown("---")

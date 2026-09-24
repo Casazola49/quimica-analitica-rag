@@ -69,13 +69,16 @@ def resolve_model_name(model_name: Optional[str]) -> str:
 
 AI_STUDIO_URL: str = "https://aistudio.google.com/app/apikey"
 STANDARD_KEY_PREFIX: str = "AIzaSy"
+STANDARD_KEY_PREFIXES: tuple[str, ...] = ("AIzaSy", "AQ.")
 MIN_KEY_LENGTH: int = 30
 MAX_KEY_LENGTH: int = 60
 
 # Whitelist patterns
-# Real Google Gemini API keys match ^AIzaSy[A-Za-z0-9_\-]{30,50}$ (total length 36-56, canonical 39)
-GEMINI_KEY_PATTERN: re.Pattern = re.compile(r"^AIzaSy[A-Za-z0-9_\-]{30,50}$")
-SAFE_KEY_CHARS_PATTERN: re.Pattern = re.compile(r"^[A-Za-z0-9_\-]+$")
+# Real Google Gemini API keys match:
+# 1. Classic: ^AIzaSy[A-Za-z0-9_\-]{30,50}$ (total length 36-56, canonical 39)
+# 2. Modern (2026+ Auth Keys): ^AQ\.[A-Za-z0-9_\-]{30,55}$ (canonical 52)
+GEMINI_KEY_PATTERN: re.Pattern = re.compile(r"^(?:AIzaSy[A-Za-z0-9_\-]{30,50}|AQ\.[A-Za-z0-9_\-]{30,55})$")
+SAFE_KEY_CHARS_PATTERN: re.Pattern = re.compile(r"^[A-Za-z0-9_\-\.]+$")
 MOCK_KEY_PREFIXES: tuple[str, ...] = ("mock_", "test_")
 MOCK_KEY_PATTERN: re.Pattern = re.compile(r"^(?:mock_|test_)[A-Za-z0-9_\-]{4,55}$")
 TEST_KEY_SUBSTRINGS: tuple[str, ...] = ("mock", "test", "quota", "forbidden", "bad_request")
@@ -87,7 +90,7 @@ def get_api_key_guidance() -> str:
         "Para utilizar este portal sin costo, obtén tu clave de API gratuita en Google AI Studio:\n"
         f"1. Visita {AI_STUDIO_URL} con tu cuenta de Google.\n"
         "2. Haz clic en 'Create API key' (Crear clave de API).\n"
-        "3. Copia tu clave (comienza con 'AIzaSy...') y pégala en el panel lateral del portal.\n"
+        "3. Copia tu clave (comienza con 'AIzaSy...' o 'AQ....') y pégala en el panel lateral del portal.\n"
         "El nivel gratuito incluye cuota suficiente (15 RPM / 1,500 RPD) para todas tus consultas del curso."
     )
 
@@ -143,12 +146,12 @@ def validate_api_key(api_key: Optional[str]) -> Tuple[bool, str]:
 
     # 2. Prefix validation
     is_mock_prefixed = cleaned_key.startswith(MOCK_KEY_PREFIXES)
-    is_standard_prefixed = cleaned_key.startswith(STANDARD_KEY_PREFIX)
+    is_standard_prefixed = cleaned_key.startswith(STANDARD_KEY_PREFIXES)
 
     if not is_standard_prefixed and not is_mock_prefixed:
         return (
             False,
-            f"La clave debe comenzar con '{STANDARD_KEY_PREFIX}' y ser obtenida de Google AI Studio ({AI_STUDIO_URL})."
+            f"La clave debe comenzar con '{STANDARD_KEY_PREFIX}' o 'AQ.' y ser obtenida de Google AI Studio ({AI_STUDIO_URL})."
         )
 
     # 3. Length constraints (lower bound)
@@ -174,7 +177,7 @@ def validate_api_key(api_key: Optional[str]) -> Tuple[bool, str]:
     if not SAFE_KEY_CHARS_PATTERN.match(cleaned_key):
         return (
             False,
-            "La clave contiene caracteres inválidos. Solo se permiten caracteres alfanuméricos, guiones (-) y guiones bajos (_)."
+            "La clave contiene caracteres inválidos. Solo se permiten caracteres alfanuméricos, guiones (-), puntos (.) y guiones bajos (_)."
         )
 
     # 6. Specific pattern validation
@@ -185,11 +188,11 @@ def validate_api_key(api_key: Optional[str]) -> Tuple[bool, str]:
             return False, "Formato de clave de prueba inválido."
         return True, "Clave de prueba válida (modo mock)."
 
-    # For standard AIzaSy keys:
+    # For standard AIzaSy / AQ. keys:
     if not is_test_key and not GEMINI_KEY_PATTERN.match(cleaned_key):
         return (
             False,
-            "La clave no cumple con el formato estándar de Google AI Studio (prefijo AIzaSy seguido de 30 a 50 caracteres)."
+            "La clave no cumple con el formato estándar de Google AI Studio (prefijo AIzaSy o AQ. seguido de caracteres válidos)."
         )
 
     # 7. Perform lightweight model metadata lookup (zero token generation cost)
