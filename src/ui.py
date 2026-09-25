@@ -590,13 +590,62 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap');
 
-    /* Ocultar Streamlit default branding y menú GitHub */
-    #MainMenu {{visibility: hidden; display: none !important;}}
-    header {{visibility: hidden; display: none !important;}}
-    footer {{visibility: hidden; display: none !important;}}
-    [data-testid="stToolbar"] {{visibility: hidden; display: none !important;}}
-    [data-testid="stDecoration"] {{visibility: hidden; display: none !important;}}
-    [data-testid="stStatusWidget"] {{visibility: hidden; display: none !important;}}
+    /* Header transparente pero con botón de menú/sidebar SIEMPRE visible y accesible en móviles */
+    header[data-testid="stHeader"] {{
+        background: transparent !important;
+        pointer-events: none !important;
+    }}
+    [data-testid="stToolbar"] {{
+        background: transparent !important;
+        pointer-events: none !important;
+    }}
+    [data-testid="stExpandSidebarButton"],
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="stSidebarCollapseButton"] {{
+        visibility: visible !important;
+        display: flex !important;
+        pointer-events: auto !important;
+        z-index: 999999 !important;
+    }}
+    [data-testid="stExpandSidebarButton"] button,
+    [data-testid="stSidebarCollapsedControl"] button {{
+        background: #dc2626 !important;
+        color: #ffffff !important;
+        border: 1px solid #b91c1c !important;
+        border-radius: 8px !important;
+        padding: 6px 12px !important;
+        box-shadow: 0 4px 14px rgba(220, 38, 38, 0.55) !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+    }}
+    [data-testid="stExpandSidebarButton"] button:hover,
+    [data-testid="stSidebarCollapsedControl"] button:hover {{
+        background: #ef4444 !important;
+        transform: scale(1.08) !important;
+    }}
+    [data-testid="stExpandSidebarButton"] button * {{
+        color: #ffffff !important;
+    }}
+    [data-testid="stAppDeployButton"] {{
+        visibility: hidden !important;
+        display: none !important;
+    }}
+    #MainMenu, [data-testid="stMainMenu"] {{
+        visibility: hidden !important;
+        display: none !important;
+    }}
+    footer {{
+        visibility: hidden !important;
+        display: none !important;
+    }}
+    [data-testid="stDecoration"] {{
+        visibility: hidden !important;
+        display: none !important;
+    }}
+    [data-testid="stStatusWidget"] {{
+        visibility: hidden !important;
+        display: none !important;
+    }}
     .viewerBadge_container__1QSob, .viewerBadge_link__1QSob {{display: none !important;}}
     a[href*="github.com"] {{display: none !important;}}
 
@@ -1010,6 +1059,63 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
 
 # Alias for sidebar renderer
 render_sidebar = render_sidebar_byok
+
+
+def render_quick_key_widget(st_ctx: Any = None) -> None:
+    """
+    Renders an accessible mobile-friendly Key Configuration widget on the main view.
+    Ensures smartphone users who have collapsed sidebars can easily paste and validate
+    their Google AI Studio API key directly from the main view.
+    """
+    ctx = _get_st(st_ctx)
+    from src import gemini_client
+
+    is_valid = ctx.session_state.get("api_key_valid", False)
+    current_key = ctx.session_state.get("api_key") or ctx.session_state.get("gemini_api_key") or ""
+
+    if is_valid:
+        with ctx.expander("🟢 Clave de API Activa (Google AI Studio) — Toca para cambiar o desconectar", expanded=False):
+            ctx.success(f"Conexión activa: {ctx.session_state.get('api_key_message', 'Google AI Studio')}")
+            col1, col2 = ctx.columns([3, 1])
+            with col1:
+                ctx.caption("Tu clave está cargada en la memoria efímera de tu navegador.")
+            with col2:
+                if ctx.button("🗑️ Desconectar", key="quick_disconnect_key_btn", use_container_width=True):
+                    clear_session_state()
+                    if hasattr(ctx, "rerun"):
+                        ctx.rerun()
+    else:
+        with ctx.expander("📱🔑 ¿Estás desde el celular? Toca aquí para ingresar tu clave Google AI Studio", expanded=False):
+            ctx.markdown(
+                "Para consultar el **Tutor Inteligente** o generar exámenes con IA en tiempo real sin costo, "
+                "ingresa tu clave gratuita obtenida en [Google AI Studio](https://aistudio.google.com/app/apikey):"
+            )
+            with ctx.form("mobile_quick_key_form", clear_on_submit=False):
+                quick_k = ctx.text_input(
+                    "Clave de API de Google (formato AQ.... o AIzaSy...):",
+                    value=current_key,
+                    type="password",
+                    help="Se almacena únicamente en tu navegador para esta sesión.",
+                )
+                submitted = ctx.form_submit_button("💾 Guardar y Conectar Clave", use_container_width=True)
+                if submitted:
+                    if quick_k and quick_k.strip():
+                        clean_k = quick_k.strip()
+                        ok, msg = gemini_client.validate_api_key(clean_k)
+                        ctx.session_state["api_key"] = clean_k
+                        ctx.session_state["gemini_api_key"] = clean_k
+                        ctx.session_state["api_key_valid"] = ok
+                        ctx.session_state["authenticated"] = ok
+                        ctx.session_state["api_key_message"] = msg
+                        if ok:
+                            ctx.success(f"🟢 {msg}")
+                        else:
+                            ctx.error(f"🔴 {msg}")
+                        if hasattr(ctx, "rerun"):
+                            ctx.rerun()
+                    else:
+                        ctx.warning("Por favor ingresa una clave de API.")
+            ctx.markdown("👉 [Crear clave gratis en Google AI Studio](https://aistudio.google.com/app/apikey)")
 
 
 def render_library_tab(

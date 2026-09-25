@@ -23,7 +23,7 @@ def main() -> None:
         page_title="Química Analítica — Portal Educativo",
         page_icon="🧪",
         layout="wide",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="auto",
     )
 
     # Initialize Ephemeral Client Session State
@@ -55,6 +55,10 @@ def main() -> None:
     else:
         st.title("🧪 Portal Educativo de Química Analítica")
         st.caption("Carrera de Ingeniería Química | Universidad Mayor de San Simón (UMSS) | Código: 2004061")
+
+    # Mobile-Friendly Quick Key Configuration Widget (for smartphone users with collapsed sidebar)
+    if hasattr(ui, "render_quick_key_widget"):
+        ui.render_quick_key_widget(st)
 
     # Multi-Tab Navigation
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
