@@ -56,6 +56,18 @@ Abre tu navegador en `http://localhost:8501`.
 
 ---
 
+## 🩺 Despliegue y Verificación
+El portal se verifica de forma automatizada con un *smoke test* que comprueba que la instancia está viva, que no exige inicio de sesión anónimo, que el *build* desplegado coincide con el commit esperado y (opcionalmente) que la clave BYOK y el RAG funcionan. Consulta [`docs/deployment.md`](docs/deployment.md) para la guía de operación y solución de problemas.
+
+Comando de verificación de una línea (la clave se lee de la variable `SMOKE_API_KEY`, nunca se imprime):
+```bash
+SMOKE_API_KEY="$TU_CLAVE" .venv/bin/python scripts/smoke_live.py \
+  --url https://analytical01.streamlit.app --expect-sha $(git rev-parse --short HEAD)
+```
+En CI esto corre en `.github/workflows/deploy-smoke.yml` ante cada push a `main` y de forma manual (`workflow_dispatch`).
+
+---
+
 ## 📚 Materias Cubiertas y Guía de Replicación
 Este repositorio sirve como piloto para la materia de **Química Analítica**. Para replicar esta plataforma en cualquier otra materia de la carrera (Fisicoquímica, Termodinámica, Operaciones Unitarias, etc.), consulta:
 - [`PROMPT_MAESTRO_REPLICACION.md`](PROMPT_MAESTRO_REPLICACION.md)

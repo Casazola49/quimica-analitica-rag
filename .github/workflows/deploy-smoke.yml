@@ -1,0 +1,66 @@
+name: Deploy Smoke Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Base URL of the deployed app"
+        required: true
+        default: "https://analytical01.streamlit.app"
+      expect_sha:
+        description: "Expected short git SHA the deployment should report"
+        required: false
+        default: ""
+  push:
+    branches:
+      - main
+    paths:
+      - "app.py"
+      - "src/**"
+      - "scripts/smoke_live.py"
+      - "requirements.txt"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_SHA: ${{ github.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Install Playwright Chromium
+        run: playwright install --with-deps chromium
+
+      - name: Run live smoke test
+        continue-on-error: false
+        env:
+          SMOKE_API_KEY: ${{ secrets.SMOKE_API_KEY }}
+          EXPECT_SHA: ${{ github.event.inputs.expect_sha || github.sha }}
+          TARGET_URL: ${{ github.event.inputs.url || 'https://analytical01.streamlit.app' }}
+        run: |
+          ARGS="--url $TARGET_URL"
+          if [ -n "$EXPECT_SHA" ]; then ARGS="$ARGS --expect-sha ${EXPECT_SHA:0:7}"; fi
+          # After a push, Streamlit Cloud redeploys asynchronously, so the app
+          # can still be serving the previous build when CI reaches it. Give the
+          # redeploy a bounded window to land instead of failing a fresh push.
+          ARGS="$ARGS --stamp-wait 300"
+          python scripts/smoke_live.py $ARGS
