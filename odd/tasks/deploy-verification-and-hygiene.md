@@ -56,7 +56,50 @@ There is no `.streamlit/config.toml` and no CI at all.
 
 ## Commits
 
-_(work-unit commit SHAs recorded here as evidence)_
+- `9ae4502` — WU1: build stamp, `.streamlit/config.toml`, removed the
+  `TEST_KEY_SUBSTRINGS` format bypass, aligned the `quota_exceeded_key` fixture.
+- `9ca4366` — WU2: `scripts/smoke_live.py`, deploy-smoke workflow, deployment runbook.
+- `0520667` — ODD tracking for this feature.
+- `f865489` — Security correction for review finding R1-001 (CRITICAL, risk lens).
+
+## Review
+
+Native RDD review, tier `high`, 4 lenses. Target
+`sha256:d5eef90d0976f8abaf0b28d7e2d2ec7347749dbdf2f859ca843d3fce4d58f464`.
+
+- First lineage `review-5cdde5aaeb739057` found **R1-001 (CRITICAL, risk,
+  introduced)**: `workflow_dispatch` accepted a free-text `url`, the job passed
+  `secrets.SMOKE_API_KEY` alongside it, and the smoke script typed the key into
+  the page's first password input. A dispatch to an attacker-controlled page let
+  that page's JavaScript read the key. Corrected in `f865489` (73 diff lines of
+  a 200 budget).
+- Second lineage `review-173020bd3a0dcd46` reviewed the corrected candidate with
+  all 4 lenses: **approved**, acknowledged, authority burned.
+  (`review-5cdde5aaeb739057` was stranded: its target was the pre-correction
+  tree, which stopped being the workspace target once the fix was committed.)
+
+### Advisory findings, all non-blocking
+
+Treat as separate later work; never as a reason to re-review this candidate.
+
+- `R2-trust-list-duplication` (readability, WARNING) `scripts/smoke_live.py:109-113`
+  — the trusted-host list exists twice, in the script and in the workflow guard,
+  and can drift.
+- `R2-misleading-built-at` (readability, SUGGESTION) `src/build_info.py:39` —
+  `built_at` records the first `get_build_info()` call, not a build time.
+- `R2-browser-errors-downgraded-to-skip` (readability, WARNING) `scripts/smoke_live.py:418-426`
+- `R2-swallowed-auth-probe-errors` (readability, WARNING) `scripts/smoke_live.py:200-210`
+- `R2-api-key-provided-misreported` (readability, SUGGESTION) `scripts/smoke_live.py:533`
+- `R2-redundant-time-import` (readability, SUGGESTION) `scripts/smoke_live.py:316`
+- `R1-001` (risk, WARNING, informational) `scripts/smoke_live.py:448`
+- `R3-001`, `R3-002`, `R3-003` (reliability) `scripts/smoke_live.py`
+
+## Known follow-up outside this feature
+
+`tests/test_playwright_browser_ui.py:45` hardcodes
+`cwd="/home/raymond/Work/agy_work/quimica_analitica_02"`, the repository's previous
+location. The test only passes when port 8599 is already occupied, because then it
+never launches Streamlit. Pre-existing, unrelated to this feature.
 
 ## Verification log
 
