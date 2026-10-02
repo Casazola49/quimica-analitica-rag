@@ -1045,6 +1045,20 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
 
     # Clear Session Button
     ctx.sidebar.markdown("---")
+    # Build provenance stamp (diagnostic: which commit/branch this instance serves).
+    # Wrapped so a build-info failure can never break the sidebar.
+    try:
+        from src import build_info
+        info = build_info.get_build_info()
+        if info.unknown or not info.short_sha or info.short_sha == "unknown":
+            build_stamp = "Build desconocido"
+        else:
+            build_stamp = f"Build {info.short_sha} · {info.branch}"
+        ctx.sidebar.caption(build_stamp)
+    except Exception:
+        build_stamp = "Build desconocido"
+        ctx.sidebar.caption(build_stamp)
+
     if ctx.sidebar.button("🗑️ Desconectar Clave / Reiniciar Sesión", use_container_width=True):
         clear_session_state()
         ctx.rerun()
@@ -1054,6 +1068,7 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
         "model": model_choice,
         "is_valid": ctx.session_state.get("api_key_valid", False),
         "theme_mode": ctx.session_state.get("theme_mode", "sumie_dark"),
+        "build": build_stamp,
     }
 
 

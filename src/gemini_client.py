@@ -81,7 +81,6 @@ GEMINI_KEY_PATTERN: re.Pattern = re.compile(r"^(?:AIzaSy[A-Za-z0-9_\-]{30,50}|AQ
 SAFE_KEY_CHARS_PATTERN: re.Pattern = re.compile(r"^[A-Za-z0-9_\-\.]+$")
 MOCK_KEY_PREFIXES: tuple[str, ...] = ("mock_", "test_")
 MOCK_KEY_PATTERN: re.Pattern = re.compile(r"^(?:mock_|test_)[A-Za-z0-9_\-]{4,55}$")
-TEST_KEY_SUBSTRINGS: tuple[str, ...] = ("mock", "test", "quota", "forbidden", "bad_request")
 
 
 def get_api_key_guidance() -> str:
@@ -129,7 +128,8 @@ def validate_api_key(api_key: Optional[str]) -> Tuple[bool, str]:
     5. Enforces strict character whitelisting: rejects control chars (\\x00, \\r, \\n, \\t), punctuation,
        SQL injection fragments, and shell metacharacters.
     6. Verifies regex whitelist pattern: Google Gemini keys match ^AIzaSy[A-Za-z0-9_-]{30,50}$
-       (also supporting test/mock patterns for automated evaluation).
+       or the modern AQ. auth-key format (^AQ.[A-Za-z0-9_-]{30,55}$) (mock/test-prefixed keys are
+       handled separately in step 6 by MOCK_KEY_PATTERN).
     7. Executes a lightweight zero-token model metadata ping (client.models.get) to verify live permissions.
 
     Args:
@@ -181,15 +181,16 @@ def validate_api_key(api_key: Optional[str]) -> Tuple[bool, str]:
         )
 
     # 6. Specific pattern validation
-    is_test_key = any(sub in cleaned_key.lower() for sub in TEST_KEY_SUBSTRINGS)
-
+    # Every key exercised by the test suite already satisfies GEMINI_KEY_PATTERN,
+    # so the old mock/test substring bypass was redundant dead weight and a needless
+    # format hole. Standard keys are now unconditionally format-checked.
     if is_mock_prefixed:
         if not MOCK_KEY_PATTERN.match(cleaned_key):
             return False, "Formato de clave de prueba inválido."
         return True, "Clave de prueba válida (modo mock)."
 
-    # For standard AIzaSy / AQ. keys:
-    if not is_test_key and not GEMINI_KEY_PATTERN.match(cleaned_key):
+    # For standard AIzaSy / AQ. keys: unconditional strict format check.
+    if not GEMINI_KEY_PATTERN.match(cleaned_key):
         return (
             False,
             "La clave no cumple con el formato estándar de Google AI Studio (prefijo AIzaSy o AQ. seguido de caracteres válidos)."

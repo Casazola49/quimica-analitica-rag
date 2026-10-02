@@ -38,8 +38,12 @@ def invalid_api_key() -> str:
 
 @pytest.fixture(scope="session")
 def quota_exceeded_key() -> str:
-    """Returns an API key simulating HTTP 429 quota exhaustion."""
-    return "AIzaSy_QUOTA_429_EXCEEDED_MOCK_KEY"
+    """Returns an API key simulating HTTP 429 quota exhaustion.
+
+    Must satisfy GEMINI_KEY_PATTERN (>=30 chars after the AIzaSy prefix) and
+    keep the QUOTA/429 substrings that MockGeminiClient keys off to raise 429.
+    """
+    return "AIzaSy_QUOTA_429_EXCEEDED_MOCK_KEY_1234"
 
 
 @pytest.fixture(scope="session")

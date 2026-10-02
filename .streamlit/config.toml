@@ -1,0 +1,16 @@
+# Streamlit runtime configuration for the Química Analítica portal.
+# Keep explicit and minimal. Per repo policy, the app ships its own Sumi-e /
+# Washi CSS via ui.get_theme_css, so NO [theme] section is defined here, and
+# maxUploadSize is intentionally left at its default.
+
+[server]
+# Run without opening a browser window on the host (headless / server deployment).
+headless = true
+
+[browser]
+# Do not phone home anonymous usage statistics to Streamlit.
+gatherUsageStats = false
+
+[client]
+# Minimal toolbar: hide the developer "Deploy"/"Record" affordances for a clean student view.
+toolbarMode = "minimal"
