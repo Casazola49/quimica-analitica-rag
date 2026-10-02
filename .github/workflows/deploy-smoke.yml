@@ -4,9 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       url:
-        description: "Base URL of the deployed app"
+        description: >-
+          Trusted deployment to smoke test. Free text is deliberately NOT accepted:
+          this job receives SMOKE_API_KEY, so an arbitrary URL would paste the real
+          key into a third-party page whose JavaScript could exfiltrate it.
         required: true
+        type: choice
         default: "https://analytical01.streamlit.app"
+        options:
+          - "https://analytical01.streamlit.app"
+          - "http://127.0.0.1:8600"
       expect_sha:
         description: "Expected short git SHA the deployment should report"
         required: false
@@ -49,6 +56,17 @@ jobs:
 
       - name: Install Playwright Chromium
         run: playwright install --with-deps chromium
+
+      - name: Guard: refuse an untrusted smoke target
+        env:
+          TARGET_URL: ${{ github.event.inputs.url || 'https://analytical01.streamlit.app' }}
+        run: |
+          # Defense in depth behind the choice input: never run the key-bearing
+          # smoke step against a host that is not on the trusted list.
+          case "$TARGET_URL" in
+            https://analytical01.streamlit.app|http://127.0.0.1:8600) ;;
+            *) echo "::error::Refusing untrusted smoke target: $TARGET_URL"; exit 1 ;;
+          esac
 
       - name: Run live smoke test
         continue-on-error: false

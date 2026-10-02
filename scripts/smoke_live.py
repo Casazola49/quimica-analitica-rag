@@ -88,6 +88,7 @@ import re
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass, asdict
 from typing import List, Optional
@@ -102,6 +103,15 @@ HEALTH_PATH = "/healthz"
 AUTH_GATE_MARKER = "share.streamlit.io/-/auth/app"
 BUILD_STAMP_RE = re.compile(r"Build\s+([0-9a-f]{7,40})")
 VALID_BADGE_TEXT = "Clave válida"
+# The api_key and rag checks type a REAL Google AI Studio key into the page's first
+# password input. That is only ever safe against a host we control: an arbitrary
+# --url would hand the key to a third-party page whose JavaScript could read and
+# exfiltrate it. Keep in sync with the trusted list in .github/workflows/deploy-smoke.yml.
+TRUSTED_KEY_HOSTS: tuple[str, ...] = (
+    "analytical01.streamlit.app",
+    "127.0.0.1",
+    "localhost",
+)
 RAG_QUESTION = "Como se calcula el error relativo de una medicion de masa?"
 CITATION_MARKER = "Fuentes Bibliográficas Consultadas"
 USER_AGENT = "quimica-analitica-smoke/1.0 (+https://github.com/)"
@@ -374,6 +384,7 @@ def run_browser_checks(
     timeout: int,
     headed: bool,
     stamp_wait: int = 0,
+    key_blocked_reason: Optional[str] = None,
 ) -> List[CheckResult]:
     """Loads the page with Playwright and runs checks 3-5. Returns the results."""
     try:
@@ -399,6 +410,9 @@ def run_browser_checks(
             if api_key:
                 results.append(check_api_key(page, api_key, timeout))
                 results.append(check_rag(page, timeout))
+            elif key_blocked_reason:
+                results.append(CheckResult("api_key", "SKIP", key_blocked_reason))
+                results.append(CheckResult("rag", "SKIP", key_blocked_reason))
             else:
                 results.append(CheckResult("api_key", "SKIP", "no --api-key supplied"))
                 results.append(CheckResult("rag", "SKIP", "no --api-key supplied"))
@@ -429,11 +443,42 @@ def _key_hint(api_key: Optional[str]) -> Optional[str]:
     return f"{api_key[:3]}… (len={len(api_key)})"
 
 
+def _host_is_trusted(base_url: str) -> bool:
+    """
+    Reports whether the target host is allowed to receive a real API key.
+
+    The key-bearing checks (api_key, rag) paste a live Google AI Studio key into
+    the page. Running them against an untrusted --url would leak that key to
+    whatever JavaScript the page serves, so an untrusted host downgrades those
+    checks to SKIP instead of FAIL -- the deployment is not broken, the caller
+    just pointed the smoke test at a host that may not see the key.
+
+    Args:
+        base_url: The deployment URL under test.
+
+    Returns:
+        True when the URL's hostname is on TRUSTED_KEY_HOSTS, False otherwise.
+    """
+    try:
+        host = urllib.parse.urlsplit(base_url).hostname or ""
+    except ValueError:
+        return False
+    return host.lower() in TRUSTED_KEY_HOSTS
+
+
 def run(args) -> int:
     base_url = args.url.rstrip("/")
     expect_sha = args.expect_sha
     # API key: explicit flag, else SMOKE_API_KEY env var (never logged in full).
     api_key = args.api_key or os.environ.get("SMOKE_API_KEY") or None
+    key_blocked_reason: Optional[str] = None
+    if api_key and not _host_is_trusted(base_url):
+        key_blocked_reason = (
+            f"key withheld: {base_url} is not a trusted host "
+            f"({', '.join(TRUSTED_KEY_HOSTS)}); the key-bearing checks are skipped "
+            "so it is never typed into a page we do not control"
+        )
+        api_key = None
     timeout = args.timeout
 
     results: List[CheckResult] = []
@@ -465,7 +510,13 @@ def run(args) -> int:
     else:
         results.extend(
             run_browser_checks(
-                base_url, expect_sha, api_key, timeout, args.headed, args.stamp_wait
+                base_url,
+                expect_sha,
+                api_key,
+                timeout,
+                args.headed,
+                args.stamp_wait,
+                key_blocked_reason,
             )
         )
         # If --skip-browser was not set but Playwright was unavailable, the
