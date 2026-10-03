@@ -168,18 +168,56 @@ def format_citation_tag(
 
 
 def _find_canonical_book(title_str: str, author_str: str = "") -> Optional[Dict[str, Any]]:
-    """Matches candidate title against canonical course textbook definitions."""
+    """Matches a candidate title against the canonical course textbooks.
+
+    Resolution happens in three ordered passes, and the order is the whole point:
+
+    1. exact title match;
+    2. title containment, or an alias contained in the title;
+    3. an alias contained in the author string.
+
+    Pass 3 must come last and must never run while the title still points at a
+    different canonical book. Several course textbooks share an author -- both
+    Skoog volumes are by Skoog, Holler and Crouch -- so a bare author-alias test
+    used to resolve every Skoog title to whichever entry appeared first, silently
+    relabelling "Principios de Analisis Instrumental" as "Fundamentos de Quimica
+    Analitica". A reader sent to the cited page would open the wrong textbook.
+
+    Args:
+        title_str: Candidate book title, from a chunk or from model prose.
+        author_str: Candidate author, used only as a last-resort signal.
+
+    Returns:
+        The matching canonical book dict, or None when the title carries no
+        usable signal.
+    """
     clean_t = str(title_str).lower().strip()
     clean_a = str(author_str).lower().strip()
+    if not clean_t:
+        return None
+
+    # Pass 1 + 2: the title is the strongest signal. Scan every entry before
+    # considering the author, so an exact title can never lose to an alias that
+    # happens to sit on an unrelated book.
     for b in CANONICAL_BOOKS:
         b_title_lower = b["title"].lower()
         if clean_t == b_title_lower:
             return b
+    for b in CANONICAL_BOOKS:
+        b_title_lower = b["title"].lower()
         if clean_t in b_title_lower or b_title_lower in clean_t:
             return b
+    for b in CANONICAL_BOOKS:
         for alias in b.get("aliases", []):
-            if alias in clean_t or alias in clean_a:
+            if alias in clean_t:
                 return b
+
+    # Pass 3: author-only match, and only when the title told us nothing.
+    if clean_a:
+        for b in CANONICAL_BOOKS:
+            for alias in b.get("aliases", []):
+                if alias in clean_a:
+                    return b
     return None
 
 
@@ -274,9 +312,18 @@ def extract_citations(
 
         canon = _find_canonical_book(b_clean, auth)
         if canon:
-            canon_title = canon["title"]
-            canon_author = canon["author"]
-            canon_edition = canon["edition"]
+            if from_chunk:
+                # The chunk came out of our own index, so its metadata is verified
+                # ground truth. Canonical entries may only fill gaps; they must
+                # never rewrite it, or a retrieved chunk gets relabelled as a
+                # different textbook and the cited page points at the wrong book.
+                canon_title = b_clean or canon["title"]
+                canon_author = canon_author or canon["author"]
+                canon_edition = canon_edition or canon["edition"]
+            else:
+                canon_title = canon["title"]
+                canon_author = canon["author"]
+                canon_edition = canon["edition"]
             if page_int > canon.get("max_page", 1200):
                 return
         elif b_clean.lower() in chunk_books:
