@@ -57,16 +57,22 @@ jobs:
       - name: Install Playwright Chromium
         run: playwright install --with-deps chromium
 
-      - name: Guard: refuse an untrusted smoke target
+      - name: "Guard: refuse an untrusted smoke target"
         env:
           TARGET_URL: ${{ github.event.inputs.url || 'https://analytical01.streamlit.app' }}
         run: |
           # Defense in depth behind the choice input: never run the key-bearing
-          # smoke step against a host that is not on the trusted list.
-          case "$TARGET_URL" in
-            https://analytical01.streamlit.app|http://127.0.0.1:8600) ;;
-            *) echo "::error::Refusing untrusted smoke target: $TARGET_URL"; exit 1 ;;
-          esac
+          # smoke step against a host that is not trusted. The allowlist lives in
+          # scripts/smoke_live.py so there is exactly one source of truth.
+          python - <<'PY'
+          import os, sys
+          sys.path.insert(0, "scripts")
+          from smoke_live import _host_is_trusted
+          url = os.environ["TARGET_URL"]
+          if not _host_is_trusted(url):
+              print(f"::error::Refusing untrusted smoke target: {url}")
+              sys.exit(1)
+          PY
 
       - name: Run live smoke test
         continue-on-error: false

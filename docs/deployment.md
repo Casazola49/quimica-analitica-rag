@@ -52,7 +52,7 @@ the first thing to check.
 
 ## 3. Is the app publicly reachable?
 
-Probe the two endpoints from your machine:
+Probe the three endpoints from your machine:
 
 ```bash
 # Liveness probe — the ONLY path that stays anonymous when viewer auth is on.

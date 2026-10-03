@@ -14,7 +14,7 @@ pipeline works end-to-end, but the deployed app at
    The previous `SAFE_KEY_CHARS_PATTERN = ^[A-Za-z0-9_\-]+$` rejected the `.`
    in any `AQ.` key with *"La clave contiene caracteres inválidos"*.
 2. The live URL is behind Streamlit viewer auth (`303` →
-   `share.streamlit.io/-/auth/app` on every path except `/_stcore/health`), so an
+   `share.streamlit.io/-/auth/app` on every path except `/healthz`), so an
    anonymous browser connects the websocket and renders a blank page. No automated
    verification of the live deployment is possible.
 3. There is no way to tell, from the outside, which commit a running instance
@@ -46,13 +46,14 @@ There is no `.streamlit/config.toml` and no CI at all.
 
 | # | Task | Work unit | Status |
 |---|------|-----------|--------|
-| 1 | Build stamp module + sidebar render | WU1 | pending |
-| 2 | `.streamlit/config.toml` | WU1 | pending |
-| 3 | Remove `TEST_KEY_SUBSTRINGS` bypass | WU1 | pending |
-| 4 | Unit test for `build_info` | WU1 | pending |
-| 5 | `scripts/smoke_live.py` live E2E | WU2 | pending |
-| 6 | GitHub Actions workflow | WU2 | pending |
-| 7 | Deployment + troubleshooting docs | WU2 | pending |
+| 1 | Build stamp module + sidebar render | WU1 | done |
+| 2 | `.streamlit/config.toml` | WU1 | done |
+| 3 | Remove `TEST_KEY_SUBSTRINGS` bypass | WU1 | done |
+| 4 | Unit test for `build_info` | WU1 | done |
+| 5 | `scripts/smoke_live.py` live E2E | WU2 | done |
+| 6 | GitHub Actions workflow | WU2 | done |
+| 7 | Deployment + troubleshooting docs | WU2 | done |
+| 8 | Correct R2 advisory findings | WU3 | done |
 
 ## Commits
 

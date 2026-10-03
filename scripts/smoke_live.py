@@ -198,17 +198,20 @@ def check_no_auth_redirect(base_url: str, timeout: int) -> CheckResult:
     """
     url = base_url.rstrip("/") + "/"
     # 1) No-follow: inspect the Location header on the initial response.
+    probe_errors: list[str] = []
     try:
         status, _final, location, _body = _http_get(url, timeout=timeout, follow_redirects=False)
         initial_redirects = status in (301, 302, 303, 307, 308) and AUTH_GATE_MARKER in location
-    except Exception:
+    except Exception as exc:
         initial_redirects = False
+        probe_errors.append(f"no-follow probe failed: {exc}")
     # 2) Follow redirects: inspect where we actually land.
     try:
         _status, final_url, _loc, _body = _http_get(url, timeout=timeout, follow_redirects=True)
         final_redirects = AUTH_GATE_MARKER in final_url
-    except Exception:
+    except Exception as exc:
         final_redirects = False
+        probe_errors.append(f"follow-redirects probe failed: {exc}")
 
     if initial_redirects or final_redirects:
         return CheckResult(
@@ -217,10 +220,20 @@ def check_no_auth_redirect(base_url: str, timeout: int) -> CheckResult:
             "app requires sign-in, so anonymous automated verification is impossible",
             finding="VIEWER_AUTH_REQUIRED",
         )
+    # A probe that never reached the server must not be reported as "no auth gate".
+    # Swallowing it here would let an outage look like a passing auth check.
+    if len(probe_errors) == 2:
+        return CheckResult(
+            "no_auth_redirect",
+            "FAIL",
+            "could not probe the deployment at all: " + "; ".join(probe_errors),
+            finding="PROBE_FAILED",
+        )
     return CheckResult(
         "no_auth_redirect",
         "PASS",
         "anonymous GET / did not redirect to the Streamlit auth gate",
+        detail="; ".join(probe_errors),
     )
 
 
@@ -533,6 +546,7 @@ def run(args) -> int:
             "expect_sha": expect_sha,
             "api_key_provided": api_key is not None,
             "api_key_hint": _key_hint(api_key),
+            "api_key_withheld_untrusted_host": key_blocked_reason is not None,
             "page_reachable_anonymously": page_reachable,
             "exit_code": exit_code,
             "checks": [asdict(r) for r in results],

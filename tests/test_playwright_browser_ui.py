@@ -12,11 +12,18 @@ import subprocess
 import sys
 import time
 import socket
+from pathlib import Path
+
 import pytest
 from playwright.sync_api import sync_playwright
 
-SCREENSHOT_PATH = "/home/raymond/.gemini/antigravity-cli/brain/06478b8c-6b66-44ab-9d84-0edf1ec31a56/playwright_verified_sumie.png"
-SCREENSHOT_TABS_PATH = "/home/raymond/.gemini/antigravity-cli/brain/06478b8c-6b66-44ab-9d84-0edf1ec31a56/playwright_tabs_verified.png"
+# Derive everything from this file instead of hardcoding machine-specific
+# absolute paths: the suite must run on any checkout, not just the machine the
+# test was written on.
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SCREENSHOT_DIR = REPO_ROOT / "tmp_covers_test" / "playwright"
+SCREENSHOT_PATH = str(SCREENSHOT_DIR / "playwright_verified_sumie.png")
+SCREENSHOT_TABS_PATH = str(SCREENSHOT_DIR / "playwright_tabs_verified.png")
 
 def is_port_open(port: int) -> bool:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -42,7 +49,7 @@ def test_browser_ui_rendering():
             cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            cwd="/home/raymond/Work/agy_work/quimica_analitica_02",
+            cwd=str(REPO_ROOT),
         )
         for _ in range(30):
             if is_port_open(port):
@@ -54,9 +61,9 @@ def test_browser_ui_rendering():
             pytest.fail(f"Streamlit server did not start on port {port} in 15 seconds")
 
     try:
+        SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
         with sync_playwright() as p:
             browser = p.chromium.launch(
-                executable_path="/usr/bin/chromium",
                 headless=True,
                 args=["--no-sandbox", "--disable-dev-shm-usage"],
             )

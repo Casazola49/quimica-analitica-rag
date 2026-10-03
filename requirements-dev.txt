@@ -1,7 +1,7 @@
 # Dev-only dependencies for the smoke script and the local E2E path.
 #
 # Runtime dependencies for the portal itself live in requirements.txt
-# (streamlit, google-genai, pytest). Install that first.
+# (streamlit, google-genai, poppler-utils, pytest). Install that first.
 #
 # After `pip install -r requirements-dev.txt` you must also install the
 # Playwright browser binaries once:
