@@ -599,6 +599,24 @@ def get_theme_css(theme_mode: str = "sumie_dark") -> str:
         background: transparent !important;
         pointer-events: none !important;
     }}
+    /* The header/toolbar are non-interactive so their empty area never blocks the
+       page, but every real control inside them must stay clickable. Without this,
+       pointer-events:none on the container makes Streamlit Cloud's own Share and
+       Deploy menus unclickable: the pointer falls through to the content below and
+       a drag just selects text. Re-enable the interactive elements themselves. */
+    header[data-testid="stHeader"] button,
+    header[data-testid="stHeader"] a,
+    header[data-testid="stHeader"] [role="button"],
+    header[data-testid="stHeader"] [role="menuitem"],
+    [data-testid="stToolbar"] button,
+    [data-testid="stToolbar"] a,
+    [data-testid="stToolbar"] [role="button"],
+    [data-testid="stToolbar"] [role="menuitem"],
+    [data-testid="stStatusWidget"] button,
+    [data-testid="stStatusWidget"] a {{
+        pointer-events: auto !important;
+        cursor: pointer !important;
+    }}
     [data-testid="stExpandSidebarButton"],
     [data-testid="stSidebarCollapsedControl"],
     [data-testid="stSidebarCollapseButton"] {{
