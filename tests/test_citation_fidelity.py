@@ -94,7 +94,12 @@ class TestChunkCitationsKeepTheirMetadata:
     """Indexed chunks are ground truth and must not be relabelled."""
 
     def test_chunk_citation_keeps_its_own_book_title(self) -> None:
-        """A chunk from the Instrumental volume stays attributed to it."""
+        """A chunk from the Instrumental volume stays attributed to it.
+
+        This is the path that broke before: canonical entries were allowed to
+        rewrite an indexed chunk's metadata, so the Instrumental volume was
+        relabelled as the Fundamentals textbook.
+        """
         chunk = {
             "book_title": INSTRUMENTAL,
             "author": SKOOG_INSTRUMENTAL_AUTHOR,
@@ -110,6 +115,24 @@ class TestChunkCitationsKeepTheirMetadata:
         assert matching[0]["book_title"] == INSTRUMENTAL
         assert matching[0]["author"] == SKOOG_INSTRUMENTAL_AUTHOR
         assert matching[0]["edition"] == "7ª Edición (2019)"
+
+    def test_chunk_citation_does_not_raise(self) -> None:
+        """The from_chunk branch executes without an UnboundLocalError.
+
+        extract_citations reaches add_citation with from_chunk=True for every
+        chunk, so this exercises the branch directly rather than inferring it.
+        """
+        chunk = {
+            "book_title": FUNDAMENTALS,
+            "author": SKOOG_FUNDAMENTALS_AUTHOR,
+            "edition": "9ª Edición (2015)",
+            "chapter": "Capítulo 18",
+            "page_num": 482,
+            "content": "E = E0 - (RT/nF) ln Q describe el potencial de Nernst.",
+        }
+        citations = extract_citations("texto del modelo", [chunk])
+        assert citations
+        assert citations[0]["page_num"] == 482
 
     def test_chunk_excerpt_comes_from_the_chunk(self) -> None:
         """The excerpt shown to the reader is the stored text, not model prose."""

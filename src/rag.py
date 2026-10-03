@@ -318,8 +318,8 @@ def extract_citations(
                 # never rewrite it, or a retrieved chunk gets relabelled as a
                 # different textbook and the cited page points at the wrong book.
                 canon_title = b_clean or canon["title"]
-                canon_author = canon_author or canon["author"]
-                canon_edition = canon_edition or canon["edition"]
+                canon_author = str(auth).strip() or canon["author"]
+                canon_edition = str(ed).strip() or canon["edition"]
             else:
                 canon_title = canon["title"]
                 canon_author = canon["author"]
