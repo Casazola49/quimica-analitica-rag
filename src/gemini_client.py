@@ -18,53 +18,131 @@ import google.genai as genai
 logger = logging.getLogger(__name__)
 
 # Model Configuration & Dynamic Re-routing Chain
-# Prioritizes Gemini 3.5 Flash Lite / latest models for maximum free quota, with automatic fallback
-DEFAULT_MODEL: str = "gemini-3.5-flash-lite"
-FALLBACK_MODEL: str = "gemini-flash-lite-latest"
+# The portal's default is the stable "latest" Flash alias, which currently
+# resolves to the newest Flash generation. Explicit numbered versions follow as
+# backstops, because a saturated alias fails as a whole: if gemini-flash-latest
+# is under demand, every request that resolves through it fails too.
+DEFAULT_MODEL: str = "gemini-flash-latest"
 
-# Comprehensive priority fallback chain for Google AI Studio free tier
-# Prioritizes Flash Lite and newest models (which have the highest free quotas)
-# Each model family has independent quota buckets on Google AI Studio
+# Ordered most-capable-first. Every entry was verified to exist against the live
+# API; retired ids (2.0-flash, 1.5-flash, 1.5-pro) were removed because rotating
+# into them only spends time on 404s. gemini-2.5-pro is last: it has its own
+# quota bucket, so it can still answer after every free-tier Flash is saturated.
 MODEL_FALLBACK_CHAIN: tuple[str, ...] = (
-    "gemini-3.5-flash-lite",
-    "gemini-flash-lite-latest",
-    "gemini-2.5-flash-lite",
-    "gemini-2.0-flash-lite",
     "gemini-flash-latest",
+    "gemini-3.5-flash",
+    "gemini-flash-lite-latest",
+    "gemini-3.5-flash-lite",
     "gemini-2.5-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-pro-latest",
+    "gemini-2.5-flash-lite",
+    "gemini-3.1-flash-lite",
     "gemini-2.5-pro",
-    "gemini-1.5-pro",
 )
+
+# The model that actually produced the last successful response. Students see
+# "respondio X" so a slow or different-sounding answer has an explanation.
+_LAST_MODEL_USED: Optional[str] = None
+
+
+def get_last_model_used() -> Optional[str]:
+    """Returns the model that served the last successful response, if any."""
+    return _LAST_MODEL_USED
+
+
+def _note_model_used(model: str) -> None:
+    """Records which model actually answered, for display in the sidebar."""
+    global _LAST_MODEL_USED
+    _LAST_MODEL_USED = model
+
+
+def classify_model_failure(code: Optional[int], err_str: str) -> str:
+    """Classifies a generation failure as ``fatal``, ``quota`` or ``transient``.
+
+    The distinction drives re-routing, and mixing it up is what makes a portal
+    look broken:
+
+    * ``fatal`` -- bad key, bad model, malformed request. Rotating cannot help.
+    * ``quota`` -- HTTP 429, the account's quota is exhausted. Quota is shared
+      across models, so every remaining entry would fail identically; rotating
+      just delays the message the student actually needs to see.
+    * ``transient`` -- HTTP 503/500, overload, high demand, deadline. This is a
+      per-model condition, so another model genuinely can answer.
+
+    Args:
+        code: Exception ``code`` attribute, when the SDK exposes one.
+        err_str: Lowercased ``str(exception)``.
+
+    Returns:
+        One of ``"fatal"``, ``"quota"`` or ``"transient"``.
+    """
+    if code in (400, 403) or any(
+        marker in err_str
+        for marker in ("403", "400", "forbidden", "invalid api key", "api key not valid", "permission denied")
+    ):
+        return "fatal"
+    if code == 429 or any(
+        marker in err_str
+        for marker in ("429", "quota", "resource_exhausted", "resource has been exhausted", "exceeded your current quota")
+    ):
+        return "quota"
+    return "transient"
 
 # User-friendly alias mapping (e.g. Gemini 3.5 Flash Lite -> 3.5 Flash Lite or latest)
 MODEL_ALIASES: dict[str, str] = {
-    "gemini-3.5-flash-lite": "gemini-3.5-flash-lite",
-    "gemini-3-flash-lite": "gemini-3.5-flash-lite",
-    "gemini-flash-lite": "gemini-flash-lite-latest",
-    "gemini-flash-lite-latest": "gemini-flash-lite-latest",
-    "gemini-3.5-flash": "gemini-flash-latest",
-    "gemini-3-flash": "gemini-flash-latest",
-    "gemini-flash": "gemini-flash-latest",
     "gemini-flash-latest": "gemini-flash-latest",
-    "gemini-pro": "gemini-pro-latest",
-    "gemini-pro-latest": "gemini-pro-latest",
+    "gemini-flash-lite-latest": "gemini-flash-lite-latest",
+    "gemini-3.5-flash-lite": "gemini-3.5-flash-lite",
+    "gemini-3.5-flash": "gemini-3.5-flash",
+    "gemini-3.1-flash-lite": "gemini-3.1-flash-lite",
+    "gemini-2.5-flash-lite": "gemini-2.5-flash-lite",
+    "gemini-2.5-flash": "gemini-2.5-flash",
+    "gemini-2.5-pro": "gemini-2.5-pro",
+    "gemini-flash-lite": "gemini-flash-lite-latest",
+    "gemini-flash": "gemini-flash-latest",
+    "gemini-pro": "gemini-2.5-pro",
 }
 
 
 def resolve_model_name(model_name: Optional[str]) -> str:
-    """Normalizes model aliases and display names to valid Google AI Studio model IDs."""
+    """
+    Normalizes a display name or alias into a live Google AI Studio model id.
+
+    Accepts ids ("gemini-flash-latest"), human labels ("Gemini 3.5 Flash Lite
+    (Mayor cuota gratuita)") and loose spacing ("Gemini Flash Lite"). Anything
+    that cannot be resolved to a known live model falls back to DEFAULT_MODEL,
+    so a stale label never sends a retired id to the API.
+
+    Args:
+        model_name: Display name, alias or raw model id from the UI or a caller.
+
+    Returns:
+        A model id that exists in MODEL_FALLBACK_CHAIN.
+    """
     if not model_name:
         return DEFAULT_MODEL
-    cleaned = str(model_name).strip()
-    if "Gemini 3.5 Flash Lite" in cleaned or ("3.5" in cleaned and "lite" in cleaned.lower()):
-        return "gemini-3.5-flash-lite"
-    if " " in cleaned:
-        cleaned = cleaned.split(" ")[0].strip()
-    cleaned_lower = cleaned.lower()
-    return MODEL_ALIASES.get(cleaned_lower, cleaned_lower)
+
+    cleaned = str(model_name).strip().lower()
+    # Drop trailing parenthetical hints such as "(Mayor cuota gratuita)".
+    cleaned = re.sub(r"\s*\(.*?\)\s*", " ", cleaned).strip()
+
+    if cleaned in MODEL_ALIASES:
+        return MODEL_ALIASES[cleaned]
+
+    # "gemini flash lite" / "gemini 3.5 flash lite" -> hyphenated candidate.
+    hyphenated = re.sub(r"[\s_]+", "-", cleaned)
+    if hyphenated in MODEL_ALIASES:
+        return MODEL_ALIASES[hyphenated]
+
+    # "gemini flash" -> try the bare first token only as a last resort, never
+    # leaving the caller with an id like "gemini".
+    for token in hyphenated.split("-"):
+        if token in MODEL_ALIASES:
+            return MODEL_ALIASES[token]
+
+    # Unknown or retired id: prefer a live model from the chain, else the default.
+    if cleaned in MODEL_FALLBACK_CHAIN:
+        return cleaned
+    return DEFAULT_MODEL
 
 
 AI_STUDIO_URL: str = "https://aistudio.google.com/app/apikey"
@@ -333,19 +411,23 @@ def _sync_response(
                 contents=prompt,
                 config=config,
             )
-            return res.text if hasattr(res, "text") and res.text is not None else ""
+            text = res.text if hasattr(res, "text") and res.text is not None else ""
+            _note_model_used(m)
+            return text
         except Exception as e:
             last_err = e
             code = getattr(e, "code", None)
             err_str = str(e).lower()
+            kind = classify_model_failure(code, err_str)
 
-            # Immediate break for non-recoverable key or malformed request errors
-            if code in (400, 403) or "403" in err_str or "forbidden" in err_str:
+            # Only a per-model saturation is worth re-routing. A 429 is the
+            # account's quota and a 403 is the key: every remaining model would
+            # fail identically, so stop and report the real cause.
+            if kind in ("fatal", "quota"):
                 break
 
-            # If quota exceeded (429) or model rate limited, try next model in fallback chain
             logger.warning(
-                "Model %s failed (code=%s). Re-routing to next available model in chain: %s",
+                "Model %s is saturated (code=%s); re-routing to the next available model: %s",
                 m, code, e
             )
 
@@ -355,8 +437,12 @@ def _sync_response(
     # Translate exception into user-friendly guidance
     err_str = str(last_err).lower() if last_err else ""
     code = getattr(last_err, "code", None)
-    if code == 429 or "429" in err_str or "quota" in err_str:
-        return "⚠️ Cuota temporal de Google AI Studio excedida (HTTP 429). Por favor espera un momento antes de enviar otra consulta."
+    if code == 429 or "429" in err_str or "quota" in err_str or "resource has been exhausted" in err_str:
+        return (
+            "⚠️ Se agotó la cuota de tu clave de Google AI Studio (HTTP 429). "
+            "La cuota es compartida entre todos los modelos, por eso no rotamos a otro. "
+            "Esperá unos minutos y volvé a intentarlo, o revisá tu cuota en AI Studio."
+        )
     if code == 403 or "403" in err_str or "forbidden" in err_str:
         return f"⚠️ Error de permisos de Google AI Studio (HTTP 403). Verifica tu clave de API en {AI_STUDIO_URL}."
     return f"⚠️ Error al conectar con Google AI Studio: {str(last_err)}"
@@ -391,6 +477,7 @@ def _stream_response(
                 if text:
                     stream_started = True
                     yield text
+            _note_model_used(m)
             return
         except Exception as e:
             last_err = e
@@ -399,12 +486,15 @@ def _stream_response(
                 break
             code = getattr(e, "code", None)
             err_str = str(e).lower()
+            kind = classify_model_failure(code, err_str)
 
-            if code in (400, 403) or "403" in err_str or "forbidden" in err_str:
+            # Same rule as the synchronous path: rotate only past a per-model
+            # saturation, never past an exhausted quota or a rejected key.
+            if kind in ("fatal", "quota"):
                 break
 
             logger.warning(
-                "Streaming with model %s failed (code=%s). Re-routing to next fallback model: %s",
+                "Streaming with model %s is saturated (code=%s); re-routing: %s",
                 m, code, e
             )
 
@@ -414,8 +504,12 @@ def _stream_response(
     if not stream_started and last_err:
         err_str = str(last_err).lower()
         code = getattr(last_err, "code", None)
-        if code == 429 or "429" in err_str or "quota" in err_str:
-            yield "⚠️ Cuota temporal de Google AI Studio excedida (HTTP 429). Por favor espera un momento antes de enviar otra consulta."
+        if code == 429 or "429" in err_str or "quota" in err_str or "resource has been exhausted" in err_str:
+            yield (
+                "⚠️ Se agotó la cuota de tu clave de Google AI Studio (HTTP 429). "
+                "La cuota es compartida entre todos los modelos, por eso no rotamos a otro. "
+                "Esperá unos minutos y volvé a intentarlo, o revisá tu cuota en AI Studio."
+            )
         elif code == 403 or "403" in err_str:
             yield f"⚠️ Error de permisos de Google AI Studio (HTTP 403). Verifica tu clave en {AI_STUDIO_URL}."
         else:

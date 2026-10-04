@@ -1019,12 +1019,12 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
     # Model Selector with Gemini 3.5 Flash Lite & Auto-Reroute
     ctx.sidebar.subheader("⚙️ Configuración del Modelo")
     model_options = [
-        "Gemini 3.5 Flash Lite (Mayor cuota gratuita)",
-        "gemini-flash-lite-latest (Último Flash Lite)",
-        "gemini-flash-latest (Último Flash)",
-        "gemini-2.5-flash-lite",
-        "gemini-2.5-flash",
-        "gemini-pro-latest (Último Pro)",
+        "Gemini Flash (más reciente y avanzado)",
+        "gemini-flash-latest (alias estable del más nuevo)",
+        "Gemini 3.5 Flash (versión numerada de respaldo)",
+        "gemini-flash-lite-latest (Flash Lite, máxima cuota)",
+        "gemini-2.5-flash (conservador)",
+        "gemini-2.5-pro (último recurso, cuota propia)",
     ]
     current_selected = ctx.session_state.get("selected_model") or model_options[0]
     selected_idx = model_options.index(current_selected) if current_selected in model_options else 0
@@ -1035,7 +1035,17 @@ def render_sidebar_byok(st_ctx: Any = None) -> Dict[str, Any]:
         index=selected_idx,
     )
     ctx.session_state["selected_model"] = model_choice
-    ctx.sidebar.caption("🔄 *Auto-Reenrutamiento activo:* Si se agota la cuota (429), conmuta automáticamente a los modelos Flash Lite / Flash / Pro restantes.")
+    ctx.sidebar.caption(
+        "🔄 *Rotación automática por saturación:* si un modelo está sobrecargado (HTTP 503) "
+        "se prueba el siguiente de la cadena. Ante cuota agotada (429) **no** rota, porque la cuota "
+        "es compartida entre todos los modelos."
+    )
+
+    # Show which model actually answered, so a different-sounding or slower
+    # reply has a visible explanation.
+    _used = getattr(gemini_client, "get_last_model_used", lambda: None)()
+    if _used:
+        ctx.sidebar.caption(f"✅ Última respuesta servida por: `{_used}`")
 
 
 
