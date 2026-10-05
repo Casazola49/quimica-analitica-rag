@@ -1544,6 +1544,117 @@ def render_metrics_tab(st_ctx: Any = None) -> None:
     )
 
 
+def render_sources_tab(st_ctx: Any = None) -> None:
+    """Renders the instructor verification view: the books, nothing else.
+
+    This tab answers the objection that makes faculty distrust AI tutors: "it
+    made that up". It shows the literal text retrieved from the course books,
+    with book, author, edition, chapter and page, and it never calls a model.
+    Nothing here is generated, so there is nothing to hallucinate, and it costs
+    the student's quota nothing.
+    """
+    ctx = _get_st(st_ctx)
+    from src.db import search_chunks
+    from src.unit_inference import explain_unit, infer_unit
+
+    ctx.header("🔎 Ver Fuentes — Verificación Docente")
+    ctx.caption(
+        "Búsqueda directa en los libros del curso. **No usa IA:** lo que ves es el "
+        "texto literal de las páginas indexadas, con su referencia completa."
+    )
+
+    ctx.info(
+        "👩‍🏫 **Cómo usarlo:** escribí un concepto, copiá el pasaje y citá la página. "
+        "Si el texto no aparece, el portal tampoco lo tiene: eso es una limitación "
+        "conocida, no una alucinación."
+    )
+
+    unit_options = ["🔎 Auto (detectar según la consulta)", "🌐 Todo el temario"]
+    c_left, c_right = ctx.columns([6, 5])
+    with c_left:
+        query = ctx.text_input(
+            "Tema o concepto a buscar:",
+            placeholder="Ej: producto de solubilidad, ecuación de Nernst, EDTA...",
+            key="sources_query",
+        )
+    with c_right:
+        unit_pick = ctx.selectbox(
+            "Restringir a la unidad:",
+            options=unit_options,
+            key="sources_unit",
+        )
+
+    top_k = ctx.slider("Fragmentos a mostrar:", min_value=1, max_value=10, value=4)
+
+    if not (query or "").strip():
+        ctx.caption("Escribí un tema arriba para ver qué dice el libro.")
+        return
+
+    clean = query.strip()
+    if unit_pick == unit_options[0]:
+        guessed, confidence = infer_unit(clean, default=None)
+        unit_filter = guessed
+        if guessed:
+            ctx.caption(
+                f"🔎 Detecté **{guessed} — {explain_unit(guessed)}**"
+                + (f" (confianza {int(confidence * 100)}%)" if confidence else "")
+            )
+        else:
+            ctx.caption("🌐 Sin señal clara: se buscó en todo el temario.")
+    elif unit_pick == unit_options[1]:
+        unit_filter = None
+        ctx.caption("🌐 Búsqueda en todo el temario.")
+    else:
+        unit_filter = unit_pick
+        ctx.caption(f"📚 Búsqueda restringida a **{unit_filter}**.")
+
+    chunks = search_chunks(query=clean, syllabus_unit=unit_filter, limit=top_k)
+
+    if not chunks:
+        ctx.warning(
+            "No se encontró nada en los libros indexados. Es una respuesta honesta: "
+            "el portal no tiene ese contenido."
+        )
+        return
+
+    ctx.caption(f"📄 {len(chunks)} fragmento(s) encontrados.")
+
+    for i, c in enumerate(chunks, start=1):
+        title = c.get("book_title", "Libro")
+        ctx.markdown(f"**{i}. {title} — Cap. {c.get('chapter', 's/d')}, p. {c.get('page_num', '?')}**")
+        ctx.caption(
+            f"{c.get('author', '')} · {c.get('edition', '')} · "
+            f"unidad {c.get('syllabus_unit') or 's/d'} · puntaje de búsqueda {c.get('score', 0):.1f}"
+        )
+        with ctx.expander("Texto literal de la página"):
+            ctx.write(str(c.get("content", "")).strip())
+        ctx.divider()
+
+    from src.citation_formats import format_bibliography
+
+    synthesized = [
+        {
+            "book_title": c.get("book_title"),
+            "author": c.get("author"),
+            "edition": c.get("edition"),
+            "chapter": c.get("chapter"),
+            "page_num": c.get("page_num"),
+        }
+        for c in chunks
+    ]
+    with ctx.expander("📚 Referencias de lo encontrado"):
+        st_src = ctx.selectbox("Formato:", options=list(("APA", "MLA", "IEEE")), key="sources_bib_style")
+        text = "\n\n".join(format_bibliography(synthesized, st_src, numbered=(st_src == "IEEE")))
+        ctx.code(text, language=None)
+        ctx.download_button(
+            "⬇️ Descargar referencias",
+            data=f"Referencias ({st_src})\n\n{text}\n".encode("utf-8"),
+            file_name=f"fuentes_{st_src.lower()}.txt",
+            mime="text/plain",
+            key="sources_bib_dl",
+        )
+
+
 def render_tutor_tab(
     st_ctx: Any = None,
     db_path: str = "data/quimica_analitica.db",
