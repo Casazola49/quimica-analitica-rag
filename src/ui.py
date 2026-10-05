@@ -1792,7 +1792,17 @@ def render_exam_tab(st_ctx: Any = None) -> None:
     ctx.caption("Evaluaciones dinámicas objetivas alineadas con los exámenes parciales y de laboratorio.")
 
     status = ctx.session_state.get("exam_status", "idle")
-    api_key = ctx.session_state.get("api_key") or ctx.session_state.get("gemini_api_key") or "AIzaSy_MockExamKey_For_Evaluation_12345"
+    # Same convention as the tutor: no key means no key. A hardcoded placeholder
+    # here looked like a real AIzaSy id, so an offline student silently triggered
+    # a live API call that came back 403 instead of getting the question bank.
+    api_key = ctx.session_state.get("api_key") or ctx.session_state.get("gemini_api_key") or ""
+
+    if not api_key:
+        ctx.info(
+            "ℹ️ **Modo Sin Conexión Activo**: sin clave de Google AI Studio las preguntas "
+            "salen del banco curricular del curso en lugar de generarse con Gemini. "
+            "Ingresa tu clave gratuita en la barra lateral para evaluaciones dinámicas."
+        )
 
     theory_units = syllabus.get_theory_units()
     unit_ids = [u["id"] for u in theory_units]
