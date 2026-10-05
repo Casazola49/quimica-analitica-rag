@@ -1,3 +1,7 @@
+# Anonymous usage metrics (student usage data must never be committed)
+data/usage_metrics.db
+data/usage_metrics.db-*
+
 # Local runtime state
 .atl/
 .pi/

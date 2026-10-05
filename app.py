@@ -61,12 +61,13 @@ def main() -> None:
         ui.render_quick_key_widget(st)
 
     # Multi-Tab Navigation
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "📚 Biblioteca & Libros",
         "📋 Plan de Estudios",
         "💬 Tutor Inteligente",
         "📝 Simulador de Exámenes",
         "🔬 Laboratorio Virtual",
+        "📊 Métricas",
     ])
 
     with tab1:
@@ -83,6 +84,12 @@ def main() -> None:
 
     with tab5:
         ui.render_simulator_tab(st)
+
+    with tab6:
+        if hasattr(ui, "render_metrics_tab"):
+            ui.render_metrics_tab(st)
+        else:
+            st.info("Métricas no disponibles en esta versión.")
 
 
 

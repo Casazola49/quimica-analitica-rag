@@ -1444,6 +1444,94 @@ def render_citation_sources(ctx: Any, citations: List[Dict[str, Any]], key_prefi
         )
 
 
+def render_metrics_tab(st_ctx: Any = None) -> None:
+    """Renders the instructor-facing usage report.
+
+    Everything on this screen is an aggregate. No student's question, answer or
+    API key is stored or shown, and the database holding the counts is
+    git-ignored so usage data never enters version control.
+    """
+    ctx = _get_st(st_ctx)
+    from src import metrics
+
+    ctx.header("📊 Métricas de Uso — Para Docentes")
+    ctx.caption("Evidencia agregada sobre cómo se está usando el portal.")
+
+    if not metrics.collection_enabled():
+        ctx.warning(
+            "⚠️ **Recolección desactivada.** La variable de entorno "
+            "`METRICS_DISABLED` está activa, así que no se registra nada."
+        )
+        return
+
+    data = metrics.summary()
+
+    if data["total"] == 0:
+        ctx.info(
+            "Todavía no hay consultas registradas. Esta pantalla se alimenta de las "
+            "preguntas que los estudiantes hacen en el tutor."
+        )
+        return
+
+    c1, c2, c3 = ctx.columns(3)
+    c1.metric("Consultas totales", data["total"])
+    c2.metric("Citas por respuesta (prom.)", data["avg_citations"])
+    quota = dict(data["outcomes"]).get("quota", 0)
+    c3.metric("Consultas frenadas por cuota", quota)
+
+    left, right = ctx.columns(2)
+
+    with left:
+        st_units = data["by_unit"]
+        ctx.subheader("Unidades más consultadas")
+        if st_units:
+            peak = max(n for _, n in st_units)
+            for unit, n in st_units[:9]:
+                pct = int(round(100 * n / peak))
+                bar = "█" * max(1, round(pct / 8))
+                ctx.markdown(f"`{unit}` &nbsp; {bar} &nbsp; **{n}**")
+            ctx.caption("Mide dónde estudian los alumnos, no qué preguntan.")
+
+    with right:
+        ctx.subheader("Uso por día (UTC)")
+        by_day = data["by_day"]
+        if by_day:
+            peak = max(n for _, n in by_day)
+            for day, n in by_day[-14:]:
+                pct = int(round(100 * n / peak))
+                bar = "█" * max(1, round(pct / 8))
+                ctx.markdown(f"`{day}` &nbsp; {bar} &nbsp; **{n}**")
+        else:
+            ctx.caption("Sin datos diarios todavía.")
+
+    with ctx.expander("Resultado de las consultas"):
+        ctx.write(dict(data["outcomes"]))
+        ctx.caption(
+            "`quota` y `key_rejected` nos avisan si los alumnos se están quedando "
+            "sin cuota o con una clave inválida, que suele pasar antes de que un "
+            "docente se entere."
+        )
+
+    if data["sources"]:
+        with ctx.expander("Uso de bibliografía"):
+            ctx.write(dict(data["sources"]))
+
+    ctx.download_button(
+        "⬇️ Descargar informe (CSV, solo agregados)",
+        data=metrics.export_csv().encode("utf-8"),
+        file_name="metricas_uso.csv",
+        mime="text/csv",
+    )
+
+    ctx.caption(
+        "🔒 **Privacidad:** no se guarda el texto de las preguntas ni las respuestas, "
+        "ni claves de API. Tampoco se guarda un hash de la pregunta: uno corto es "
+        "fácil de revertir probando frases comunes. Solo la forma de la consulta "
+        "(fecha, unidad, tamaño, cuántas fuentes volvió). Los datos viven en "
+        "`data/usage_metrics.db`, que está en `.gitignore`."
+    )
+
+
 def render_tutor_tab(
     st_ctx: Any = None,
     db_path: str = "data/quimica_analitica.db",
@@ -1603,6 +1691,7 @@ def render_tutor_tab(
             # than guess wrong.
             effective_unit = selected_unit
             inferred_note = ""
+            unit_source = "selected" if effective_unit else "inferred"
             if effective_unit is None:
                 from src.unit_inference import explain_unit, infer_unit
 
@@ -1629,6 +1718,35 @@ def render_tutor_tab(
                     db_path=db_path,
                 )
                 citations = rag_res.get("citations", [])
+
+                # Anonymous usage shape only: no question text, no key, no
+                # answer. This is what backs the instructor-facing report.
+                try:
+                    from src import metrics
+                    from src.gemini_client import get_last_model_used
+
+                    if not api_key:
+                        outcome = metrics.OUTCOME_OFFLINE
+                    elif "429" in reply_str:
+                        outcome = metrics.OUTCOME_QUOTA
+                    elif "403" in reply_str:
+                        outcome = metrics.OUTCOME_KEY
+                    elif reply_str.strip().startswith("⚠️"):
+                        outcome = metrics.OUTCOME_ERROR
+                    else:
+                        outcome = metrics.OUTCOME_OK
+                    metrics.record_query_event(
+                        unit=effective_unit,
+                        unit_source=unit_source,
+                        question_chars=len(clean_input),
+                        chunks=len(rag_res.get("retrieved_chunks", []) or []),
+                        citations=len(citations),
+                        sources=len({c.get("book_title") for c in citations if c.get("book_title")}),
+                        model=get_last_model_used(),
+                        outcome=outcome,
+                    )
+                except Exception:
+                    pass
 
                 if inferred_note:
                     ctx.caption(inferred_note)
