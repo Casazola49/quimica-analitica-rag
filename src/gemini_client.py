@@ -40,7 +40,9 @@ MODEL_FALLBACK_CHAIN: tuple[str, ...] = (
 )
 
 # The model that actually produced the last successful response. Students see
-# "respondio X" so a slow or different-sounding answer has an explanation.
+# "respondio X" so a slow or different-sounding answer has an explanation, and
+# it doubles as a fast path: when a run of models is saturated, trying the one
+# that worked last first avoids walking the whole chain on every question.
 _LAST_MODEL_USED: Optional[str] = None
 
 
@@ -53,6 +55,31 @@ def _note_model_used(model: str) -> None:
     """Records which model actually answered, for display in the sidebar."""
     global _LAST_MODEL_USED
     _LAST_MODEL_USED = model
+
+
+def _model_order(resolved_target: str) -> list:
+    """
+    Builds the model attempt order, putting the last known good model first.
+
+    A saturated run is contagious: when gemini-flash-latest and gemini-3.5-flash
+    are both under demand, every question pays for the whole chain before
+    reaching a model that answers. Trying the model that served the previous
+    question first turns that walk into a single request.
+
+    Args:
+        resolved_target: The caller-requested model, which always leads.
+
+    Returns:
+        The attempt order, without duplicates.
+    """
+    models_to_try = [resolved_target]
+    preferred = _LAST_MODEL_USED
+    if preferred and preferred not in models_to_try:
+        models_to_try.append(preferred)
+    for m in MODEL_FALLBACK_CHAIN:
+        if m not in models_to_try:
+            models_to_try.append(m)
+    return models_to_try
 
 
 def classify_model_failure(code: Optional[int], err_str: str) -> str:
@@ -396,11 +423,7 @@ def _sync_response(
 ) -> str:
     """Internal synchronous response generator with dynamic quota fallback."""
     resolved_target = resolve_model_name(target_model)
-    # Build models to try: starting with resolved_target, then others from MODEL_FALLBACK_CHAIN
-    models_to_try = [resolved_target]
-    for m in MODEL_FALLBACK_CHAIN:
-        if m not in models_to_try:
-            models_to_try.append(m)
+    models_to_try = _model_order(resolved_target)
 
     last_err: Optional[Exception] = None
 
@@ -457,10 +480,7 @@ def _stream_response(
 ) -> Iterator[str]:
     """Internal streaming generator with dynamic quota fallback support."""
     resolved_target = resolve_model_name(target_model)
-    models_to_try = [resolved_target]
-    for m in MODEL_FALLBACK_CHAIN:
-        if m not in models_to_try:
-            models_to_try.append(m)
+    models_to_try = _model_order(resolved_target)
 
     stream_started = False
     last_err: Optional[Exception] = None
