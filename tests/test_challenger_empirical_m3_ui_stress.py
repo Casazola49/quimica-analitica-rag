@@ -99,6 +99,8 @@ class MockStreamlitContext:
         self.radio_values: Dict[str, Any] = {}
         self.slider_values: Dict[str, Any] = {}
         self.text_input_values: Dict[str, str] = {}
+        self.code_blocks: List[str] = []
+        self.downloads: List[Dict[str, Any]] = []
 
     def rerun(self) -> None:
         self.rerun_called = True
@@ -156,6 +158,16 @@ class MockStreamlitContext:
 
     def chat_input(self, placeholder: str) -> Optional[str]:
         return self.chat_input_val
+
+    def code(self, text: str, language: Optional[str] = None, **kwargs) -> MockContextManager:
+        """Records rendered code blocks so tests can assert on exported text."""
+        self.code_blocks.append(text)
+        return MockContextManager(f"code_{len(self.code_blocks)}")
+
+    def download_button(self, label: str, data: Any = None, file_name: str = "", mime: str = "", key: Optional[str] = None, **kwargs) -> bool:
+        """Records download widgets; rendering them is a no-op in tests."""
+        self.downloads.append({"label": label, "data": data, "file_name": file_name})
+        return False
 
     def button(self, label: str, key: Optional[str] = None, **kwargs) -> bool:
         k = key or label

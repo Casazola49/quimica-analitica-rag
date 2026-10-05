@@ -1391,6 +1391,53 @@ def render_syllabus_tab(
                     ctx.markdown(f"📚 **Capítulos Guía:** {', '.join(chapters)}")
 
 
+def render_citation_sources(ctx: Any, citations: List[Dict[str, Any]]) -> None:
+    """Renders the source drawer plus a ready-to-use bibliography export.
+
+    A teacher who wants to justify an answer should not have to retype author,
+    title, edition and page by hand, so the same verified metadata is offered
+    as APA, MLA or IEEE and as a downloadable file.
+
+    Args:
+        ctx: Active Streamlit context.
+        citations: Citations from the RAG answer.
+    """
+    with ctx.expander(f"📚 Fuentes Bibliográficas Consultadas ({len(citations)})"):
+        for c in citations:
+            b_title = c.get("book_title", "Libro Oficial")
+            author = c.get("author", "")
+            edition = c.get("edition", "")
+            chapter = c.get("chapter", "Capítulo")
+            page_num = c.get("page_num", "")
+            excerpt = c.get("excerpt", "")
+
+            card_label = f"📖 {b_title} (Pág. {page_num})"
+            ctx.markdown(f"- **{card_label}** — *{chapter}*, {author} ({edition})")
+            if excerpt:
+                ctx.caption(f"> \"{excerpt}\"")
+
+        try:
+            from src.citation_formats import STYLES, format_bibliography
+        except Exception:
+            return
+
+        style = ctx.selectbox(
+            "Formato de cita para copiar o descargar:",
+            options=list(STYLES),
+            key=f"bib_style_{len(citations)}",
+        )
+        entries = format_bibliography(citations, style, numbered=(style == "IEEE"))
+        text = "\n\n".join(entries)
+        ctx.code(text, language=None)
+        ctx.download_button(
+            "⬇️ Descargar bibliografía",
+            data=f"Referencias ({style})\n\n{text}\n".encode("utf-8"),
+            file_name=f"bibliografia_{style.lower()}.txt",
+            mime="text/plain",
+            key=f"bib_dl_{len(citations)}",
+        )
+
+
 def render_tutor_tab(
     st_ctx: Any = None,
     db_path: str = "data/quimica_analitica.db",
@@ -1526,19 +1573,7 @@ def render_tutor_tab(
                 ctx.markdown(format_chemical_formula(content))
                 citations = msg.get("citations", [])
                 if citations and role == "assistant":
-                    with ctx.expander(f"📚 Fuentes Bibliográficas Consultadas ({len(citations)})"):
-                        for c in citations:
-                            b_title = c.get("book_title", "Libro Oficial")
-                            author = c.get("author", "")
-                            edition = c.get("edition", "")
-                            chapter = c.get("chapter", "Capítulo")
-                            page_num = c.get("page_num", "")
-                            excerpt = c.get("excerpt", "")
-
-                            card_label = f"📖 {b_title} (Pág. {page_num})"
-                            ctx.markdown(f"- **{card_label}** — *{chapter}*, {author} ({edition})")
-                            if excerpt:
-                                ctx.caption(f"> \"{excerpt}\"")
+                    render_citation_sources(ctx, citations)
 
     # Chat Input
     prompt_prefill = ctx.session_state.pop("prefill_prompt", None)
@@ -1593,20 +1628,7 @@ def render_tutor_tab(
                     ctx.caption(inferred_note)
                 ctx.markdown(format_chemical_formula(reply_str))
                 if citations:
-                    with ctx.expander(f"📚 Fuentes Bibliográficas Consultadas ({len(citations)})"):
-                        for c in citations:
-                            b_title = c.get("book_title", "Libro Oficial")
-                            author = c.get("author", "")
-                            edition = c.get("edition", "")
-                            chapter = c.get("chapter", "")
-                            page_num = c.get("page_num", "")
-                            excerpt = c.get("excerpt", "")
-
-                            card_label = f"📖 {b_title} (Pág. {page_num})"
-                            ctx.markdown(f"- **{card_label}** — *{chapter}*, {author} ({edition})")
-                            if excerpt:
-                                ctx.caption(f"> \"{excerpt}\"")
-
+                    render_citation_sources(ctx, citations)
         ctx.session_state["messages"].append({
             "role": "assistant",
             "content": reply_str,
