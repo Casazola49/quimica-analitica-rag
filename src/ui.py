@@ -1391,7 +1391,7 @@ def render_syllabus_tab(
                     ctx.markdown(f"📚 **Capítulos Guía:** {', '.join(chapters)}")
 
 
-def render_citation_sources(ctx: Any, citations: List[Dict[str, Any]]) -> None:
+def render_citation_sources(ctx: Any, citations: List[Dict[str, Any]], key_prefix: str = "") -> None:
     """Renders the source drawer plus a ready-to-use bibliography export.
 
     A teacher who wants to justify an answer should not have to retype author,
@@ -1401,7 +1401,13 @@ def render_citation_sources(ctx: Any, citations: List[Dict[str, Any]]) -> None:
     Args:
         ctx: Active Streamlit context.
         citations: Citations from the RAG answer.
+        key_prefix: Distinguishes the widgets of one message from another's. The
+            chat history renders several answers in a single script run, and two
+            messages with the same number of sources would otherwise collide on
+            one widget key and raise Streamlit's DuplicateWidgetID, taking the
+            whole tutor page down.
     """
+    uid = key_prefix or "single"
     with ctx.expander(f"📚 Fuentes Bibliográficas Consultadas ({len(citations)})"):
         for c in citations:
             b_title = c.get("book_title", "Libro Oficial")
@@ -1424,7 +1430,7 @@ def render_citation_sources(ctx: Any, citations: List[Dict[str, Any]]) -> None:
         style = ctx.selectbox(
             "Formato de cita para copiar o descargar:",
             options=list(STYLES),
-            key=f"bib_style_{len(citations)}",
+            key=f"bib_style_{uid}",
         )
         entries = format_bibliography(citations, style, numbered=(style == "IEEE"))
         text = "\n\n".join(entries)
@@ -1434,7 +1440,7 @@ def render_citation_sources(ctx: Any, citations: List[Dict[str, Any]]) -> None:
             data=f"Referencias ({style})\n\n{text}\n".encode("utf-8"),
             file_name=f"bibliografia_{style.lower()}.txt",
             mime="text/plain",
-            key=f"bib_dl_{len(citations)}",
+            key=f"bib_dl_{uid}",
         )
 
 
@@ -1566,14 +1572,14 @@ def render_tutor_tab(
             + "¿Qué concepto, cálculo estequiométrico o técnica de laboratorio deseas consultar hoy?"
         )
     else:
-        for msg in messages:
+        for msg_index, msg in enumerate(messages):
             role = msg.get("role", "assistant")
             content = msg.get("content", "")
             with ctx.chat_message(role):
                 ctx.markdown(format_chemical_formula(content))
                 citations = msg.get("citations", [])
                 if citations and role == "assistant":
-                    render_citation_sources(ctx, citations)
+                    render_citation_sources(ctx, citations, key_prefix=f"hist_{msg_index}")
 
     # Chat Input
     prompt_prefill = ctx.session_state.pop("prefill_prompt", None)
@@ -1628,7 +1634,7 @@ def render_tutor_tab(
                     ctx.caption(inferred_note)
                 ctx.markdown(format_chemical_formula(reply_str))
                 if citations:
-                    render_citation_sources(ctx, citations)
+                    render_citation_sources(ctx, citations, key_prefix="new")
         ctx.session_state["messages"].append({
             "role": "assistant",
             "content": reply_str,

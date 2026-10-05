@@ -126,6 +126,62 @@ class TestIeee:
         assert entries[1].startswith("[2] ")
 
 
+class TestBibliographyWidgetKeys:
+    """Regression: two answers with the same number of sources used to collide.
+
+    The chat history renders every assistant message in one script run, so
+    widget keys built only from len(citations) produced Streamlit's
+    DuplicateWidgetID and took the whole tutor page down as soon as a student
+    asked a second question.
+    """
+
+    CITATIONS = [
+        {
+            "book_title": "Fundamentos de Química Analítica",
+            "author": "Douglas A. Skoog, Donald M. West",
+            "edition": "9ª Edición (2015)",
+            "chapter": "Capítulo 5",
+            "page_num": 107,
+            "excerpt": "texto",
+        },
+        {
+            "book_title": "Quantitative Analysis",
+            "author": "R. A. Day, Jr., A. L. Underwood",
+            "edition": "6th Edition (1991)",
+            "chapter": "Capítulo 5",
+            "page_num": 107,
+            "excerpt": "texto",
+        },
+    ]
+
+    def test_two_messages_with_equal_citation_counts_do_not_collide(self) -> None:
+        from src import ui
+        from tests.test_challenger_empirical_m3_ui_stress import MockStreamlitContext
+
+        session = ui.init_session_state(
+            {
+                "messages": [
+                    {"role": "assistant", "content": "r1", "citations": list(self.CITATIONS)},
+                    {"role": "assistant", "content": "r2", "citations": list(self.CITATIONS)},
+                ]
+            }
+        )
+        mock = MockStreamlitContext(session_state=session, raise_on_rerun=False)
+        ui.render_tutor_tab(st_ctx=mock)
+
+        assert len(mock.code_blocks) == 2
+        assert len(mock.downloads) == 2
+
+    def test_widget_keys_are_unique_per_message(self) -> None:
+        from src import ui
+
+        seen = []
+        for prefix in ("hist_0", "hist_1", "new"):
+            seen.append(f"bib_style_{prefix or 'single'}")
+        assert len(set(seen)) == len(seen)
+        assert ui.render_citation_sources.__defaults__ == ("",)
+
+
 class TestBibliography:
     def test_duplicates_are_removed(self) -> None:
         entries = format_bibliography([FUNDAMENTALS, FUNDAMENTALS, INSTRUMENTAL], "APA")
