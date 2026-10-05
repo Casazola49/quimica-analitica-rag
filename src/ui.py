@@ -1516,6 +1516,18 @@ def render_metrics_tab(st_ctx: Any = None) -> None:
         with ctx.expander("Uso de bibliografía"):
             ctx.write(dict(data["sources"]))
 
+    if data.get("most_cited"):
+        ctx.subheader("Fuentes más citadas")
+        ctx.caption(
+            "Qué libros sostienen realmente las respuestas. Un título de libro es "
+            "dato bibliográfico público, no información del estudiante, y se guarda "
+            "solo como acumulado diario."
+        )
+        peak = max(n for _, n in data["most_cited"])
+        for title, n in data["most_cited"]:
+            bar = "█" * max(1, round(8 * n / peak))
+            ctx.markdown(f"**{title}** &nbsp; {bar} &nbsp; *{n}*")
+
     ctx.download_button(
         "⬇️ Descargar informe (CSV, solo agregados)",
         data=metrics.export_csv().encode("utf-8"),
@@ -1744,6 +1756,9 @@ def render_tutor_tab(
                         sources=len({c.get("book_title") for c in citations if c.get("book_title")}),
                         model=get_last_model_used(),
                         outcome=outcome,
+                    )
+                    metrics.record_source_usage(
+                        [c.get("book_title") for c in citations if c.get("book_title")]
                     )
                 except Exception:
                     pass

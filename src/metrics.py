@@ -32,7 +32,7 @@ import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterator, Optional
+from typing import Any, Iterable, Iterator, Optional
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB_PATH = PROJECT_ROOT / "data" / "usage_metrics.db"
@@ -53,6 +53,17 @@ CREATE TABLE IF NOT EXISTS query_events (
 );
 CREATE INDEX IF NOT EXISTS idx_events_day  ON query_events(day);
 CREATE INDEX IF NOT EXISTS idx_events_unit ON query_events(unit);
+
+-- Which textbooks the answers actually leaned on. A book title is public
+-- bibliographic data, not student content, and rows are kept only as daily
+-- rollups: one row per day and book, never one per query, so no timing of an
+-- individual session can be reconstructed.
+CREATE TABLE IF NOT EXISTS source_usage_daily (
+    day        TEXT NOT NULL,
+    book_title TEXT NOT NULL,
+    uses       INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (day, book_title)
+);
 """
 
 # Outcomes a query can end in. Kept closed so the aggregate report has a fixed
@@ -158,6 +169,56 @@ def record_query_event(
         return False
 
 
+def record_source_usage(
+    book_titles: Optional[Iterable[str]] = None,
+    db_path: Optional[Path] = None,
+) -> bool:
+    """
+    Adds one use to today's rollup for each distinct book cited.
+
+    Kept separate from :func:`record_query_event` so the event row keeps no
+    text at all while the daily rollup still answers "which textbooks carry this
+    course". Duplicate titles within one answer are counted once.
+
+    Args:
+        book_titles: Distinct titles from the answer's citations.
+        db_path: Override for the metrics database, used by tests.
+
+    Returns:
+        True when the rollup was written, False on any failure.
+    """
+    if not collection_enabled():
+        return False
+    titles = {str(t).strip() for t in (book_titles or []) if str(t).strip()}
+    if not titles:
+        return False
+    path = Path(db_path or DEFAULT_DB_PATH)
+    try:
+        _ensure_parent(path)
+        day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        with _connect(path) as conn:
+            conn.executemany(
+                "INSERT INTO source_usage_daily (day, book_title, uses) VALUES (?,?,1) "
+                "ON CONFLICT(day, book_title) DO UPDATE SET uses = uses + 1",
+                [(day, title) for title in sorted(titles)],
+            )
+        return True
+    except Exception:
+        return False
+
+
+def most_cited_sources(db_path: Optional[Path] = None, limit: int = 8) -> list[tuple[str, int]]:
+    """Books cited most often across all recorded answers, most used first."""
+    path = Path(db_path or DEFAULT_DB_PATH)
+    rows = _query(
+        path,
+        "SELECT book_title, SUM(uses) AS total FROM source_usage_daily "
+        "GROUP BY book_title ORDER BY total DESC, book_title ASC LIMIT ?",
+        (max(1, int(limit)),),
+    )
+    return [(str(r["book_title"]), int(r["total"])) for r in rows]
+
+
 def _query(db_path: Path, sql: str, params: tuple = ()) -> list[sqlite3.Row]:
     try:
         _ensure_parent(db_path)
@@ -207,11 +268,9 @@ def outcomes_breakdown(db_path: Optional[Path] = None) -> list[tuple[str, int]]:
 
 def source_usage(db_path: Optional[Path] = None) -> list[tuple[str, int]]:
     """
-    Which books the answers actually leaned on, from the citation totals.
+    Volume figures behind the source report: answers, citations, distinct books.
 
-    Derived from the aggregate counts rather than from stored citations: the
-    metrics table holds no book names of its own, and summing `sources` is enough
-    to show which textbooks carry the course.
+    Kept separate from :func:`most_cited_sources`, which names the books.
     """
     path = Path(db_path or DEFAULT_DB_PATH)
     rows = _query(
@@ -260,6 +319,8 @@ def export_csv(db_path: Optional[Path] = None) -> str:
         writer.writerow(["por_dia", day, n])
     for outcome, n in outcomes_breakdown(path):
         writer.writerow(["por_resultado", outcome, n])
+    for title, uses in most_cited_sources(path, limit=25):
+        writer.writerow(["fuentes_mas_citadas", title, uses])
     for label, value in source_usage(path):
         writer.writerow(["fuentes", label, value])
     return buf.getvalue()
@@ -275,4 +336,5 @@ def summary(db_path: Optional[Path] = None) -> dict[str, Any]:
         "outcomes": outcomes_breakdown(path),
         "avg_citations": average_citations(path),
         "sources": source_usage(path),
+        "most_cited": most_cited_sources(path),
     }

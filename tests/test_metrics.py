@@ -105,8 +105,57 @@ class TestAggregates:
     def test_summary_shape(self, db) -> None:
         self._seed(db)
         data = metrics.summary(db)
-        assert set(data) == {"total", "by_unit", "by_day", "outcomes", "avg_citations", "sources"}
+        assert set(data) == {
+            "total", "by_unit", "by_day", "outcomes", "avg_citations", "sources", "most_cited",
+        }
         assert data["total"] == 6
+
+
+class TestSourceUsage:
+    """Book titles are public bibliographic data and are aggregated by day."""
+
+    def test_rollup_counts_each_book_once_per_answer(self, db) -> None:
+        """Two citations of the same book in one answer count once."""
+        assert metrics.record_source_usage(["Skoog", "Skoog", "Day"], db_path=db) is True
+        assert metrics.most_cited_sources(db) == [("Day", 1), ("Skoog", 1)]
+
+    def test_repeated_uses_accumulate(self, db) -> None:
+        for _ in range(3):
+            metrics.record_source_usage(["Skoog"], db_path=db)
+        metrics.record_source_usage(["Day"], db_path=db)
+        assert dict(metrics.most_cited_sources(db)) == {"Skoog": 3, "Day": 1}
+
+    def test_ordering_is_by_uses(self, db) -> None:
+        metrics.record_source_usage(["Poco usado"], db_path=db)
+        for _ in range(4):
+            metrics.record_source_usage(["Muy usado"], db_path=db)
+        assert metrics.most_cited_sources(db)[0][0] == "Muy usado"
+
+    def test_rollup_is_daily_not_per_event(self, db) -> None:
+        """No per-event rows: an adversary cannot time an individual session."""
+        for _ in range(5):
+            metrics.record_source_usage(["Skoog"], db_path=db)
+        conn = sqlite3.connect(str(db))
+        try:
+            rows = conn.execute("SELECT COUNT(*) FROM source_usage_daily").fetchone()[0]
+        finally:
+            conn.close()
+        assert rows == 1
+
+    def test_no_sources_is_a_no_op(self, db) -> None:
+        assert metrics.record_source_usage([], db_path=db) is False
+        assert metrics.record_source_usage(None, db_path=db) is False
+        assert metrics.most_cited_sources(db) == []
+
+    def test_respects_the_collection_switch(self, db, monkeypatch) -> None:
+        monkeypatch.setenv("METRICS_DISABLED", "1")
+        assert metrics.record_source_usage(["Skoog"], db_path=db) is False
+
+    def test_event_row_still_carries_no_text(self, db) -> None:
+        """The privacy guarantee covers the source rollup too."""
+        metrics.record_query_event(unit="U2", db_path=db)
+        metrics.record_source_usage(["Skoog"], db_path=db)
+        assert "book_title" not in set(_rows(db)[0].keys())
 
 
 class TestExport:
