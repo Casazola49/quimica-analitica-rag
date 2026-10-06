@@ -1391,6 +1391,80 @@ def render_syllabus_tab(
                     ctx.markdown(f"📚 **Capítulos Guía:** {', '.join(chapters)}")
 
 
+def render_grounded_answer(
+    ctx: Any,
+    reply: str,
+    chunks: Optional[List[Dict[str, Any]]] = None,
+    grounded: Optional[List[Dict[str, Any]]] = None,
+) -> None:
+    """Renders an answer section by section, each with its evidence.
+
+    The model is never asked where its own claims came from. Each section is
+    compared against the passages the retriever actually supplied, so the badge
+    reports what the books contain rather than what the model claims. A section
+    the passages do not back is shown as such instead of being hidden: that gap
+    is exactly what an instructor needs to see.
+    """
+    from src.grounding import (
+        SUPPORTED,
+        compact_grounding,
+        grounding_summary,
+        strip_inline_citations,
+    )
+
+    cleaned = strip_inline_citations(reply)
+    if grounded is None:
+        grounded = compact_grounding(cleaned, chunks or [])
+    summary = grounding_summary(grounded)
+
+    if not grounded:
+        ctx.markdown(format_chemical_formula(cleaned))
+        return
+
+    total = summary["total"]
+    plural = "secciones" if total != 1 else "sección"
+    if summary["unsupported"]:
+        ctx.warning(
+            f"🟡 **{summary['supported']} de {total} {plural}** "
+            f"{'tienen' if total != 1 else 'tiene'} apoyo textual claro en los fragmentos "
+            "recuperados. Las marcadas 🟡 **no aparecen en el libro**: pueden ser "
+            "correctas, pero no están respaldadas por la bibliografía del curso."
+        )
+    else:
+        ctx.success(
+            f"🟢 La{'s' if total != 1 else ''} **{total} {plural}** de esta respuesta "
+            f"{'tienen' if total != 1 else 'tiene'} apoyo textual en los fragmentos "
+            "recuperados de los libros."
+        )
+
+    for i, sec in enumerate(grounded, start=1):
+        if sec["heading"]:
+            ctx.markdown(f"**{sec['heading']}**")
+        chunk = sec.get("chunk") or sec.get("evidence")
+        if sec["level"] == SUPPORTED and chunk:
+            ctx.caption(
+                f"🟢 **Apoyada** en {chunk.get('book_title', '')}, "
+                f"cap. {chunk.get('chapter', 's/d')}, **p. {chunk.get('page_num', '?')}** "
+                f"(coincidencia {sec['score']:.0%})"
+            )
+        elif chunk:
+            ctx.caption(
+                f"🟡 **Sin apoyo claro** en los libros. Pasaje más cercano: "
+                f"{chunk.get('book_title', '')}, p. {chunk.get('page_num', '?')} "
+                f"(coincidencia {sec['score']:.0%})."
+            )
+        else:
+            ctx.caption("🟡 **Sin apoyo** en los fragmentos recuperados.")
+
+        if sec["body"]:
+            ctx.markdown(format_chemical_formula(sec["body"]))
+
+        if chunk and sec["body"]:
+            with ctx.expander(f"📖 Texto literal — {chunk.get('book_title', '')}, p. {chunk.get('page_num', '?')}"):
+                ctx.write(str(chunk.get("content", "")).strip())
+        ctx.divider()
+
+
 def render_citation_sources(ctx: Any, citations: List[Dict[str, Any]], key_prefix: str = "") -> None:
     """Renders the source drawer plus a ready-to-use bibliography export.
 
@@ -1787,7 +1861,11 @@ def render_tutor_tab(
             role = msg.get("role", "assistant")
             content = msg.get("content", "")
             with ctx.chat_message(role):
-                ctx.markdown(format_chemical_formula(content))
+                saved = msg.get("grounded")
+                if role == "assistant" and saved:
+                    render_grounded_answer(ctx, content, grounded=saved)
+                else:
+                    ctx.markdown(format_chemical_formula(content))
                 citations = msg.get("citations", [])
                 if citations and role == "assistant":
                     render_citation_sources(ctx, citations, key_prefix=f"hist_{msg_index}")
@@ -1876,13 +1954,20 @@ def render_tutor_tab(
 
                 if inferred_note:
                     ctx.caption(inferred_note)
-                ctx.markdown(format_chemical_formula(reply_str))
+                render_grounded_answer(ctx, reply_str, rag_res.get("retrieved_chunks", []) or [])
                 if citations:
                     render_citation_sources(ctx, citations, key_prefix="new")
+        from src.grounding import compact_grounding, strip_inline_citations
         ctx.session_state["messages"].append({
             "role": "assistant",
             "content": reply_str,
             "citations": citations,
+            # Stored so scrolling back up re-renders the same evidence the
+            # student was shown when the answer arrived.
+            "grounded": compact_grounding(
+                strip_inline_citations(reply_str),
+                rag_res.get("retrieved_chunks", []) or [],
+            ),
         })
         ctx.rerun()
 

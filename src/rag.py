@@ -248,6 +248,7 @@ def build_rag_prompt(
                 f"Página: {page}\n"
                 f"Unidad: {s_unit}\n"
                 f"Cita sugerida: [Libro: {title}, Autor: {author}, Edición: {edition}, Capítulo: {chapter}, Página: {page}]\n"
+                f"(Fragmento {i} de {len(chunks)})\n"
                 f"Texto:\n{content}"
             )
             context_blocks.append(block)
@@ -260,8 +261,11 @@ def build_rag_prompt(
         f"Contexto bibliográfico disponible:{unit_note}\n\n"
         f"{context_str}\n\n"
         f"Pregunta del estudiante: {clean_query}\n\n"
-        "Responde con rigor técnico universitario, ecuaciones KaTeX claras y cita exactamente "
-        "las fuentes consultadas en formato [Libro: <Título>, Autor: <Autor>, Edición: <Edición>, Capítulo: <Capítulo>, Página: <Página>]."
+        "Responde con rigor técnico universitario y ecuaciones KaTeX claras. Basa cada afirmación "
+        "únicamente en los fragmentos anteriores, cita textualmente la frase clave que la sustenta "
+        "y NO escribas etiquetas [Libro: ...] al final: el portal arma las referencias verificadas "
+        "a partir de los fragmentos reales. Si un fragmento no sustenta lo que vas a afirmar, "
+        "dilo explícitamente en lugar de rellenarlo con información externa."
     )
     return prompt, RAG_SYSTEM_INSTRUCTION
 

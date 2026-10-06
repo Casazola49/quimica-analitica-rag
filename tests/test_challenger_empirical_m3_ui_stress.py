@@ -101,6 +101,7 @@ class MockStreamlitContext:
         self.text_input_values: Dict[str, str] = {}
         self.code_blocks: List[str] = []
         self.downloads: List[Dict[str, Any]] = []
+        self.rendered_warnings: List[str] = []
 
     def rerun(self) -> None:
         self.rerun_called = True
@@ -130,6 +131,10 @@ class MockStreamlitContext:
 
     def error(self, text: str) -> None:
         self.rendered_errors.append(text)
+
+    def warning(self, text: str) -> None:
+        """Records a warning. Used by the grounded-answer coverage banner."""
+        self.rendered_warnings.append(text)
 
     def divider(self) -> None:
         pass
